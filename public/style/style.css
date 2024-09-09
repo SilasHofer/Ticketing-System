@@ -1,0 +1,358 @@
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+.customer {
+  border: 2px solid rgb(43, 255, 0);
+  width: 25%;
+  margin: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  /* border width, style, and color */
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+body {
+  text-align: center;
+  padding-bottom: 100px;
+}
+
+.category-form {
+  width: 20%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+  margin-top: 20px;
+}
+
+table td,
+table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+table tr:hover {
+  background-color: #ddd;
+}
+
+table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #393d3c;
+  color: white;
+}
+
+.button {
+  background-color: #0099ff;
+  border: none;
+  border-radius: 20px;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #2a0061;
+}
+
+.table-picture {
+  max-width: 70px;
+}
+
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgb(85, 85, 85);
+  color: white;
+  text-align: center;
+
+}
+
+.showOrder:hover,
+.addOrder:hover,
+.addProductToOrder:hover {
+  background-color: #000000;
+  color: white;
+  cursor: pointer;
+}
+
+.checkbox-box {
+  border: 1px solid #ccc;
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.checkbox-box div {
+  margin-bottom: 5px;
+  text-align: left !important;
+}
+
+.checkbox-box input[type="checkbox"] {
+  margin-right: 5px;
+
+}
+
+.checkbox-box label {
+  cursor: pointer;
+}
+
+.addToOrder,
+.deleteOrder,
+.orderTheOrder,
+.showpicklist,
+.showInvoice {
+  background-color: #0099ff;
+  color: white;
+  padding: 16px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.deleteOrder {
+  background-color: #ff0000 !important;
+}
+
+
+.deleteOrder:hover {
+  background-color: #690000 !important;
+}
+
+.orderTheOrder {
+  background-color: #00ff2a !important;
+}
+
+.orderTheOrder:hover {
+  background-color: #008616 !important;
+}
+
+.addToOrder:hover,
+.showpicklist:hover {
+  background-color: #2a0061;
+}
+
+.status-Created {
+  color: orange;
+}
+
+
+.status-Updated {
+  color: blue;
+}
+
+.status-Shipped {
+  color: green;
+}
+
+.status-Deleted {
+  color: rgb(255, 0, 0);
+}
+
+.status-Ordered {
+  color: rgb(145, 255, 0);
+}
+
+input[type=text],
+select {
+  width: 75%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 50%;
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.category-row {
+  cursor: pointer;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  background-color: #0099ff;
+  color: white;
+  padding: 16px 20px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: 280px;
+}
+
+.open-button:hover {
+  background-color: #2a0061;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  z-index: 9999;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* Center the element */
+  border: 3px solid #f1f1f1;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+/* Add styles to the form container */
+.container {
+  max-width: 300px;
+  min-width: 200px;
+  padding: 10px;
+  background-color: white;
+}
+
+.amount-from {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #c7c7c7;
+}
+
+.edit-form {
+  z-index: 9999;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  /* Center the element */
+  border: 3px solid #f1f1f1;
+  max-height: 90%;
+  overflow-y: auto;
+}
+
+/* Full-width input fields */
+.container input[type=text],
+.container input[type=password],
+.container input[type=number],
+select {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  border: none;
+  background: #f1f1f1;
+}
+
+/* When the inputs get focus, do something */
+.container input[type=text]:focus,
+.container input[type=password]:focus {
+  background-color: #ddd;
+  outline: none;
+}
+
+.container .btn {
+  background-color: #04AA6D;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+/* Add a red background color to the cancel button */
+.container .cancel {
+  background-color: red;
+}
+
+.container .white {
+  background-color: white;
+  color: black;
+  border: black;
+  border-style: solid;
+}
+
+.container .white:hover {
+  background-color: rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
+  border: black;
+  border-style: solid;
+}
+
+.container .cancel:hover {
+  background-color: rgb(87, 0, 0);
+}
+
+/* Add some hover effects to buttons */
+.container .btn:hover,
+.open-button:hover {
+  opacity: 1;
+}
