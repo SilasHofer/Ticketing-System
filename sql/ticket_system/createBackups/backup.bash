@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-DATABASE=${1:-eshop}
+DATABASE=${1:-ticket_system}
 
 printf "Taking a backup of the database '%s'.\n" "$DATABASE"
 
