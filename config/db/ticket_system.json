@@ -2,6 +2,6 @@
     "host": "LAPPIE.local",
     "user": "dbadm",
     "password": "P@ssw0rd",
-    "database": "eshop",
+    "database": "ticket_system",
     "multipleStatements": true
 }
