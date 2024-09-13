@@ -1,6 +1,41 @@
-<%- include("./../partials/header.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
 
-    <h1>Ticket System</h1>
-    <h3></h3>
-    <div></div>
-    <%- include("./../partials/footer.ejs") %>
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/style/style.css">
+    <script src="https://use.fontawesome.com/0aee473986.js"></script>
+</head>
+
+<body class="container">
+    <% if (error && error.length> 0) { %>
+        <div class="error-messages">
+            <% error.forEach(function(msg) { %>
+                <p>
+                    <%= msg %>
+                </p>
+                <% }); %>
+        </div>
+        <% } %>
+            <form action="/login" method="POST">
+                <label for="email">Email</label><br>
+                <input type="text" id="email" name="email" required><br>
+                <label for="password">Password</label><br>
+                <input type="password" id="password" name="password" required><br>
+                <input type="submit" value="login">
+            </form>
+            <a href="/registration">create account</a>
+            <% if (error && error.length> 0) { %>
+                <div class="error-messages">
+                    <% error.forEach(function(msg) { %>
+                        <p>
+                            <%= msg %>
+                        </p>
+                        <% }); %>
+                </div>
+</body>
+
+</html>

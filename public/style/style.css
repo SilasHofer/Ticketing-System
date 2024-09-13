@@ -29,6 +29,8 @@ li a {
 
 body {
   text-align: center;
+  margin-left: auto;
+  margin-right: auto;
   padding-bottom: 100px;
 }
 

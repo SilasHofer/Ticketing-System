@@ -19,11 +19,11 @@ USE ticket_system ;
 -- Table `ticket_system`.`Users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ticket_system`.`Users` (
-  `idUsers` INT NOT NULL,
+  `idUsers` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(45) NOT NULL,
   `last_name` VARCHAR(45) NOT NULL,
   `email` VARCHAR(45) NOT NULL,
-  `password_hashed` VARCHAR(45) NOT NULL,
+  `password_hashed` VARCHAR(150) NOT NULL,
   `role` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idUsers`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
@@ -153,3 +153,50 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+
+DROP PROCEDURE IF EXISTS user_by_email;
+
+DELIMITER ;;
+
+CREATE PROCEDURE user_by_email(
+  p_email VARCHAR(45)
+  ) 
+BEGIN
+    SELECT * FROM Users WHERE email = p_email;
+END ;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS user_by_id;
+
+DELIMITER ;;
+
+CREATE PROCEDURE user_by_id(
+  p_id INT
+  ) 
+BEGIN
+    SELECT * FROM Users WHERE idUsers = p_id;
+END ;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS registration;
+
+DELIMITER ;;
+
+CREATE PROCEDURE registration(
+  p_first_name VARCHAR(45),
+  p_last_name VARCHAR(45),
+  p_email VARCHAR(45),
+  p_password_hashed VARCHAR(150)
+
+  ) 
+BEGIN
+    INSERT INTO 
+    users 
+    (first_name,last_name,email,password_hashed,role) 
+    VALUES(p_first_name,p_last_name,p_email,p_password_hashed,"user"); 
+END ;;
+
+DELIMITER ;
