@@ -11,6 +11,14 @@
 </head>
 
 <body class="container">
+    <form action="/login" method="POST">
+        <label for="email">Email</label><br>
+        <input type="text" id="email" name="email" required><br>
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="login">
+    </form>
+    <a href="/registration">create account</a>
     <% if (error && error.length> 0) { %>
         <div class="error-messages">
             <% error.forEach(function(msg) { %>
@@ -20,22 +28,6 @@
                 <% }); %>
         </div>
         <% } %>
-            <form action="/login" method="POST">
-                <label for="email">Email</label><br>
-                <input type="text" id="email" name="email" required><br>
-                <label for="password">Password</label><br>
-                <input type="password" id="password" name="password" required><br>
-                <input type="submit" value="login">
-            </form>
-            <a href="/registration">create account</a>
-            <% if (error && error.length> 0) { %>
-                <div class="error-messages">
-                    <% error.forEach(function(msg) { %>
-                        <p>
-                            <%= msg %>
-                        </p>
-                        <% }); %>
-                </div>
 </body>
 
 </html>
