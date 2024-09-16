@@ -27,12 +27,23 @@ Router.use(auth(config));
 
 const { requiresAuth } = require('express-openid-connect');
 
-Router.get("", requiresAuth(), (req, res) => {
+Router.get("", requiresAuth(), async (req, res) => {
     let data = {};
-    data.title = "login";
+    data.title = "Home";
     data.role = req.oidc.user.role[0]
     data.name = req.oidc.user.name
+    if (data.role == "agent") {
+        data.showTickets = await helpers.showTickets("");
+    } else {
+        data.showTickets = await helpers.showTickets(req.oidc.user.user_id);
+    }
+    console.log(data.showTickets)
     res.render("pages/index.ejs", data);
+});
+
+Router.post("/create-ticket", requiresAuth(), async (req, res) => {
+    await helpers.createTicket(req.oidc.user.user_id, req.body.title, req.body.description)
+    res.redirect("/")
 });
 
 

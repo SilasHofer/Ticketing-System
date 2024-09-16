@@ -1,6 +1,83 @@
 <%- include("./../partials/header.ejs") %>
-    <%= name %>
-        <%= role %>
-            <a href="/logout">Logout</a>
+    <div class="container">
+        <% if (role=="user" ) { %>
+            <div>
+                <div class="create">
+                    <button class="button" id="openAddFormButton">Create New Ticket</button>
+                </div>
 
-            <%- include("./../partials/footer.ejs") %>
+                <div class="form-popup" id="form">
+                    <form action="/create-ticket" method="POST" class="popup-container">
+                        <h1>New Ticket</h1>
+
+                        <label for="title"><b>Title</b></label>
+                        <input type="text" placeholder="Title" name="title" value="" required>
+
+                        <label for="description"><b>Description</b></label>
+                        <textarea type="text" placeholder="Description" name="description" value="" required></textarea>
+                        <button type="submit" class="btn">Add</button>
+                        <button type="button" class="btn cancel" id="closeAddForm">Close</button>
+                    </form>
+                </div>
+            </div>
+            <% } %>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Category</th>
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Creator</th>
+                            <th>Agent</th>
+                            <th>Created</th>
+                            <th>Processed</th>
+                            <th>Closed</th>
+                            <th>Solved</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for (const ticket of showTickets) { %>
+                            <tr>
+                                <td>
+                                    <%= ticket.idTickets %>
+                                </td>
+                                <td>
+                                    <%= ticket.category_id %>
+                                </td>
+                                <td>
+                                    <%= ticket.titel %>
+                                </td>
+                                <td>
+                                    <%= ticket.description %>
+                                </td>
+                                <td>
+                                    <%= ticket.creator_id %>
+                                </td>
+                                <td>
+                                    <%= ticket.agent_id %>
+                                </td>
+                                <td>
+                                    <%= ticket.created %>
+                                </td>
+                                <td>
+                                    <%= ticket.processed %>
+                                </td>
+                                <td>
+                                    <%= ticket.closed %>
+                                </td>
+                                <td>
+                                    <%= ticket.solved %>
+                                </td>
+                                <td>
+                                    <%= ticket.department %>
+                                </td>
+                            </tr>
+                            <% } %>
+                    </tbody>
+                </table>
+    </div>
+
+
+    <%- include("./../partials/footer.ejs") %>
