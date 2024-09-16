@@ -13,48 +13,30 @@ const bcrypt = require("bcrypt");
 
 const helpers = require("../src/helpers.js");
 
-function ensureAuthenticated(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next(); // User is authenticated, proceed to the next middleware
-    }
-    // User is not authenticated, redirect to login
-    res.redirect("/");
-}
+const { auth } = require('express-openid-connect');
 
+const config = {
+    authRequired: false,
+    auth0Logout: true,
+    secret: process.env.AUTH_SECRET,
+    baseURL: 'http://localhost:3000',
+    clientID: process.env.AUTH_CLIENTID,
+    issuerBaseURL: process.env.AUTH_ISSUERBASEURL
+};
+Router.use(auth(config));
 
-Router.get("", (req, res) => {
+const { requiresAuth } = require('express-openid-connect');
+
+Router.get("", requiresAuth(), (req, res) => {
     let data = {};
-
     data.title = "login";
+    data.role = req.oidc.user.role[0]
+    data.name = req.oidc.user.name
     res.render("pages/index.ejs", data);
 });
 
-Router.get("/registration", (req, res) => {
-    let data = {};
-
-    data.title = "registration";
-    res.render("pages/registration.ejs", data);
-});
-
-Router.post("/registration", async (req, res) => {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    await helpers.registration(req.body.first_name, req.body.last_name, req.body.email, hashedPassword)
-    res.redirect("/")
-});
-
-Router.get("/gg", ensureAuthenticated, (req, res) => {
-    let data = {};
-    data.name = req.user[0].first_name + req.user[0].last_name
-    data.title = "gg";
-
-    res.render("pages/gg.ejs", data);
-});
 
 
-Router.post("/login", passport.authenticate("local", {
-    successRedirect: "/gg",
-    failureRedirect: "/",
-    failureFlash: true
-}));
+
 
 module.exports = Router;
