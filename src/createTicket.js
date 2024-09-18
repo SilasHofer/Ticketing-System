@@ -5,14 +5,14 @@ auther:Silas Hofer
 const mysql = require("promise-mysql");
 const config = require("../config/db/ticket_system.json");
 
-async function createTicket(id, title, description) {
+async function createTicket(user_id, user_name, user_email, title, description) {
     const db = await mysql.createConnection(config);
     let res;
 
     let sql = `
-    CALL add_ticket(?,?,?);`;
+    CALL add_ticket(?,?,?,?,?);`;
 
-    res = await db.query(sql, [id, title, description]);
+    res = await db.query(sql, [user_id, user_name, user_email, title, description]);
     db.end();
     return res[0];
 }

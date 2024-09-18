@@ -5,6 +5,159 @@
           box-sizing: border-box;
         }
 
+        .table-container {
+          max-height: 800px;
+          /* Set the max height for the table */
+          overflow-y: scroll;
+          /* Enable vertical scrolling */
+          margin-top: 25px;
+          padding-bottom: 25px;
+          margin-left: auto;
+          margin-right: auto;
+          width: 100%;
+          /* Adjust the width as needed */
+
+        }
+
+        /* For WebKit browsers */
+        .table-container::-webkit-scrollbar {
+          width: 10px;
+          /* Width of the scrollbar */
+        }
+
+        .table-container::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          /* Background of the scrollbar track */
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+          background-color: #888;
+          /* Color of the scrollbar thumb */
+          border-radius: 10px;
+          /* Rounded edges of the scrollbar thumb */
+          border: 2px solid #f1f1f1;
+          /* Space between the thumb and the track */
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+          background-color: #555;
+          /* Color when hovering over the scrollbar thumb */
+        }
+
+        .styled-table {
+          border-collapse: separate;
+          /* Changed to separate for border-radius to work */
+          border-spacing: 0;
+          /* Ensure no spacing between cells */
+          margin-top: 25px;
+          margin-left: auto;
+          margin-right: auto;
+          font-size: 1.2em;
+          min-width: 50%;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+          border-radius: 20px;
+          /* Rounded corners for the entire table */
+          overflow: hidden;
+          /* Ensure that the rounded corners are visible */
+        }
+
+        .styled-table thead tr {
+          background-color: #0A21c0;
+          color: #ffffff;
+          text-align: left;
+        }
+
+        .styled-table th,
+        .styled-table td {
+          padding: 35px 20px;
+        }
+
+        .styled-table tbody tr {
+          border-bottom: 1px solid #dddddd;
+        }
+
+        .styled-table tbody tr:nth-of-type(even) {
+          background-color: #f3f3f3;
+        }
+
+        /* Description column specific styles */
+        .styled-table td.description {
+          max-width: 200px !important;
+          /* Set max-width for the description column */
+          overflow: hidden;
+          /* Hide overflowed content */
+          text-overflow: ellipsis;
+          /* Add ellipsis for overflowed content */
+          white-space: nowrap;
+          /* Prevent text from wrapping */
+        }
+
+        /* Ensure the first and last rows have rounded corners */
+        .styled-table thead tr:first-child th:first-child {
+          border-top-left-radius: 20px;
+          /* Top-left corner */
+        }
+
+        .styled-table thead tr:first-child th:last-child {
+          border-top-right-radius: 20px;
+          /* Top-right corner */
+        }
+
+        .styled-table tbody tr:last-child td:first-child {
+          border-bottom-left-radius: 20px;
+          /* Bottom-left corner */
+        }
+
+        .styled-table tbody tr:last-child td:last-child {
+          border-bottom-right-radius: 20px;
+          /* Bottom-right corner */
+        }
+
+        @media (max-width: 768px) {
+          table {
+            border: 0;
+          }
+
+          thead {
+            display: none;
+          }
+
+          tbody,
+          tr,
+          td {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+          }
+
+          tr {
+            margin-bottom: 10px;
+          }
+
+          td {
+            text-align: right;
+            position: relative;
+            padding-left: 50%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 0;
+            width: 45%;
+            padding-left: 15px;
+            font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background-color: #f4f4f4;
+          }
+        }
+
+
         /* Basic styling for the navbar */
         nav {
           background-color: #141619;
@@ -170,145 +323,6 @@
           padding-top: 60px;
         }
 
-
-
-
-
-
-
-        table {
-          font-family: Arial, Helvetica, sans-serif;
-          border-collapse: collapse;
-          margin-left: auto;
-          margin-right: auto;
-          width: 75%;
-          margin-top: 20px;
-        }
-
-        table td,
-        table th {
-          border: 1px solid #ddd;
-          padding: 8px;
-        }
-
-        table tr:nth-child(even) {
-          background-color: #f2f2f2;
-        }
-
-        table tr:hover {
-          background-color: #ddd;
-        }
-
-        table th {
-          padding-top: 12px;
-          padding-bottom: 12px;
-          text-align: left;
-          background-color: #393d3c;
-          color: white;
-        }
-
-
-
-        .table-picture {
-          max-width: 70px;
-        }
-
-        .showOrder:hover,
-        .addOrder:hover,
-        .addProductToOrder:hover {
-          background-color: #000000;
-          color: white;
-          cursor: pointer;
-        }
-
-        .checkbox-box {
-          border: 1px solid #ccc;
-          padding: 5px;
-          margin-top: 5px;
-          margin-bottom: 10px;
-          max-height: 200px;
-          overflow-y: auto;
-        }
-
-        .checkbox-box div {
-          margin-bottom: 5px;
-          text-align: left !important;
-        }
-
-        .checkbox-box input[type="checkbox"] {
-          margin-right: 5px;
-
-        }
-
-        .checkbox-box label {
-          cursor: pointer;
-        }
-
-        .addToOrder,
-        .deleteOrder,
-        .orderTheOrder,
-        .showpicklist,
-        .showInvoice {
-          background-color: #0099ff;
-          color: white;
-          padding: 16px 20px;
-          margin-top: 10px;
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-        }
-
-        .red {
-          color: red;
-        }
-
-        .green {
-          color: green;
-        }
-
-        .deleteOrder {
-          background-color: #ff0000 !important;
-        }
-
-
-        .deleteOrder:hover {
-          background-color: #690000 !important;
-        }
-
-        .orderTheOrder {
-          background-color: #00ff2a !important;
-        }
-
-        .orderTheOrder:hover {
-          background-color: #008616 !important;
-        }
-
-        .addToOrder:hover,
-        .showpicklist:hover {
-          background-color: #2a0061;
-        }
-
-        .status-Created {
-          color: orange;
-        }
-
-
-        .status-Updated {
-          color: blue;
-        }
-
-        .status-Shipped {
-          color: green;
-        }
-
-        .status-Deleted {
-          color: rgb(255, 0, 0);
-        }
-
-        .status-Ordered {
-          color: rgb(145, 255, 0);
-        }
-
         input[type=text],
         select {
           width: 75%;
@@ -339,29 +353,6 @@
           font-family: Arial, Helvetica, sans-serif;
         }
 
-        .category-row {
-          cursor: pointer;
-        }
-
-
-        /* Button used to open the contact form - fixed at the bottom of the page */
-        .open-button {
-          background-color: #0099ff;
-          color: white;
-          padding: 16px 20px;
-          margin-top: 10px;
-          border: none;
-          border-radius: 20px;
-          cursor: pointer;
-          width: 280px;
-        }
-
-        .open-button:hover {
-          background-color: #2a0061;
-        }
-
-
-
         /* Add styles to the form popup-container */
         .popup-container {
           max-width: 5000px;
@@ -371,25 +362,6 @@
           background-color: #b3b4bd;
         }
 
-        .amount-from {
-          width: 100%;
-          padding: 15px;
-          border: none;
-          border-radius: 5px;
-          background-color: #c7c7c7;
-        }
-
-        .edit-form {
-          z-index: 9999;
-          position: fixed;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          /* Center the element */
-          border: 3px solid #f1f1f1;
-          max-height: 90%;
-          overflow-y: auto;
-        }
 
         /* Full-width input fields */
         .popup-container input[type=text],
@@ -408,4 +380,30 @@
         .popup-container input[type=password]:focus {
           background-color: #ddd;
           outline: none;
+        }
+
+        .status-solved {
+          color: green;
+        }
+
+        .status-closed {
+          color: red;
+        }
+
+        .status-processed {
+          color: blue;
+        }
+
+        .status-created {
+          color: orange;
+        }
+
+        .status-unknown {
+          color: gray;
+        }
+
+        .top-text {
+          font-size: 35px;
+          margin-top: 20px;
+          font-weight: 1000;
         }

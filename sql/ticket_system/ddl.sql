@@ -32,13 +32,17 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   `idTickets` INT NOT NULL AUTO_INCREMENT,
   `category_id` INT NULL,
   `titel` VARCHAR(45) NULL,
-  `description` VARCHAR(45) NULL,
+  `description` VARCHAR(300) NULL,
   `creator_id` VARCHAR(45) NULL,
+  `creator_name` VARCHAR(45) NULL,
+  `creator_email` VARCHAR(45) NULL,
   `agent_id` INT NULL,
+  `agent_name` VARCHAR(45) NULL,
+  `agent_email` VARCHAR(45) NULL,
   `created` TIMESTAMP NULL,
   `processed` TIMESTAMP NULL,
   `closed` TIMESTAMP NULL,
-  `solved` TINYINT NULL,
+  `solved` TIMESTAMP NULL,
   `department` VARCHAR(45) NULL,
   PRIMARY KEY (`idTickets`),
   INDEX `category_id_idx` (`category_id` ASC) VISIBLE,
@@ -122,6 +126,8 @@ DELIMITER ;;
 
 CREATE PROCEDURE add_ticket(
     p_user_id VARCHAR(45),
+    p_user_name VARCHAR(45),
+    p_user_email VARCHAR(45),
     p_title VARCHAR(45),
     P_description VARCHAR(150)
 
@@ -132,8 +138,12 @@ INSERT INTO `tickets` (
   `category_id`, 
   `titel`, 
   `description`, 
-  `creator_id`, 
-  `agent_id`, 
+  `creator_id`,
+  `creator_name`,
+  `creator_email`, 
+  `agent_id`,
+  `agent_name`,
+  `agent_email`, 
   `created`, 
   `processed`, 
   `closed`, 
@@ -145,11 +155,15 @@ INSERT INTO `tickets` (
   p_title,     -- Replace with actual title
   P_description, -- Replace with actual description
   p_user_id,   -- Replace with actual user_id (creator_id)
+  p_user_name,
+  p_user_email,
   NULL,                  -- `agent_id` can be set to NULL if not assigned yet
+  NULL,
+  NULL,
   NOW(),                 -- `created` timestamp (current time)
   NULL,                  -- `processed` timestamp (NULL if not processed yet)
   NULL,                  -- `closed` timestamp (NULL if not closed yet)
-  0,                     -- `solved` (0 for not solved, adjust as needed)
+  NULL,                     -- `solved` (0 for not solved, adjust as needed)
   NULL                   -- `department` can be set to NULL if not specified
 );
 END;;
@@ -165,10 +179,31 @@ DELIMITER ;;
 CREATE PROCEDURE show_tickets(
   p_id VARCHAR(45)
 )
-    Select *
-    FROM `tickets` 
-    WHERE
+SELECT 
+    idTickets,
+    category_id,
+    titel,
+    description,
+    creator_id,
+    creator_name,
+    creator_email,
+    agent_id,
+    agent_name,
+    agent_email,
+    DATE_FORMAT(created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
+    department,
+    CASE
+        WHEN solved IS NOT NULL THEN 'Solved'
+        WHEN closed IS NOT NULL THEN 'Closed'
+        WHEN processed IS NOT NULL THEN 'Processed'
+        WHEN created IS NOT NULL THEN 'Created'
+        ELSE 'Unknown'
+    END AS status
+FROM 
+    tickets
+WHERE 
     p_id = "" OR creator_id = p_id
+ORDER BY created DESC;
 
 ;;
 
