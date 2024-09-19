@@ -1,11 +1,11 @@
 <%- include("./../partials/header.ejs") %>
     <div class="container">
-        <div class="top-text">
+        <div class="top-text toLong">
             <%= ticket.title%>
         </div>
     </div>
     <div class="ticket-information">
-        <div class="ticket-row">
+        <div class="ticket-top-row">
             <div class="created">
                 <h4>Created:</h4>
                 <%= ticket.created_datetime%>
@@ -20,16 +20,43 @@
                                             ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>
                                     "">
             <%= ticket.status%>
-        </div>
-        </div>
-        <div class=" description-ticket">
-                <h3 class="description-top">Description</h1>
-                    <div class="description-bottom">
-                        <%= ticket.description%>
-                    </div>
-
             </div>
         </div>
-    </div>
+        <div class=" ticket-bottom-row">
+                <div class="creator">
+                    <h3>Creator</h3>
+                    <h5>Name</h5>
+                    <%= ticket.creator_name%>
+                        <h5>Email</h5>
+                        <%= ticket.creator_email %>
+                </div>
+                <div class="description-ticket">
+                    <h3 class="description-top">Description</h1>
+                        <br>
+                        <div class="description-bottom">
+                            <%= ticket.description%>
+                        </div>
+                </div>
+                <div class="agent">
+                    <h3>Agent</h3>
+                    <% if (ticket.agent_name) { %>
+                        <h5>Name</h5>
+                        <%= ticket.agent_name %>
+                            <h5>Email</h5>
+                            <%= ticket.agent_email %>
+                                <% } else { %>
+                                    No agent assigned
+                                    <br>
+                                    <br>
+                                    <% if (role=="agent" ) { %>
+                                        <a class="button "
+                                            href="/claimTicket?ticketID=<%= ticket.idTickets %>&userID=<%= userId %>&userName=<%= userName %>&userEmail=<%= userEmail %>">Claim
+                                            Ticket</a>
+                                        <% }%>
 
-    <%- include("./../partials/footer.ejs") %>
+                                            <% }%>
+                </div>
+            </div>
+        </div>
+
+        <%- include("./../partials/footer.ejs") %>

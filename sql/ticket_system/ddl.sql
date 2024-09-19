@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   `creator_id` VARCHAR(45) NULL,
   `creator_name` VARCHAR(45) NULL,
   `creator_email` VARCHAR(45) NULL,
-  `agent_id` INT NULL,
+  `agent_id` VARCHAR(45) NULL,
   `agent_name` VARCHAR(45) NULL,
   `agent_email` VARCHAR(45) NULL,
   `created` TIMESTAMP NULL,
@@ -248,3 +248,24 @@ WHERE
 ;;
 
 DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS claim_ticket;
+
+DELIMITER ;;
+
+CREATE PROCEDURE claim_ticket(
+  p_id VARCHAR(45),
+  p_agent_id VARCHAR(45),
+  p_agent_name VARCHAR(45),
+  p_agent_email VARCHAR(45)
+
+)
+UPDATE tickets
+SET agent_id = p_agent_id, agent_name = p_agent_name, agent_email = p_agent_email, updated = NOW()
+WHERE idTickets = p_id;
+
+;;
+
+DELIMITER ;
+

@@ -116,7 +116,12 @@ Router.post("/create-ticket", requiresAuth(), async (req, res) => {
 Router.get("/ticket", requiresAuth(), async (req, res) => {
     let data = {};
     data.ticket = await helpers.getTicket(req.query.ticketID);
+    data.role = req.oidc.user.role[0];
     data.title = data.ticket.title;
+    data.userId = req.oidc.user.user_id;
+    data.userName = req.oidc.user.name;
+    data.userEmail = req.oidc.user.email;
+
     if (req.oidc.user.role[0] != "agent" && req.oidc.user.user_id != data.ticket.creator_id) {
         res.redirect("/")
     }
@@ -124,6 +129,11 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     res.render("pages/ticket.ejs", data);
 });
 
+Router.get("/claimTicket", requiresAuth(), async (req, res) => {
+    console.log(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail)
+    await helpers.claimTicket(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
+    res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
+});
 
 
 
