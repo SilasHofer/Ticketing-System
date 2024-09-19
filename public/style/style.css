@@ -5,6 +5,82 @@
           box-sizing: border-box;
         }
 
+        .ticket-row {
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+          display: flex;
+          justify-content: space-between;
+          /* Adjust spacing between the two elements */
+          align-items: center;
+          /* Vertically align items to the center */
+          margin-bottom: 10px;
+          height: 80px;
+          /* Add some space between rows if needed */
+          padding: 0 10%;
+          /* Add padding to control left and right space */
+          position: relative;
+        }
+
+        .created {
+          position: absolute;
+          left: 10%;
+          /* Push created to the left */
+          padding: 15px 20px;
+        }
+
+        .updated {
+          flex: 1;
+          /* Takes full remaining space in the center */
+          text-align: center;
+          /* Centers text within the div */
+        }
+
+        .status {
+          position: absolute;
+          right: 10%;
+          /* Push status to the right */
+          max-width: 15%;
+          /* Restrict the max width of status */
+          padding: 15px 20px;
+          border-radius: 20px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .ticket-information {
+          font-size: 1.2em;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+          border-radius: 20px;
+          margin-top: 25px;
+          padding-bottom: 20px;
+          padding-top: 20px;
+          margin-left: auto;
+          margin-right: auto;
+          max-width: 50%;
+        }
+
+        .description-top {
+          padding-top: 20px;
+          padding-bottom: 10px;
+          color: white;
+          background-color: #2c2e3a;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+          border-radius: 20px;
+        }
+
+        .description-bottom {
+          margin-top: 10px;
+          color: black;
+        }
+
+        .description-ticket {
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+          border-radius: 20px;
+          margin-left: auto;
+          margin-right: auto;
+          padding-bottom: 10px;
+          max-width: 50%;
+          background-color: whitesmoke;
+        }
+
         .table-container {
           max-height: 800px;
           /* Set the max height for the table */
@@ -64,7 +140,11 @@
         .styled-table thead tr {
           background-color: #0A21c0;
           color: #ffffff;
-          text-align: left;
+        }
+
+        .styled-table tbody tr:hover {
+          background-color: #B3B4BD !important;
+          cursor: pointer;
         }
 
         .styled-table th,
@@ -382,24 +462,44 @@
           outline: none;
         }
 
-        .status-solved {
+        .status-color-solved {
           color: green;
         }
 
-        .status-closed {
+        .status-color-closed {
           color: red;
         }
 
-        .status-processed {
+        .status-color-processed {
           color: blue;
         }
 
-        .status-created {
+        .status-color-created {
           color: orange;
         }
 
-        .status-unknown {
+        .status-color-unknown {
           color: gray;
+        }
+
+        .status-background-color-solved {
+          background-color: green;
+        }
+
+        .status-background-color-closed {
+          background-color: red;
+        }
+
+        .status-background-color-processed {
+          background-color: blue;
+        }
+
+        .status-background-color-created {
+          background-color: orange;
+        }
+
+        .status-background-color-unknown {
+          background-color: gray;
         }
 
         .top-text {

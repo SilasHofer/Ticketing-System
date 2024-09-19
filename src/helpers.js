@@ -9,6 +9,8 @@ auther:Silas Hofer
 module.exports = {
     "createTicket": require("./createTicket.js"),
     "showTickets": require("./showTickets.js"),
+    "getTicket": require("./getTicket.js"),
+
 
 };
 

@@ -31,7 +31,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   `idTickets` INT NOT NULL AUTO_INCREMENT,
   `category_id` INT NULL,
-  `titel` VARCHAR(45) NULL,
+  `title` VARCHAR(150) NULL,
   `description` VARCHAR(300) NULL,
   `creator_id` VARCHAR(45) NULL,
   `creator_name` VARCHAR(45) NULL,
@@ -41,8 +41,9 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   `agent_email` VARCHAR(45) NULL,
   `created` TIMESTAMP NULL,
   `processed` TIMESTAMP NULL,
+  `updated` TIMESTAMP NULL,
   `closed` TIMESTAMP NULL,
-  `solved` TIMESTAMP NULL,
+  `solved` INT NULL,
   `department` VARCHAR(45) NULL,
   PRIMARY KEY (`idTickets`),
   INDEX `category_id_idx` (`category_id` ASC) VISIBLE,
@@ -128,15 +129,15 @@ CREATE PROCEDURE add_ticket(
     p_user_id VARCHAR(45),
     p_user_name VARCHAR(45),
     p_user_email VARCHAR(45),
-    p_title VARCHAR(45),
-    P_description VARCHAR(150)
+    p_title VARCHAR(150),
+    P_description VARCHAR(300)
 
 )
 BEGIN
 INSERT INTO `tickets` (
   `idTickets`, 
   `category_id`, 
-  `titel`, 
+  `title`, 
   `description`, 
   `creator_id`,
   `creator_name`,
@@ -145,7 +146,8 @@ INSERT INTO `tickets` (
   `agent_name`,
   `agent_email`, 
   `created`, 
-  `processed`, 
+  `processed`,
+  `updated`, 
   `closed`, 
   `solved`, 
   `department`
@@ -161,7 +163,8 @@ INSERT INTO `tickets` (
   NULL,
   NULL,
   NOW(),                 -- `created` timestamp (current time)
-  NULL,                  -- `processed` timestamp (NULL if not processed yet)
+  NULL,
+  NUll,                  -- `processed` timestamp (NULL if not processed yet)
   NULL,                  -- `closed` timestamp (NULL if not closed yet)
   NULL,                     -- `solved` (0 for not solved, adjust as needed)
   NULL                   -- `department` can be set to NULL if not specified
@@ -182,14 +185,10 @@ CREATE PROCEDURE show_tickets(
 SELECT 
     idTickets,
     category_id,
-    titel,
+    title,
     description,
-    creator_id,
     creator_name,
-    creator_email,
-    agent_id,
     agent_name,
-    agent_email,
     DATE_FORMAT(created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
     department,
     CASE
@@ -204,6 +203,47 @@ FROM
 WHERE 
     p_id = "" OR creator_id = p_id
 ORDER BY created DESC;
+
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS get_ticket;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_ticket(
+  p_id VARCHAR(45)
+)
+SELECT 
+    idTickets,
+    category_id,
+    title,
+    description,
+    creator_id,
+    creator_name,
+    creator_email,
+    agent_id,
+    agent_name,
+    agent_email,
+    DATE_FORMAT(created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
+    DATE_FORMAT(processed, '%Y-%m-%d %H:%i:%s') AS processed_datetime,
+    DATE_FORMAT(closed, '%Y-%m-%d %H:%i:%s') AS closed_datetime,
+    DATE_FORMAT(updated, '%Y-%m-%d %H:%i:%s') AS updated_datetime,
+
+    solved,
+    department,
+    CASE
+        WHEN solved IS NOT NULL THEN 'Solved'
+        WHEN closed IS NOT NULL THEN 'Closed'
+        WHEN processed IS NOT NULL THEN 'Processed'
+        WHEN created IS NOT NULL THEN 'Created'
+        ELSE 'Unknown'
+    END AS status
+FROM 
+    tickets
+WHERE 
+    idTickets = p_id
 
 ;;
 

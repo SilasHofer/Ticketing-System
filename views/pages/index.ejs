@@ -41,12 +41,12 @@
                         </thead>
                         <tbody>
                             <% showTickets.forEach(ticket=> { %>
-                                <tr>
+                                <tr class="openTicket" data-ticket-id="<%= ticket.idTickets %>">
                                     <td>
                                         <%= ticket.idTickets %>
                                     </td>
                                     <td>
-                                        <%= ticket.titel %>
+                                        <%= ticket.title %>
                                     </td>
                                     <td class="description">
                                         <%= ticket.description %>
@@ -64,10 +64,10 @@
                                         <%= ticket.department %>
                                     </td>
                                     <td class="
-                                        <%= ticket.status === 'Solved' ? 'status-solved' :
-                                            ticket.status === 'Closed' ? 'status-closed' :
-                                            ticket.status === 'Processed' ? 'status-processed' :
-                                            ticket.status === 'Created' ? 'status-created' : 'status-unknown' %>
+                                        <%= ticket.status === 'Solved' ? 'status-color-solved' :
+                                            ticket.status === 'Closed' ? 'status-color-closed' :
+                                            ticket.status === 'Processed' ? 'status-color-processed' :
+                                            ticket.status === 'Created' ? 'status-color-created' : 'status-color-unknown' %>
                                     ">
                                         <%= ticket.status %>
                                     </td>

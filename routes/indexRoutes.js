@@ -96,17 +96,6 @@ Router.get("", requiresAuth(), async (req, res) => {
             data.showTickets = await helpers.showTickets(userId);
         }
 
-
-        // Create an array to hold the enhanced tickets
-        const enhancedTickets = [];
-        for (const ticket of data.showTickets) {
-            const creatorInfo = await getUserInformation(ticket.creator_id);
-            enhancedTickets.push({
-                ...ticket,
-                creator_name: creatorInfo ? creatorInfo.name : 'Unknown User'
-            });
-        }
-
         // Render the page
         res.render("pages/index.ejs", data);
 
@@ -122,6 +111,17 @@ Router.post("/create-ticket", requiresAuth(), async (req, res) => {
     sendEmailToUser(req, transporter, 'Your ticket ' + req.body.title + ' has been successfully created!')
 
     res.redirect("/")
+});
+
+Router.get("/ticket", requiresAuth(), async (req, res) => {
+    let data = {};
+    data.ticket = await helpers.getTicket(req.query.ticketID);
+    data.title = data.ticket.title;
+    if (req.oidc.user.role[0] != "agent" && req.oidc.user.user_id != data.ticket.creator_id) {
+        res.redirect("/")
+    }
+
+    res.render("pages/ticket.ejs", data);
 });
 
 

@@ -1,0 +1,35 @@
+<%- include("./../partials/header.ejs") %>
+    <div class="container">
+        <div class="top-text">
+            <%= ticket.title%>
+        </div>
+    </div>
+    <div class="ticket-information">
+        <div class="ticket-row">
+            <div class="created">
+                <h4>Created:</h4>
+                <%= ticket.created_datetime%>
+            </div>
+            <div class="updated">
+                <h4>Updated:</h4>
+                <%= ticket.updated_datetime%>
+            </div>
+            <div class="status <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
+                                            ticket.status === 'Closed' ? 'status-background-color-closed' :
+                                            ticket.status === 'Processed' ? 'status-background-color-processed' :
+                                            ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>
+                                    "">
+            <%= ticket.status%>
+        </div>
+        </div>
+        <div class=" description-ticket">
+                <h3 class="description-top">Description</h1>
+                    <div class="description-bottom">
+                        <%= ticket.description%>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+
+    <%- include("./../partials/footer.ejs") %>
