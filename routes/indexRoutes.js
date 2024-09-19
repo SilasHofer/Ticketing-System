@@ -7,9 +7,7 @@ if (process.env.NODE_ENV != "production") {
     require("dotenv").config()
 }
 const express = require("express");
-const passport = require("passport");
 const Router = express.Router();
-const bcrypt = require("bcrypt");
 const nodemailer = require('nodemailer');
 const helpers = require("../src/helpers.js");
 const userCache = new Map();
@@ -43,31 +41,6 @@ function sendEmailToUser(req, transporter, emailText) {
         return true;
     });
 }
-
-async function getUserInformation(userId) {
-    if (userCache.has(userId)) {
-        return userCache.get(userId);
-    }
-    const axios = require("axios").default;
-
-    const options = {
-        method: 'GET',
-        url: `https://dev-c3i3d0lsnjh0p61t.eu.auth0.com/api/v2/users/${userId}`,
-        headers: {
-            Authorization: `Bearer ${process.env.AUTH0_ACCESS_TOKEN}`
-        }
-    };
-
-    try {
-        const response = await axios.request(options);
-        userCache.set(userId, response.data);
-        return response.data; // Return the data directly
-    } catch (error) {
-        console.error('Error fetching user information:', error);
-        throw error; // Propagate the error so the caller can handle it
-    }
-}
-
 
 const config = {
     authRequired: false,
@@ -116,15 +89,15 @@ Router.post("/create-ticket", requiresAuth(), async (req, res) => {
 Router.get("/ticket", requiresAuth(), async (req, res) => {
     let data = {};
     data.ticket = await helpers.getTicket(req.query.ticketID);
+    if (!data.ticket || req.oidc.user.role[0] != "agent" && req.oidc.user.user_id != data.ticket.creator_id) {
+        return res.redirect("/")
+    }
     data.role = req.oidc.user.role[0];
     data.title = data.ticket.title;
     data.userId = req.oidc.user.user_id;
     data.userName = req.oidc.user.name;
     data.userEmail = req.oidc.user.email;
 
-    if (req.oidc.user.role[0] != "agent" && req.oidc.user.user_id != data.ticket.creator_id) {
-        res.redirect("/")
-    }
 
     res.render("pages/ticket.ejs", data);
 });
