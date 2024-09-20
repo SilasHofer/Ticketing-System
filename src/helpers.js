@@ -11,6 +11,10 @@ module.exports = {
     "showTickets": require("./showTickets.js"),
     "getTicket": require("./getTicket.js"),
     "claimTicket": require("./claimTicket.js"),
+    "addComment": require("./addComment.js"),
+    "showComments": require("./showComments.js"),
+
+
 
 
 

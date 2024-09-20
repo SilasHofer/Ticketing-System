@@ -59,20 +59,13 @@ ENGINE = InnoDB;
 -- Table `ticket_system`.`Comments`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ticket_system`.`comments` (
-  `idComments` INT NOT NULL,
-  `text` VARCHAR(45) NULL,
-  `user_id` INT NOT NULL,
+  `idComments` INT NOT NULL AUTO_INCREMENT,
+  `text` VARCHAR(300) NULL,
+  `user_name` VARCHAR(45) NOT NULL,
   `ticket_id` INT NOT NULL,
-  `accsess` VARCHAR(45) NOT NULL,
+  `user_access` TINYINT NOT NULL,
   `time` TIMESTAMP NULL,
-  PRIMARY KEY (`idComments`),
-  INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `fk_Comments_user_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `ticket_system`.`Users` (`idUsers`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+  PRIMARY KEY (`idComments`));
 
 
 -- -----------------------------------------------------
@@ -269,3 +262,65 @@ WHERE idTickets = p_id;
 
 DELIMITER ;
 
+DROP PROCEDURE IF EXISTS add_comment;
+
+DELIMITER ;;
+
+CREATE PROCEDURE add_comment(
+  p_ticket_id VARCHAR(45),
+  p_user_name VARCHAR(45),
+  p_text VARCHAR(300),
+  p_access TINYINT
+
+)
+BEGIN
+INSERT INTO `comments` (
+  `idComments`, 
+  `text`, 
+  `user_name`, 
+  `ticket_id`, 
+  `user_access`,
+  `time`
+) VALUES (
+  NULL,                  
+  p_text,
+  p_user_name,
+  p_ticket_id,
+  p_access,
+  NOW()
+);
+END;;
+;;
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS show_comments;
+
+DELIMITER ;;
+
+CREATE PROCEDURE show_comments(
+  p_id INT,
+  p_access TINYINT
+)
+BEGIN
+UPDATE tickets
+  SET updated = NOW()  
+  WHERE idTickets = p_id;
+
+  SELECT
+    user_name, 
+    text,
+    time,
+    user_access
+  FROM 
+    comments
+  WHERE 
+    ticket_id = p_id AND (p_access = 1 OR user_access = 0);
+
+    END;;
+
+
+;;
+
+DELIMITER ;

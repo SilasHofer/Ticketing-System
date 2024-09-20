@@ -22,12 +22,12 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-function sendEmailToUser(req, transporter, emailText) {
+function sendEmailToUser(req, transporter, to, emailsubject, emailText) {
     // Define mail options
     const mailOptions = {
         from: 'ticketsystem8@gmail.com',
-        to: req.oidc.user.email,
-        subject: 'Ticket Created',
+        to: to,
+        subject: emailsubject,
         text: emailText
     };
 
@@ -81,7 +81,7 @@ Router.get("", requiresAuth(), async (req, res) => {
 Router.post("/create-ticket", requiresAuth(), async (req, res) => {
     await helpers.createTicket(req.oidc.user.user_id, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
 
-    sendEmailToUser(req, transporter, 'Your ticket ' + req.body.title + ' has been successfully created!')
+    sendEmailToUser(req, transporter, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
 
     res.redirect("/")
 });
@@ -97,15 +97,34 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     data.userId = req.oidc.user.user_id;
     data.userName = req.oidc.user.name;
     data.userEmail = req.oidc.user.email;
-
+    if (data.role == "agent") {
+        data.showComments = await helpers.showComments(req.query.ticketID, 1);
+    } else {
+        data.showComments = await helpers.showComments(req.query.ticketID, 0);
+    }
 
     res.render("pages/ticket.ejs", data);
 });
 
 Router.get("/claimTicket", requiresAuth(), async (req, res) => {
-    console.log(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail)
     await helpers.claimTicket(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
+});
+
+Router.post("/addComment", requiresAuth(), async (req, res) => {
+    let hide;
+    if (req.oidc.user.role[0] == "agent") {
+        hide = req.body.hide === "on"
+    } else {
+        hide = false;
+    }
+    await helpers.addComment(req.body.ticketID, req.body.userName, req.body.comment, hide)
+    if (hide == false) {
+        sendEmailToUser(req, transporter, req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
+    }
+
+    res.redirect(`/ticket?ticketID=${req.body.ticketID}`)
+
 });
 
 

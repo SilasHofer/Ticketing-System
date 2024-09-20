@@ -5,12 +5,20 @@
           box-sizing: border-box;
         }
 
-        .ticket-bottom-row {
-          display: flex;
-          position: relative;
-          justify-content: space-between;
-          margin-bottom: 5%;
-          padding-top: 20px;
+        .ticket-comment-row-top {
+          font-size: 2rem;
+          padding: 20px;
+          color: white;
+          background-color: #2c2e3a;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .ticket-comment-row {
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .hide-comment {
+          font-size: 10px !important;
         }
 
         .ticket-top-row {
@@ -26,6 +34,14 @@
           padding: 0 10%;
           /* Add padding to control left and right space */
           position: relative;
+        }
+
+        .ticket-bottom-row {
+          display: flex;
+          position: relative;
+          justify-content: space-between;
+          margin-bottom: 5%;
+          padding-top: 20px;
         }
 
         .created {

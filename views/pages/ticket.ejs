@@ -57,6 +57,46 @@
                                             <% }%>
                 </div>
             </div>
+            <div class=" ticket-comment-row">
+                <div class="ticket-comment-row-top">
+                    Comments
+                </div>
+                <form action="/addComment" method="POST">
+                    <input type="text" placeholder="Comment" name="comment" value="" required>
+                    <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">
+                    <input type="hidden" name="ticketTitle" value="<%= ticket.title %>">
+                    <input type="hidden" name="userName" value="<%= userName %>">
+                    <input type="hidden" name="creatorEmail" value="<%= ticket.creator_email %>">
+
+
+                    <% if (role=="agent" ) { %>
+                        <label for="hide" class="hide-comment"><b>hide form user</b></label>
+                        <input type="checkbox" name="hide" value="on">
+                        <% }%>
+                            <button type="submit" class="btn " id="addComment">comment</button>
+                </form>
+                <div class="ticket-comments">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>user</th>
+                                <th>text</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% showComments.forEach(comment=> { %>
+                                <tr <% if (comment.user_access==1) { %> style="background-color: red;" <% } %> >
+                                        <td>
+                                            <%= comment.user_name %>
+                                        </td>
+                                        <td>
+                                            <%= comment.text %>
+                                        </td>
+                                        <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
         <%- include("./../partials/footer.ejs") %>
