@@ -325,3 +325,19 @@ UPDATE tickets
 ;;
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS close_ticket;
+
+DELIMITER ;;
+
+CREATE PROCEDURE close_ticket(
+  p_id VARCHAR(45)
+
+)
+UPDATE tickets
+SET closed = NOW()
+WHERE idTickets = p_id;
+
+;;
+
+DELIMITER ;

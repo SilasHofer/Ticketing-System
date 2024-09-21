@@ -110,6 +110,13 @@ Router.get("/claimTicket", requiresAuth(), async (req, res) => {
     await helpers.claimTicket(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
+Router.get("/closeTicket", requiresAuth(), async (req, res) => {
+    await helpers.closeTicket(req.query.ticketID);
+    sendEmailToUser(req, transporter, req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')
+
+    res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
+});
+
 
 Router.post("/addComment", requiresAuth(), async (req, res) => {
     let hide;

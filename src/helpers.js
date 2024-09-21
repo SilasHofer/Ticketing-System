@@ -13,6 +13,8 @@ module.exports = {
     "claimTicket": require("./claimTicket.js"),
     "addComment": require("./addComment.js"),
     "showComments": require("./showComments.js"),
+    "closeTicket": require("./closeTicket.js"),
+
 
 
 

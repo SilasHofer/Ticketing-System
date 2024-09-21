@@ -144,12 +144,6 @@
           padding-top: 20px;
         }
 
-        .created {
-          position: absolute;
-          left: 10%;
-          /* Push created to the left */
-          padding: 15px 20px;
-        }
 
         .agent {
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -158,6 +152,42 @@
           /* Push created to the left */
           padding: 15px 20px;
           border-radius: 20px;
+        }
+
+        select[name="ticketStatus"] {
+          appearance: none;
+          /* Removes default dropdown arrow */
+          -webkit-appearance: none;
+          /* For Safari */
+          -moz-appearance: none;
+          /* For Firefox */
+
+          border: none;
+          /* Remove border */
+          background-color: transparent;
+          /* Transparent background */
+          font-size: 16px;
+          /* Font size to match regular text */
+          color: inherit;
+          /* Inherit the text color */
+          cursor: pointer;
+          /* Pointer cursor to indicate clickability */
+          padding: 0;
+          /* Remove padding */
+          margin: 0;
+          /* Remove margin */
+          width: auto;
+          /* Auto width for inline text-like appearance */
+        }
+
+        select[name="ticketStatus"]:focus {
+          outline: none;
+          /* Remove focus outline */
+        }
+
+        option {
+          color: black;
+          /* Ensure options are visible in the dropdown */
         }
 
         .agent h3,
@@ -184,6 +214,13 @@
           padding: 15px 20px;
         }
 
+        .created {
+          position: absolute;
+          left: 5%;
+          /* Push created to the left */
+          padding: 15px 20px;
+        }
+
         .updated {
           flex: 1;
           /* Takes full remaining space in the center */
@@ -191,15 +228,33 @@
           /* Centers text within the div */
         }
 
-        .status {
-          position: absolute;
-          right: 10%;
-          /* Push status to the right */
-          max-width: 15%;
-          /* Restrict the max width of status */
+        .close-button {
+          margin-left: 10px;
           padding: 15px 20px;
           border-radius: 20px;
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .status-indiecator {
+          margin-right: 10px;
+          padding: 15px 20px;
+          border-radius: 20px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+
+        }
+
+        .status {
+          display: flex;
+          /* Use Flexbox for layout */
+          align-items: center;
+          /* Vertically align items */
+          justify-content: space-between;
+          position: absolute;
+          right: 5%;
+          /* Push status to the right */
+          max-width: 25%;
+          /* Restrict the max width of status */
+
         }
 
         .ticket-information {
@@ -486,6 +541,20 @@
           margin-left: auto;
           margin-right: auto;
           padding-bottom: 100px;
+        }
+
+        .close-button {
+          background-color: red;
+          border: none;
+          border-radius: 20px;
+          color: white;
+          text-decoration: none;
+          font-size: 20px;
+          cursor: pointer;
+        }
+
+        .close-button:hover {
+          background-color: #050A44;
         }
 
         .button {

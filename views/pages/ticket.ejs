@@ -14,50 +14,71 @@
                 <h4>Updated:</h4>
                 <%= ticket.updated_datetime%>
             </div>
-            <div class="status <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
+            <div class="status">
+                <div class="status-indiecator <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
                                             ticket.status === 'Closed' ? 'status-background-color-closed' :
                                             ticket.status === 'Processed' ? 'status-background-color-processed' :
                                             ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>
                                     "">
-            <%= ticket.status%>
+                <% if (role =='agent' ) { %>
+                    <select name='ticketStatus' onchange=" ">
+                    <option value=" Solved" <%=ticket.status==='Solved' ? 'selected' : '' %>>Solved</option>
+                    <option value="Closed" <%=ticket.status==='Closed' ? 'selected' : '' %>>Closed</option>
+                    <option value="Processed" <%=ticket.status==='Processed' ? 'selected' : '' %>>Processed</option>
+                    <option value="Created" <%=ticket.status==='Created' ? 'selected' : '' %>>Created</option>
+                    </select>
+                    <% } else { %>
+                        <%= ticket.status %>
+                            <% } %>
+                </div>
+                <% if (ticket.status !=='Closed' ) { %>
+                    <a class=" close-button " href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
+                    <%=ticket.creator_email %>&ticketTitle=<%= ticket.title %> %>">Close Ticket</a>
+                    <% } else {%>
+                        <%= ticket.closed_datetime %>
+                            <% } %>
             </div>
+
+
+
         </div>
         <div class=" ticket-bottom-row">
-                <div class="creator">
-                    <h3>Creator</h3>
-                    <h5>Name</h5>
-                    <%= ticket.creator_name%>
-                        <h5>Email</h5>
-                        <%= ticket.creator_email %>
-                </div>
-                <div class="description-ticket">
-                    <h3 class="description-top">Description</h1>
-                        <br>
-                        <div class="description-bottom">
-                            <%= ticket.description%>
-                        </div>
-                </div>
-                <div class="agent">
-                    <h3>Agent</h3>
-                    <% if (ticket.agent_name) { %>
-                        <h5>Name</h5>
-                        <%= ticket.agent_name %>
-                            <h5>Email</h5>
-                            <%= ticket.agent_email %>
-                                <% } else { %>
-                                    No agent assigned
-                                    <br>
-                                    <br>
-                                    <% if (role=="agent" ) { %>
-                                        <a class="button "
-                                            href="/claimTicket?ticketID=<%= ticket.idTickets %>&userID=<%= userId %>&userName=<%= userName %>&userEmail=<%= userEmail %>">Claim
-                                            Ticket</a>
-                                        <% }%>
-
-                                            <% }%>
-                </div>
+            <div class="creator">
+                <h3>Creator</h3>
+                <h5>Name</h5>
+                <%= ticket.creator_name%>
+                    <h5>Email</h5>
+                    <%= ticket.creator_email %>
             </div>
-            <div class="ticket-comment-row">
+            <div class="description-ticket">
+                <h3 class="description-top">Description</h1>
+                    <br>
+                    <div class="description-bottom">
+                        <%= ticket.description%>
+                    </div>
+            </div>
+            <div class="agent">
+                <h3>Agent</h3>
+                <% if (ticket.agent_name) { %>
+                    <h5>Name</h5>
+                    <%= ticket.agent_name %>
+                        <h5>Email</h5>
+                        <%= ticket.agent_email %>
+                            <% } else { %>
+                                No agent assigned
+                                <br>
+                                <br>
+                                <% if (role=="agent" ) { %>
+                                    <a class="button "
+                                        href="/claimTicket?ticketID=<%= ticket.idTickets %>&userID=<%= userId %>&userName=<%= userName %>&userEmail=<%= userEmail %>">Claim
+                                        Ticket</a>
+                                    <% }%>
+
+                                        <% }%>
+            </div>
+        </div>
+        <div class="ticket-comment-row">
+            <% if (ticket.status !=='Closed' ) { %>
                 <form action="/addComment" method="POST">
                     <input type="text" placeholder="Comment" name="comment" value="" required>
                     <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">
@@ -70,24 +91,25 @@
                         <% }%>
                             <button type="submit" class="btn " id="addComment">comment</button>
                 </form>
-                <div class="ticket-comments">
-                    <% showComments.forEach(comment=> { %>
-                        <div class="comment">
-                            <div class="comment-top">
-                                <div class="user_name">
-                                    <%= comment.user_name %>
+                <% }%>
+                    <div class="ticket-comments">
+                        <% showComments.forEach(comment=> { %>
+                            <div class="comment">
+                                <div class="comment-top">
+                                    <div class="user_name">
+                                        <%= comment.user_name %>
+                                    </div>
+                                    <div class="time">
+                                        <%= comment.time_datetime %>
+                                    </div>
                                 </div>
-                                <div class="time">
-                                    <%= comment.time_datetime %>
+                                <div class="<% if (comment.user_access==1) { %> hide-comment-color <% } %>">
+                                    <%= comment.text %>
                                 </div>
                             </div>
-                            <div class="<% if (comment.user_access==1) { %> hide-comment-color <% } %>">
-                                <%= comment.text %>
-                            </div>
-                        </div>
-                        <% }) %>
-                </div>
-            </div>
+                            <% }) %>
+                    </div>
         </div>
+    </div>
 
-        <%- include("./../partials/footer.ejs") %>
+    <%- include("./../partials/footer.ejs") %>
