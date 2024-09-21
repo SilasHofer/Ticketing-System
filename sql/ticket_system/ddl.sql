@@ -311,12 +311,13 @@ UPDATE tickets
   SELECT
     user_name, 
     text,
-    time,
+    DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') AS time_datetime,
     user_access
   FROM 
     comments
   WHERE 
-    ticket_id = p_id AND (p_access = 1 OR user_access = 0);
+    ticket_id = p_id AND (p_access = 1 OR user_access = 0)
+    ORDER BY time_datetime DESC;
 
     END;;
 
