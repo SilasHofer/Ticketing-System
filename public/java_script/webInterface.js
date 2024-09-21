@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = `/ticket?ticketID=${ticketID}`;
         });
     });
+
 });
 document.getElementById("openAddFormButton").addEventListener("click", openAddForm);
 function openAddForm() {

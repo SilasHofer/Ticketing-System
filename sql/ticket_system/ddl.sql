@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   `processed` TIMESTAMP NULL,
   `updated` TIMESTAMP NULL,
   `closed` TIMESTAMP NULL,
-  `solved` INT NULL,
+  `solved` TIMESTAMP NULL,
   `department` VARCHAR(45) NULL,
   PRIMARY KEY (`idTickets`),
   INDEX `category_id_idx` (`category_id` ASC) VISIBLE,
@@ -339,5 +339,40 @@ SET closed = NOW()
 WHERE idTickets = p_id;
 
 ;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS change_status;
+
+DELIMITER ;;
+
+CREATE PROCEDURE change_status(
+  p_id VARCHAR(45),
+  p_status VARCHAR(45)
+
+)
+BEGIN
+    -- Update the correct column based on input
+    IF p_status = 'processed' THEN
+        UPDATE tickets
+        SET processed = NOW()
+        WHERE idTickets = p_id;
+        
+    ELSEIF p_status = 'solved' THEN
+        UPDATE tickets
+        SET solved = NOW()
+        WHERE idTickets = p_id;
+
+    ELSEIF p_status = 'closed' THEN
+        UPDATE tickets
+        SET closed = NOW()
+        WHERE idTickets = p_id;
+
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid column name';
+    END IF;
+END;;
+
+
 
 DELIMITER ;

@@ -20,18 +20,22 @@
                                             ticket.status === 'Processed' ? 'status-background-color-processed' :
                                             ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>
                                     "">
-                <% if (role =='agent' ) { %>
-                    <select name='ticketStatus' onchange=" ">
-                    <option value=" Solved" <%=ticket.status==='Solved' ? 'selected' : '' %>>Solved</option>
-                    <option value="Closed" <%=ticket.status==='Closed' ? 'selected' : '' %>>Closed</option>
-                    <option value="Processed" <%=ticket.status==='Processed' ? 'selected' : '' %>>Processed</option>
-                    <option value="Created" <%=ticket.status==='Created' ? 'selected' : '' %>>Created</option>
-                    </select>
-                    <% } else { %>
-                        <%= ticket.status %>
-                            <% } %>
+                <% if (role =='agent' && ticket.agent_id === userId && ticket.status !=='Solved' ) { %>
+                        <select name='ticketStatus' onchange="
+                    window.location='/changeStatus?ticketID=<%=ticket.idTickets%>&creatorEmail=<%=ticket.creator_email %>&ticketTitle=<%= ticket.title %>&status='
+                    + this.value ">
+                    <option value=" <%=ticket.status %>" selected disabled>
+                    <%= ticket.status %>
+                        </option>
+                        <option value="Solved" <%=ticket.status==='Solved' ? 'selected' : '' %>>Solved</option>
+                        <option value="Closed" <%=ticket.status==='Closed' ? 'selected' : '' %>>Closed</option>
+                        <option value="Processed" <%=ticket.status==='Processed' ? 'selected' : '' %>>Processed</option>
+                        </select>
+                        <% } else { %>
+                            <%= ticket.status %>
+                                <% } %>
                 </div>
-                <% if (ticket.status !=='Closed' ) { %>
+                <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
                     <a class=" close-button " href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
                     <%=ticket.creator_email %>&ticketTitle=<%= ticket.title %> %>">Close Ticket</a>
                     <% } else {%>
@@ -78,7 +82,7 @@
             </div>
         </div>
         <div class="ticket-comment-row">
-            <% if (ticket.status !=='Closed' ) { %>
+            <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
                 <form action="/addComment" method="POST">
                     <input type="text" placeholder="Comment" name="comment" value="" required>
                     <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">

@@ -117,6 +117,12 @@ Router.get("/closeTicket", requiresAuth(), async (req, res) => {
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 
+Router.get("/changeStatus", requiresAuth(), async (req, res) => {
+    sendEmailToUser(req, transporter, req.query.creatorEmail, 'Ticket updated', 'Your ticket ' + req.query.ticketTitle + ' has ben updated')
+    await helpers.changeStatus(req.query.ticketID, req.query.status);
+    res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
+});
+
 
 Router.post("/addComment", requiresAuth(), async (req, res) => {
     let hide;
