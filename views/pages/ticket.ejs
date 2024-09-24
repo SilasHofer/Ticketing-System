@@ -1,6 +1,6 @@
 <%- include("./../partials/header.ejs") %>
     <div class="container">
-        <div class="top-text">
+        <div class="ticket-top-text">
             <%= ticket.title%>
         </div>
     </div>
@@ -15,7 +15,7 @@
                 <%= ticket.updated_datetime%>
             </div>
             <div class="status">
-                <div class="status-indiecator <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
+                <div class="status-indicator <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
                                             ticket.status === 'Closed' ? 'status-background-color-closed' :
                                             ticket.status === 'Processed' ? 'status-background-color-processed' :
                                             ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>
@@ -36,7 +36,7 @@
                                 <% } %>
                 </div>
                 <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
-                    <a class=" close-button " href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
+                    <a class="red-button " href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
                     <%=ticket.creator_email %>&ticketTitle=<%= ticket.title %> %>">Close Ticket</a>
                     <% } else {%>
                         <%= ticket.closed_datetime %>
@@ -108,7 +108,7 @@
                                     </div>
                                 </div>
                                 <div
-                                    class="comment-text <% if (comment.user_access==1) { %> hide-comment-color <% } %>">
+                                    class="ticket-comment-text <% if (comment.user_access==1) { %> hide-comment-color <% } %>">
                                     <%= comment.text %>
                                 </div>
                             </div>

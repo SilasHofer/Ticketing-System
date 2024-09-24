@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = `/ticket?ticketID=${ticketID}`;
         });
     });
+
     document.getElementById('filter-input').addEventListener('input', function () {
         // Get the value of the input field and convert it to lowercase for case-insensitive matching
         let filterValue = this.value.toLowerCase();
@@ -40,12 +41,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-
-
 document.getElementById("openAddFormButton").addEventListener("click", openAddForm);
 function openAddForm() {
     document.getElementById("form").style.display = "block";
 }
+
 document.getElementById("closeAddForm").addEventListener("click", closeAddForm);
 function closeAddForm() {
     document.getElementById("form").style.display = "none";

@@ -5,6 +5,15 @@
           box-sizing: border-box;
         }
 
+        body {
+          font-family: Arial, Helvetica, sans-serif;
+          text-align: center;
+          margin-top: 0px;
+          margin-left: auto;
+          margin-right: auto;
+          padding-bottom: 100px;
+        }
+
         .highlight {
           background-color: yellow;
           /* Change this to your desired highlight color */
@@ -26,13 +35,6 @@
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Top part of the comment section, e.g., the "Comments" header */
-        .ticket-comment-row-top {
-          font-size: 24px;
-          font-weight: bold;
-          margin-bottom: 15px;
-          color: #333;
-        }
 
         /* Styling the form inputs and button */
         form input[type="text"] {
@@ -240,15 +242,7 @@
           /* Centers text within the div */
         }
 
-        .close-button {
-          margin-left: 10px;
-          padding: 15px 20px;
-          border-radius: 20px;
-          font-size: 13px !important;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .status-indiecator {
+        .status-indicator {
           margin-right: 10px;
           padding: 15px 20px;
           border-radius: 20px;
@@ -548,15 +542,11 @@
 
         }
 
-        body {
-          text-align: center;
-          margin-top: 0px;
-          margin-left: auto;
-          margin-right: auto;
-          padding-bottom: 100px;
-        }
-
-        .close-button {
+        .red-button {
+          margin-left: 10px;
+          padding: 15px 20px;
+          font-size: 13px !important;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
           background-color: red;
           border: none;
           border-radius: 20px;
@@ -566,7 +556,7 @@
           cursor: pointer;
         }
 
-        .close-button:hover {
+        .red-button:hover {
           background-color: #050A44;
         }
 
@@ -681,9 +671,6 @@
           background-color: #45a049;
         }
 
-        body {
-          font-family: Arial, Helvetica, sans-serif;
-        }
 
         /* Add styles to the form popup-container */
         .popup-container {
@@ -754,7 +741,7 @@
           background-color: gray;
         }
 
-        .top-text {
+        .ticket-top-text {
           margin-left: auto;
           margin-right: auto;
           font-size: 35px;
@@ -767,7 +754,7 @@
           max-width: 90%;
         }
 
-        .comment-text {
+        .ticket-comment-text {
           margin-left: auto;
           margin-right: auto;
           padding: 15px;
