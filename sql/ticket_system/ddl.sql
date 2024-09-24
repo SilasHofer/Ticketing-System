@@ -31,8 +31,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   `idTickets` INT NOT NULL AUTO_INCREMENT,
   `category_id` INT NULL,
-  `title` VARCHAR(150) NULL,
-  `description` VARCHAR(300) NULL,
+  `title` VARCHAR(200) NULL,
+  `description` VARCHAR(2000) NULL,
   `creator_id` VARCHAR(45) NULL,
   `creator_name` VARCHAR(45) NULL,
   `creator_email` VARCHAR(45) NULL,
@@ -60,7 +60,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ticket_system`.`comments` (
   `idComments` INT NOT NULL AUTO_INCREMENT,
-  `text` VARCHAR(300) NULL,
+  `text` VARCHAR(2000) NULL,
   `user_name` VARCHAR(45) NOT NULL,
   `ticket_id` INT NOT NULL,
   `user_access` TINYINT NOT NULL,
@@ -122,8 +122,8 @@ CREATE PROCEDURE add_ticket(
     p_user_id VARCHAR(45),
     p_user_name VARCHAR(45),
     p_user_email VARCHAR(45),
-    p_title VARCHAR(150),
-    P_description VARCHAR(300)
+    p_title VARCHAR(200),
+    P_description VARCHAR(2000)
 
 )
 BEGIN
@@ -269,7 +269,7 @@ DELIMITER ;;
 CREATE PROCEDURE add_comment(
   p_ticket_id VARCHAR(45),
   p_user_name VARCHAR(45),
-  p_text VARCHAR(300),
+  p_text VARCHAR(2000),
   p_access TINYINT
 
 )
@@ -374,5 +374,38 @@ BEGIN
 END;;
 
 
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS delete_ticket;
+
+DELIMITER ;;
+
+CREATE PROCEDURE delete_ticket(
+  p_id VARCHAR(45)
+
+)
+BEGIN
+  -- Declare variables to hold the data you want to return before deletion
+  DECLARE v_title VARCHAR(255);
+  DECLARE v_creator_email VARCHAR(100);
+
+  -- Fetch the data you want to return from the ticket before deleting it
+  SELECT title,creator_email
+  INTO v_title, v_creator_email
+  FROM tickets
+  WHERE idTickets = p_id;
+
+  -- Return the data (e.g., using SELECT)
+  SELECT v_title AS title, 
+         v_creator_email AS creator_email;
+
+  -- Delete the ticket
+  DELETE FROM tickets
+  WHERE idTickets = p_id;
+
+END ;;
+
+;;
 
 DELIMITER ;

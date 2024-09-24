@@ -15,6 +15,7 @@ module.exports = {
     "showComments": require("./showComments.js"),
     "closeTicket": require("./closeTicket.js"),
     "changeStatus": require("./changeStatus.js"),
+    "deleteComment": require("./deleteComment.js")
 
 
 

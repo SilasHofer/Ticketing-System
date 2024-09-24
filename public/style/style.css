@@ -5,6 +5,18 @@
           box-sizing: border-box;
         }
 
+        .highlight {
+          background-color: yellow;
+          /* Change this to your desired highlight color */
+        }
+
+        #filter-form {
+          width: 20%;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: -20px;
+        }
+
         /* Container for the entire comment section */
         .ticket-comment-row {
           margin: 20px;
@@ -232,6 +244,7 @@
           margin-left: 10px;
           padding: 15px 20px;
           border-radius: 20px;
+          font-size: 13px !important;
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
         }
 
@@ -747,4 +760,20 @@
           font-size: 35px;
           margin-top: 20px;
           font-weight: 1000;
+          word-wrap: break-word;
+          /* Ensures long words break into new lines */
+          word-break: break-word;
+          /* Handles breaking for long unbreakable words */
+          max-width: 90%;
+        }
+
+        .comment-text {
+          margin-left: auto;
+          margin-right: auto;
+          padding: 15px;
+          word-wrap: break-word;
+          /* Ensures long words break into new lines */
+          word-break: break-word;
+          /* Handles breaking for long unbreakable words */
+          max-width: 90%;
         }

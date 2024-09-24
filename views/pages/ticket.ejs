@@ -1,6 +1,6 @@
 <%- include("./../partials/header.ejs") %>
     <div class="container">
-        <div class="top-text toLong">
+        <div class="top-text">
             <%= ticket.title%>
         </div>
     </div>
@@ -107,7 +107,8 @@
                                         <%= comment.time_datetime %>
                                     </div>
                                 </div>
-                                <div class="<% if (comment.user_access==1) { %> hide-comment-color <% } %>">
+                                <div
+                                    class="comment-text <% if (comment.user_access==1) { %> hide-comment-color <% } %>">
                                     <%= comment.text %>
                                 </div>
                             </div>

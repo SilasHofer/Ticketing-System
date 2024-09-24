@@ -140,6 +140,13 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
 
 });
 
+Router.post("/delete-ticket", requiresAuth(), async (req, res) => {
+    var userData = await helpers.deleteComment(req.body.ticketID);
+    console.log(userData)
+    console
+    sendEmailToUser(req, transporter, userData[0].creator_email, 'Ticket removal', 'Your ticket ' + userData[0].title + ' has ben removed')
+    res.redirect("/")
+});
 
 
 
