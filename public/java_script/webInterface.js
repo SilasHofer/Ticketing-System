@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let shouldDisplay = false; // Flag to track if row should be displayed
 
             // Loop through each cell in the row
-            row.querySelectorAll('td').forEach(function (cell) {
+            row.querySelectorAll('td.toLong').forEach(function (cell) {
                 // Get the original text and check if it includes the filter value
                 let cellText = cell.textContent.toLowerCase();
                 if (cellText.includes(filterValue)) {
