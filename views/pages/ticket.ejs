@@ -84,7 +84,7 @@
         <div class="ticket-comment-row">
             <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
                 <form action="/addComment" method="POST">
-                    <input type="text" placeholder="Comment" name="comment" value="" required>
+                    <input type="text" placeholder="Comment" name="comment" value="" maxlength="2000" required>
                     <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">
                     <input type="hidden" name="ticketTitle" value="<%= ticket.title %>">
                     <input type="hidden" name="userName" value="<%= userName %>">
