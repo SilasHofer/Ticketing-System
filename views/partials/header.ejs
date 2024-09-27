@@ -17,6 +17,10 @@
             <!-- Left-aligned navigation links -->
             <div class="nav-links">
                 <div class="nav-link"><a href="/">Home</a></div>
+                <% if (role=="admin" ) { %>
+                    <div class="nav-link"><a href="/admin-panel">Admin
+                            Panel</a></div>
+                    <% } %>
             </div>
 
             <!-- Right-aligned logout button -->

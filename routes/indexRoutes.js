@@ -60,10 +60,11 @@ Router.get("", requiresAuth(), async (req, res) => {
     data.role = req.oidc.user.role[0];
     data.name = req.oidc.user.name;
     var userId = req.oidc.user.user_id;
+    data.showCategories = await helpers.showCategories();
 
     try {
         // Fetch tickets depending on the role
-        if (data.role == "agent") {
+        if (data.role != "user") {
             data.showTickets = await helpers.showTickets("");
         } else {
             data.showTickets = await helpers.showTickets(userId);
@@ -79,7 +80,7 @@ Router.get("", requiresAuth(), async (req, res) => {
 });
 
 Router.post("/create-ticket", requiresAuth(), async (req, res) => {
-    await helpers.createTicket(req.oidc.user.user_id, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
+    await helpers.createTicket(req.oidc.user.user_id, req.body.category, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
 
     sendEmailToUser(req, transporter, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
 
@@ -89,7 +90,7 @@ Router.post("/create-ticket", requiresAuth(), async (req, res) => {
 Router.get("/ticket", requiresAuth(), async (req, res) => {
     let data = {};
     data.ticket = await helpers.getTicket(req.query.ticketID);
-    if (!data.ticket || req.oidc.user.role[0] != "agent" && req.oidc.user.user_id != data.ticket.creator_id) {
+    if (!data.ticket || req.oidc.user.role[0] == "user" && req.oidc.user.user_id != data.ticket.creator_id) {
         return res.redirect("/")
     }
     data.role = req.oidc.user.role[0];
@@ -131,7 +132,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
     } else {
         hide = false;
     }
-    await helpers.addComment(req.body.ticketID, req.body.userName, req.body.comment, hide)
+    await helpers.addComment(req.body.ticketID, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
     if (hide == false) {
         sendEmailToUser(req, transporter, req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
     }
@@ -142,10 +143,34 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
 
 Router.post("/delete-ticket", requiresAuth(), async (req, res) => {
     var userData = await helpers.deleteComment(req.body.ticketID);
-    console.log(userData)
-    console
     sendEmailToUser(req, transporter, userData[0].creator_email, 'Ticket removal', 'Your ticket ' + userData[0].title + ' has ben removed')
     res.redirect("/")
+});
+
+Router.get("/admin-panel", requiresAuth(), async (req, res) => {
+    let data = {};
+    data.title = "Admin Panel";
+    data.role = req.oidc.user.role[0];
+    data.showCategories = await helpers.showCategories();
+    if (req.oidc.user.role[0] != "admin") {
+        return res.redirect("/")
+    }
+
+    res.render("pages/admin-panel.ejs", data);
+});
+
+Router.post("/add-category", requiresAuth(), async (req, res) => {
+
+    await helpers.addCategory(req.body.category)
+
+    res.redirect("/admin-panel")
+});
+
+Router.post("/delete-category", requiresAuth(), async (req, res) => {
+
+    await helpers.deleteCategory(req.body.categoryID)
+
+    res.redirect("/admin-panel")
 });
 
 

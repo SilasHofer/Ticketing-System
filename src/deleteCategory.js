@@ -5,17 +5,17 @@ auther:Silas Hofer
 const mysql = require("promise-mysql");
 const config = require("../config/db/ticket_system.json");
 
-async function createTicket(user_id, category_id, user_name, user_email, title, description) {
+async function deleteCategory(category_id) {
     const db = await mysql.createConnection(config);
     let res;
 
     let sql = `
-    CALL add_ticket(?,?,?,?,?,?);`;
+    CALL delete_category(?);`;
 
-    res = await db.query(sql, [user_id, category_id, user_name, user_email, title, description]);
+    res = await db.query(sql, [category_id]);
     db.end();
     return res[0];
 }
 
 
-module.exports = createTicket;
+module.exports = deleteCategory;

@@ -16,12 +16,12 @@ CREATE SCHEMA IF NOT EXISTS `ticket_system` DEFAULT CHARACTER SET utf8 ;
 USE ticket_system ;
 
 -- -----------------------------------------------------
--- Table `ticket_system`.`categorys`
+-- Table `ticket_system`.`categories`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ticket_system`.`categorys` (
-  `idCategorys` INT NOT NULL,
-  `name` VARCHAR(45) NULL,
-  PRIMARY KEY (`idCategorys`))
+CREATE TABLE IF NOT EXISTS `ticket_system`.`categories` (
+  `idCategory` INT NOT NULL AUTO_INCREMENT,
+  `category_name` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idCategory`))
 ENGINE = InnoDB;
 
 
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   INDEX `category_id_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_id`
     FOREIGN KEY (`category_id`)
-    REFERENCES `ticket_system`.`categorys` (`idCategorys`)
+    REFERENCES `ticket_system`.`categories` (`idCategory`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`comments` (
   `user_name` VARCHAR(45) NOT NULL,
   `ticket_id` INT NOT NULL,
   `user_access` TINYINT NOT NULL,
+  `user_role` VARCHAR(45) NULL,
   `time` TIMESTAMP NULL,
   PRIMARY KEY (`idComments`));
 
@@ -120,6 +121,8 @@ DELIMITER ;;
 
 CREATE PROCEDURE add_ticket(
     p_user_id VARCHAR(45),
+    p_category_id INT,
+
     p_user_name VARCHAR(45),
     p_user_email VARCHAR(45),
     p_title VARCHAR(200),
@@ -146,7 +149,7 @@ INSERT INTO `tickets` (
   `department`
 ) VALUES (
   NULL,                  -- Assuming `idTickets` is an auto-incrementing primary key
-  NULL,                  -- `category_id` can be set to NULL if not available
+  p_category_id,                  -- `category_id` can be set to NULL if not available
   p_title,     -- Replace with actual title
   P_description, -- Replace with actual description
   p_user_id,   -- Replace with actual user_id (creator_id)
@@ -176,26 +179,28 @@ CREATE PROCEDURE show_tickets(
   p_id VARCHAR(45)
 )
 SELECT 
-    idTickets,
-    category_id,
-    title,
-    description,
-    creator_name,
-    agent_name,
-    DATE_FORMAT(created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
-    department,
+    t.idTickets,
+    c.category_name,
+    t.title,
+    t.description,
+    t.creator_name,
+    t.agent_name,
+    DATE_FORMAT(t.created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
+    t.department,
     CASE
-        WHEN solved IS NOT NULL THEN 'Solved'
-        WHEN closed IS NOT NULL THEN 'Closed'
-        WHEN processed IS NOT NULL THEN 'Processed'
-        WHEN created IS NOT NULL THEN 'Created'
+        WHEN t.solved IS NOT NULL THEN 'Solved'
+        WHEN t.closed IS NOT NULL THEN 'Closed'
+        WHEN t.processed IS NOT NULL THEN 'Processed'
+        WHEN t.created IS NOT NULL THEN 'Created'
         ELSE 'Unknown'
     END AS status
 FROM 
-    tickets
+    tickets t
+  LEFT JOIN 
+    categories c ON t.category_id = c.idCategory
 WHERE 
-    p_id = "" OR creator_id = p_id
-ORDER BY created DESC;
+    p_id = "" OR t.creator_id = p_id
+ORDER BY t.created DESC;
 
 ;;
 
@@ -270,16 +275,22 @@ CREATE PROCEDURE add_comment(
   p_ticket_id VARCHAR(45),
   p_user_name VARCHAR(45),
   p_text VARCHAR(2000),
-  p_access TINYINT
+  p_access TINYINT,
+  p_role VARCHAR(45)
 
 )
 BEGIN
+UPDATE tickets
+  SET updated = NOW()  
+  WHERE idTickets = p_ticket_id;
+
 INSERT INTO `comments` (
   `idComments`, 
   `text`, 
   `user_name`, 
   `ticket_id`, 
   `user_access`,
+  `user_role`,
   `time`
 ) VALUES (
   NULL,                  
@@ -287,6 +298,7 @@ INSERT INTO `comments` (
   p_user_name,
   p_ticket_id,
   p_access,
+  p_role,
   NOW()
 );
 END;;
@@ -304,15 +316,13 @@ CREATE PROCEDURE show_comments(
   p_access TINYINT
 )
 BEGIN
-UPDATE tickets
-  SET updated = NOW()  
-  WHERE idTickets = p_id;
 
   SELECT
     user_name, 
     text,
     DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') AS time_datetime,
-    user_access
+    user_access,
+    user_role
   FROM 
     comments
   WHERE 
@@ -405,6 +415,58 @@ BEGIN
   WHERE idTickets = p_id;
 
 END ;;
+
+;;
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS add_category;
+
+DELIMITER ;;
+
+CREATE PROCEDURE add_category(
+  p_name VARCHAR(45)
+
+)
+BEGIN
+INSERT INTO `categories` (
+  `category_name`
+) VALUES (
+  p_name
+);
+END;;
+
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS show_categories;
+
+DELIMITER ;;
+
+CREATE PROCEDURE show_categories(
+
+)
+BEGIN
+SELECT * from `categories`;
+END;;
+
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS delete_category;
+
+DELIMITER ;;
+
+CREATE PROCEDURE delete_category(
+p_id INT
+)
+BEGIN
+  DELETE FROM `categories`
+  WHERE `idCategory` = p_id;
+END;;
 
 ;;
 
