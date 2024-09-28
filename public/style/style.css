@@ -5,6 +5,29 @@
           box-sizing: border-box;
         }
 
+        input[type="file"] {
+          display: none;
+        }
+
+        /* Style the custom button */
+        .custom-file-upload {
+          display: inline-block;
+          padding: 10px 20px;
+          margin-top: 10px;
+          margin-bottom: 10px;
+          cursor: pointer;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          font-size: 16px;
+        }
+
+        /* Optional: Style the file name text */
+        #file-name {
+          margin-left: 10px;
+          font-size: 14px;
+        }
 
         body {
           font-family: Arial, Helvetica, sans-serif;
@@ -678,6 +701,7 @@
 
         /* The popup form */
         .form-popup {
+          min-width: 50%;
           display: none;
           position: fixed;
           left: 50%;

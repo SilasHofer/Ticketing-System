@@ -10,7 +10,6 @@ const express = require("express");
 const Router = express.Router();
 const nodemailer = require('nodemailer');
 const helpers = require("../src/helpers.js");
-const userCache = new Map();
 
 const { auth } = require('express-openid-connect');
 

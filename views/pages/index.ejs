@@ -29,6 +29,12 @@
                                 </option>
                                 <% }) %>
                         </select>
+                        Allowed file types: JPEG, PNG, PDF, DOCX | Max file size: 2 MB each | Max 3 files. <br>
+                        <label class="custom-file-upload">
+                            add a file/picture
+                            <input type="file" id="myFile" name="filename" multiple>
+                        </label>
+                        <span id="file-name">No file chosen</span>
                         <button type="submit" class="btn">Add</button>
                         <button type="button" class="btn cancel" id="closeAddForm">Close</button>
                     </form>
