@@ -10,6 +10,40 @@ const express = require("express");
 const Router = express.Router();
 const nodemailer = require('nodemailer');
 const helpers = require("../src/helpers.js");
+const multer = require('multer');
+const config = require('../config/config.js');
+const path = require('path');
+
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'user_files/'); // Directory where files will be saved
+    },
+    filename: (req, file, cb) => {
+        // Use the original file name, but you can also add a timestamp or a unique ID
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const originalName = file.originalname.replace(path.extname(file.originalname), ''); // Get the original name without extension
+        const extension = path.extname(file.originalname); // Get the extension
+        cb(null, `${originalName}-${uniqueSuffix}${extension}`); // Retain original name and add unique suffix
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: config.file.max_file_size * 1024 * 1024, files: config.file.max_files }, // 2 MB file size limit
+    fileFilter: (req, file, cb) => {
+
+        const isMimeTypeAllowed = config.file.allowed_mime_types.includes(file.mimetype);
+        const isExtensionAllowed = config.file.allowed_extensions.some(type => type === path.extname(file.originalname).toLowerCase());
+
+        if (isMimeTypeAllowed && isExtensionAllowed) {
+            cb(null, true);
+        } else {
+            cb(new Error('File type not allowed!'), false);
+        }
+    }
+});
+
 
 const { auth } = require('express-openid-connect');
 
@@ -41,7 +75,7 @@ function sendEmailToUser(req, transporter, to, emailsubject, emailText) {
     });
 }
 
-const config = {
+const authConfig = {
     authRequired: false,
     auth0Logout: true,
     secret: process.env.AUTH_SECRET,
@@ -49,12 +83,15 @@ const config = {
     clientID: process.env.AUTH_CLIENTID,
     issuerBaseURL: process.env.AUTH_ISSUERBASEURL
 };
-Router.use(auth(config));
+Router.use(auth(authConfig));
 
 const { requiresAuth } = require('express-openid-connect');
 
 Router.get("", requiresAuth(), async (req, res) => {
     let data = {};
+    if (req.query.error) {
+
+    }
     data.title = "Home";
     data.role = req.oidc.user.role[0];
     data.name = req.oidc.user.name;
@@ -78,12 +115,23 @@ Router.get("", requiresAuth(), async (req, res) => {
     }
 });
 
-Router.post("/create-ticket", requiresAuth(), async (req, res) => {
-    await helpers.createTicket(req.oidc.user.user_id, req.body.category, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
+Router.post("/create-ticket", requiresAuth(), (req, res) => {
+    upload.array('filename', config.file.max_files)(req, res, function (err) {
+        if (err) {
+            return res.redirect(`/?error=${encodeURIComponent(err.message)}`);
+        } (async () => {
+            try {
+                await helpers.createTicket(req.oidc.user.user_id, req.body.category, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
 
-    sendEmailToUser(req, transporter, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
+                sendEmailToUser(req, transporter, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
 
-    res.redirect("/")
+                res.redirect("/")
+            } catch (error) {
+                console.error(error);
+                res.redirect(`/?error=${encodeURIComponent(error.message)}`);
+            }
+        })();
+    });
 });
 
 Router.get("/ticket", requiresAuth(), async (req, res) => {

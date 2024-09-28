@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".openTicket").forEach(button => {
         button.addEventListener("click", function () {
@@ -7,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = `/ticket?ticketID=${ticketID}`;
         });
     });
-
     document.getElementById('filter-input').addEventListener('input', function () {
         // Get the value of the input field and convert it to lowercase for case-insensitive matching
         let filterValue = this.value.toLowerCase();
@@ -42,47 +42,35 @@ document.addEventListener("DOMContentLoaded", function () {
     // Code for the file input functionality
     const fileInput = document.getElementById('myFile');
     const fileNameSpan = document.getElementById('file-name');
-    const maxFiles = 3; // Limit to 3 files
-    const maxSizeInBytes = 2 * 1024 * 1024;
-    const allowedFileTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-
     if (fileInput) {
         fileInput.addEventListener('change', function () {
             const files = fileInput.files;
-            let valid = true; // Flag to check if all files are valid
             let fileNames = [];
 
-            if (files.length > maxFiles) {
-                alert(`You can only upload a maximum of ${maxFiles} files.`);
-                fileInput.value = ""; // Reset the file input
-                fileNameSpan.textContent = "No files chosen";
-                valid = false;
-            } else {
-                // Check each file's size
-                Array.from(files).forEach(file => {
-                    if (file.size > maxSizeInBytes) {
-                        alert(`The file "${file.name}" exceeds the 2 MB size limit.`);
-                        valid = false;
-                    } else if (!allowedFileTypes.includes(file.type)) {
-                        alert(`The file "${file.name}" is not an allowed file type. Only JPG, PNG, and PDF files are accepted.`);
-                        valid = false;
-                    } else {
-                        fileNames.push(file.name); // If valid, add to the list of file names
-                    }
-                });
-            }
+            // Only show the names of the files selected
+            Array.from(files).forEach(file => {
+                fileNames.push(file.name);
+            });
 
-            // If all files are valid, show the file names
-            if (valid && files.length > 0) {
+            // Show the file names or reset if no files
+            if (files.length > 0) {
                 fileNameSpan.textContent = fileNames.join(', ');
             } else {
-                fileInput.value = ""; // Reset the file input if any file is invalid
                 fileNameSpan.textContent = "No files chosen";
             }
         });
     }
-
 });
+
+// Check if there is an 'error' query parameter in the URL
+const urlParams = new URLSearchParams(window.location.search);
+const errorMessage = urlParams.get('error');
+
+// If an error exists, show an alert with the message
+if (errorMessage) {
+    alert(decodeURIComponent(errorMessage));
+    window.location.href = `/`; // Decode it to handle any special characters
+}
 
 document.getElementById("openAddFormButton").addEventListener("click", openAddForm);
 function openAddForm() {
