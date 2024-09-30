@@ -20,6 +20,8 @@ module.exports = {
     "addCategory": require("./addCategory.js"),
     "deleteCategory": require("./deleteCategory.js"),
     "addFileToTicket": require("./addFileToTicket.js"),
+    "getAttachments": require("./getAttachments.js"),
+
 
 
 

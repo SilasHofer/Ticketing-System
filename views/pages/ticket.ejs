@@ -1,5 +1,11 @@
 <%- include("./../partials/header.ejs") %>
     <div class="container">
+
+        <div class="lightbox" id="lightbox">
+            <span class="close" id="close">&times;</span>
+            <img class="lightbox-image" id="lightbox-img" src="" alt="Large Image">
+        </div>
+
         <div class="ticket-information">
             <div class="ticket-top-text">
                 <%= ticket.title%>
@@ -88,6 +94,17 @@
                     </div>
                     <div class="attachments">
                         <h3>Attachments</h3>
+                        <% showAttachments.forEach(attachment=> { %>
+                            <% if (attachment.isImage) { %>
+                                <img class="ticket-images" src="/user_files/<%= attachment.file_name %>"
+                                    alt="<%= attachment.file_name %>"
+                                    data-image="/user_files/<%= attachment.file_name %>">
+                                <% } else { %>
+                                    <a href="/user_files/<%= attachment.file_name %>" target="_blank">
+                                        <%= attachment.file_name.replace(/-\d+-\d+(?=\.\w+$)/, '' ) %>
+                                    </a>
+                                    <% } %>
+                                        <% }) %>
                     </div>
                 </div>
             </div>

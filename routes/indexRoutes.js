@@ -17,7 +17,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'user_files/'); // Directory where files will be saved
+        cb(null, 'public/user_files/'); // Directory where files will be saved
     },
     filename: (req, file, cb) => {
         // Use the original file name, but you can also add a timestamp or a unique ID
@@ -131,7 +131,7 @@ Router.post("/create-ticket", requiresAuth(), (req, res) => {
                 }
 
 
-                sendEmailToUser(req, transporter, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
+                //sendEmailToUser(req, transporter, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
 
                 res.redirect("/")
             } catch (error) {
@@ -153,6 +153,10 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     data.userId = req.oidc.user.user_id;
     data.userName = req.oidc.user.name;
     data.userEmail = req.oidc.user.email;
+    data.showAttachments = await helpers.getAttachments(req.query.ticketID)
+    data.showAttachments.forEach(attachment => {
+        attachment.isImage = /\.(jpg|jpeg|png|gif)$/i.test(attachment.file_name);
+    });
     if (data.role == "agent") {
         data.showComments = await helpers.showComments(req.query.ticketID, 1);
     } else {
@@ -168,13 +172,13 @@ Router.get("/claimTicket", requiresAuth(), async (req, res) => {
 });
 Router.get("/closeTicket", requiresAuth(), async (req, res) => {
     await helpers.closeTicket(req.query.ticketID);
-    sendEmailToUser(req, transporter, req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')
+    //sendEmailToUser(req, transporter, req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')
 
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 
 Router.get("/changeStatus", requiresAuth(), async (req, res) => {
-    sendEmailToUser(req, transporter, req.query.creatorEmail, 'Ticket updated', 'Your ticket ' + req.query.ticketTitle + ' has ben updated')
+    //sendEmailToUser(req, transporter, req.query.creatorEmail, 'Ticket updated', 'Your ticket ' + req.query.ticketTitle + ' has ben updated')
     await helpers.changeStatus(req.query.ticketID, req.query.status);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -189,7 +193,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
     }
     await helpers.addComment(req.body.ticketID, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
     if (hide == false) {
-        sendEmailToUser(req, transporter, req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
+        //sendEmailToUser(req, transporter, req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
     }
 
     res.redirect(`/ticket?ticketID=${req.body.ticketID}`)
@@ -198,7 +202,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
 
 Router.post("/delete-ticket", requiresAuth(), async (req, res) => {
     var userData = await helpers.deleteComment(req.body.ticketID);
-    sendEmailToUser(req, transporter, userData[0].creator_email, 'Ticket removal', 'Your ticket ' + userData[0].title + ' has ben removed')
+    //sendEmailToUser(req, transporter, userData[0].creator_email, 'Ticket removal', 'Your ticket ' + userData[0].title + ' has ben removed')
     res.redirect("/")
 });
 

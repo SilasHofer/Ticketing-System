@@ -97,7 +97,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ticket_system`.`attachments` (
   `idAttachments` INT NOT NULL AUTO_INCREMENT,
-  `file_name` VARCHAR(45) NULL,
+  `file_name` VARCHAR(200) NULL,
   `ticket_id` INT NULL,
   PRIMARY KEY (`idAttachments`),
   INDEX `ticket_id_idx` (`ticket_id` ASC) VISIBLE,
@@ -480,7 +480,7 @@ DELIMITER ;;
 
 CREATE PROCEDURE add_file_fo_ticket(
 p_id INT,
-p_file_name VARCHAR(50)
+p_file_name VARCHAR(200)
 )
 BEGIN
 INSERT INTO `Attachments` (
@@ -490,6 +490,21 @@ INSERT INTO `Attachments` (
   p_file_name,
   p_id
 );
+END;;
+
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS get_attachments;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_attachments(
+p_id INT
+)
+BEGIN
+SELECT file_name FROM attachments WHERE ticket_id = p_id;
 END;;
 
 ;;

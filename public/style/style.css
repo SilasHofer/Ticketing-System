@@ -203,6 +203,20 @@
           }
         }
 
+        .ticket-images {
+          width: 100px;
+          /* Maintain the aspect ratio of the image */
+          display: block;
+          /* Make images block elements */
+          margin: 10px 10px;
+          /* Center images and add margin above/below */
+          border-radius: 10px;
+        }
+
+        .ticket-images:hover {
+          cursor: pointer;
+        }
+
         .ticket-top-row {
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
           display: flex;
@@ -233,6 +247,45 @@
           max-width: 100%;
           /* Ensure they don't grow beyond their container */
           box-sizing: border-box;
+        }
+
+
+        /* Lightbox styles */
+        .lightbox {
+          display: none;
+          /* Hidden by default */
+          position: fixed;
+          /* Stay in place */
+          z-index: 1000;
+          /* Sit on top */
+          left: 0;
+          top: 0;
+          width: 100%;
+          /* Full width */
+          height: 100%;
+          /* Full height */
+          background-color: rgba(0, 0, 0, 0.8);
+          /* Black background with transparency */
+          justify-content: center;
+          /* Center the content */
+          align-items: center;
+          /* Center the content */
+        }
+
+        .lightbox-image {
+          max-width: 90%;
+          /* Limit the width of the large image */
+          max-height: 90%;
+          /* Limit the height of the large image */
+        }
+
+        .close {
+          position: absolute;
+          top: 20px;
+          right: 30px;
+          color: white;
+          font-size: 30px;
+          cursor: pointer;
         }
 
         select[name="ticketStatus"] {

@@ -1,5 +1,14 @@
 
 document.addEventListener("DOMContentLoaded", function () {
+    // Attach event listener to each image
+    document.querySelectorAll('.ticket-images').forEach(img => {
+        img.addEventListener('click', function () {
+            const imageSrc = this.getAttribute('data-image'); // Get image source
+            document.getElementById('lightbox-img').src = imageSrc; // Set image src for lightbox
+            document.getElementById('lightbox').style.display = 'flex'; // Show lightbox
+        });
+    });
+
     document.querySelectorAll(".openTicket").forEach(button => {
         button.addEventListener("click", function () {
             // Get the ticket ID from the data attribute
@@ -86,6 +95,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+// Check if the elements exist before adding the event listeners
+const closeButton = document.getElementById('close');
+const lightbox = document.getElementById('lightbox');
+
+if (closeButton) {
+    closeButton.addEventListener('click', function () {
+        lightbox.style.display = 'none'; // Hide lightbox
+    });
+}
+
+if (lightbox) {
+    lightbox.addEventListener('click', function (event) {
+        // Ensure you don't close the lightbox if clicking the image or close button
+        if (event.target === lightbox) {
+            lightbox.style.display = 'none'; // Hide lightbox
+        }
+    });
+}
 
 // Check if there is an 'error' query parameter in the URL
 const urlParams = new URLSearchParams(window.location.search);
@@ -106,6 +133,8 @@ document.getElementById("closeAddForm").addEventListener("click", closeAddForm);
 function closeAddForm() {
     document.getElementById("form").style.display = "none";
 }
+
+
 
 
 
