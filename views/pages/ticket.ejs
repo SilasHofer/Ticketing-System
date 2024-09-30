@@ -39,7 +39,8 @@
                     </div>
                     <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
                         <a class="red-button " href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
-                    <%=ticket.creator_email %>&ticketTitle=<%= ticket.title %> %>">
+                    <%=ticket.creator_email %>&ticketTitle=<%= ticket.title %> %>"
+                            onclick="return confirm('Are you sure you want to close this ticket?');">
                             <h2>Close Ticket</h2>
                         </a>
                         <% } else {%>
@@ -85,8 +86,10 @@
 
                                                 <% }%>
                     </div>
+                    <div class="attachments">
+                        <h3>Attachments</h3>
+                    </div>
                 </div>
-
             </div>
             <div class="ticket-comment-row">
                 <h2 class="comment-top">Comments</h2>

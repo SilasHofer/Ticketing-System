@@ -13,8 +13,9 @@ async function createTicket(user_id, category_id, user_name, user_email, title, 
     CALL add_ticket(?,?,?,?,?,?);`;
 
     res = await db.query(sql, [user_id, category_id, user_name, user_email, title, description]);
+
     db.end();
-    return res[0];
+    return res[0][0].ticket_id;
 }
 
 

@@ -119,9 +119,17 @@ Router.post("/create-ticket", requiresAuth(), (req, res) => {
     upload.array('filename', config.file.max_files)(req, res, function (err) {
         if (err) {
             return res.redirect(`/?error=${encodeURIComponent(err.message)}`);
-        } (async () => {
+        }
+        const uploadedFiles = req.files.map(file => file.filename);
+
+        (async () => {
             try {
-                await helpers.createTicket(req.oidc.user.user_id, req.body.category, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
+                const ticketId = await helpers.createTicket(req.oidc.user.user_id, req.body.category, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
+
+                for (const file of uploadedFiles) {
+                    await helpers.addFileToTicket(ticketId, file); // Function to insert files related to the ticket
+                }
+
 
                 sendEmailToUser(req, transporter, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
 

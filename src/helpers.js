@@ -19,6 +19,9 @@ module.exports = {
     "showCategories": require("./showCategories.js"),
     "addCategory": require("./addCategory.js"),
     "deleteCategory": require("./deleteCategory.js"),
+    "addFileToTicket": require("./addFileToTicket.js"),
+
+
 
 
 

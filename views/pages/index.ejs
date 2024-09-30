@@ -34,7 +34,9 @@
                             add a file/picture
                             <input type="file" id="myFile" name="filename" multiple>
                         </label>
+                        <div id="imageContainer"></div>
                         <span id="file-name">No file chosen</span>
+
                         <button type="submit" class="btn">Add</button>
                         <button type="button" class="btn cancel" id="closeAddForm">Close</button>
                     </form>
@@ -97,7 +99,8 @@
                                         <td>
                                             <form action="/delete-ticket" method="POST">
                                                 <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">
-                                                <button type="submit" class="red-button">Delete</button>
+                                                <button type="submit" class="red-button"
+                                                    onclick="return confirm('Are you sure you want to close this ticket?');">Delete</button>
                                             </form>
                                         </td>
                                         <% }%>

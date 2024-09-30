@@ -96,9 +96,8 @@ ENGINE = InnoDB;
 -- Table `ticket_system`.`Attachments`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `ticket_system`.`attachments` (
-  `idAttachments` INT NOT NULL,
+  `idAttachments` INT NOT NULL AUTO_INCREMENT,
   `file_name` VARCHAR(45) NULL,
-  `file_type` VARCHAR(45) NULL,
   `ticket_id` INT NULL,
   PRIMARY KEY (`idAttachments`),
   INDEX `ticket_id_idx` (`ticket_id` ASC) VISIBLE,
@@ -165,6 +164,7 @@ INSERT INTO `tickets` (
   NULL,                     -- `solved` (0 for not solved, adjust as needed)
   NULL                   -- `department` can be set to NULL if not specified
 );
+    SELECT LAST_INSERT_ID() AS ticket_id; 
 END;;
 
 
@@ -410,6 +410,8 @@ BEGIN
   SELECT v_title AS title, 
          v_creator_email AS creator_email;
 
+  DELETE FROM attachments WHERE ticket_id = p_id;
+
   -- Delete the ticket
   DELETE FROM tickets
   WHERE idTickets = p_id;
@@ -466,6 +468,28 @@ p_id INT
 BEGIN
   DELETE FROM `categories`
   WHERE `idCategory` = p_id;
+END;;
+
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS add_file_fo_ticket;
+
+DELIMITER ;;
+
+CREATE PROCEDURE add_file_fo_ticket(
+p_id INT,
+p_file_name VARCHAR(50)
+)
+BEGIN
+INSERT INTO `Attachments` (
+  `file_name`,
+  `ticket_id`
+) VALUES (
+  p_file_name,
+  p_id
+);
 END;;
 
 ;;

@@ -54,7 +54,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
             // Show the file names or reset if no files
             if (files.length > 0) {
-                fileNameSpan.textContent = fileNames.join(', ');
+                // Clear previous images
+                const imageContainer = document.getElementById('imageContainer'); // Assuming you have a container for images
+                imageContainer.innerHTML = ''; // Clear existing images
+
+                // Store filenames for display
+                const fileNames = [];
+
+                // Loop through each file
+                for (const file of files) {
+                    // Check if the file is an image
+                    if (file.type.startsWith('image/')) {
+                        const img = document.createElement('img'); // Create an img element
+                        img.src = URL.createObjectURL(file); // Create a URL for the file
+                        img.alt = file.name; // Set alt text
+                        img.style.width = '100px'; // Set desired width
+                        img.style.height = 'auto'; // Maintain aspect ratio
+                        img.style.marginRight = '10px'; // Add some space between images
+                        imageContainer.appendChild(img); // Append the img to the container
+                    } else {
+                        fileNames.push(file.name); // If not an image, just store the filename
+                    }
+                }
+
+                // Display filenames for non-image files
+                const fileNameSpan = document.getElementById('file-name'); // Assuming you have a span for file names
+                fileNameSpan.textContent = fileNames.length > 0 ? fileNames.join(', ') : "";
             } else {
                 fileNameSpan.textContent = "No files chosen";
             }

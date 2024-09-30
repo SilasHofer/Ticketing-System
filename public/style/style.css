@@ -218,20 +218,21 @@
           position: relative;
         }
 
-        .ticket-bottom-row {
-          display: flex;
-          position: relative;
-          justify-content: space-between;
-          margin-bottom: 5%;
-          padding-top: 20px;
-        }
 
 
-        .agent {
+        .agent,
+        .creator,
+        .attachments {
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
           /* Push created to the left */
           padding: 15px 20px;
           border-radius: 20px;
+          margin-bottom: 5px;
+          width: 100%;
+          /* Allow them to adjust to the container */
+          max-width: 100%;
+          /* Ensure they don't grow beyond their container */
+          box-sizing: border-box;
         }
 
         select[name="ticketStatus"] {
@@ -286,12 +287,24 @@
           /* Adds spacing below the text (ticket.agent_name and ticket.agent_email) */
         }
 
-        .creator {
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-          border-radius: 20px;
-          margin-bottom: 15px;
-          /* Push created to the left */
-          padding: 15px 20px;
+
+        /* Media query to change layout on smaller screens */
+        @media (max-width: 768px) {
+          .ticket-bottom-row {
+            flex-direction: column;
+            /* Stack items vertically */
+            align-items: flex-start;
+          }
+
+          .ticket-left,
+          .ticket-right {
+            margin: 0;
+          }
+
+          .ticket-right {
+            margin-top: 20px;
+            /* Add some space between sections */
+          }
         }
 
         .created {
@@ -325,7 +338,7 @@
           position: absolute;
           right: 5%;
           /* Push status to the right */
-          max-width: 25%;
+          width: 25%;
           /* Restrict the max width of status */
 
         }
@@ -339,16 +352,25 @@
           padding-top: 10px;
           margin-left: auto;
           margin-right: auto;
-          max-width: 50%;
+          max-width: 60%;
         }
 
         .ticket-left {
-          min-width: 75%;
+          width: 75%;
           margin-left: 2%;
+          margin-right: 2%;
         }
 
         .ticket-right {
           margin-right: 2%;
+        }
+
+        .ticket-bottom-row {
+          display: flex;
+          position: relative;
+          justify-content: space-between;
+          margin-bottom: 5%;
+          padding-top: 20px;
         }
 
         .description-top {
