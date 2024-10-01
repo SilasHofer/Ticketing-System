@@ -1,44 +1,63 @@
 <%- include("./../partials/header.ejs") %>
     <div class="container">
         <div class="admin-panel">
-            <div class="add-category">
-                <h2>add Category</h2>
-                <form class="admin-form" action="/add-category" method="POST">
-                    <input type="text" placeholder="Category" name="category" value="" maxlength="200" required>
-                    <button type="submit" class="btn " id="addCategory">add</button>
+            <div class="categories">
+                <div class="add-category">
+                    <h2>add Category</h2>
+                    <form class="admin-form" action="/add-category" method="POST">
+                        <input type="text" placeholder="Category" name="category" value="" maxlength="200" required>
+                        <button type="submit" class="btn " id="addCategory">add</button>
+                    </form>
+                </div>
+                <div class="show-categories">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% showCategories.forEach(Category=> { %>
+                                <tr>
+                                    <td>
+                                        <%= Category.idCategory %>
+                                    </td>
+                                    <td>
+                                        <%= Category.category_name %>
+                                    </td>
+                                    <td>
+                                        <form action="/delete-category" method="POST">
+                                            <input type="hidden" name="categoryID" value="<%= Category.idCategory %>">
+                                            <button type="submit" class="red-button">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% }) %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="accounts">
+                <div class="create-account"></div>
+                <h2>create account</h2>
+                <form class="admin-form" action="/create-account" method="POST">
+                    <input type="text" placeholder="Name" name="name" value="" required>
+                    <input type="email" placeholder="Email" name="email" value="" required>
+                    <input type="password" placeholder="Password" name="password" value="" required minlength="8"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}"
+                        title="Password must be 8-20 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=)">
+                    <select name="role" required>
+                        <option value="rol_SbiBHiolJfOexDLM">user</option>
+                        <option value="rol_q8gMQ7JR1S2hYePM">agent</option>
+                    </select>
+                    <button type="submit" class="btn " id="createAccount">add</button>
                 </form>
             </div>
-            <div class="show-categories">
-                <table class="styled-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Delete</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% showCategories.forEach(Category=> { %>
-                            <tr>
-                                <td>
-                                    <%= Category.idCategory %>
-                                </td>
-                                <td>
-                                    <%= Category.category_name %>
-                                </td>
-                                <td>
-                                    <form action="/delete-category" method="POST">
-                                        <input type="hidden" name="categoryID" value="<%= Category.idCategory %>">
-                                        <button type="submit" class="red-button">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <% }) %>
-
-                    </tbody>
-                </table>
-            </div>
         </div>
+    </div>
     </div>
 
     <%- include("./../partials/footer.ejs") %>

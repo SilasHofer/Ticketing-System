@@ -13,6 +13,7 @@ const helpers = require("../src/helpers.js");
 const multer = require('multer');
 const config = require('../config/config.js');
 const path = require('path');
+const axios = require('axios');
 
 
 const storage = multer.diskStorage({
@@ -171,6 +172,57 @@ Router.get("/claimTicket", requiresAuth(), async (req, res) => {
     await helpers.claimTicket(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
+
+Router.post("/create-account", requiresAuth(), async (req, res) => {
+    try {
+        // Get access token from Auth0
+        const response = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/oauth/token`, {
+            client_id: process.env.AUTH_CLIENTID,
+            client_secret: process.env.AUTH_CLIENTSECRET,
+            audience: `${process.env.AUTH_ISSUERBASEURL}/api/v2/`,
+            grant_type: 'client_credentials',
+            scope: 'create:users update:roles create:role_members'
+        });
+
+        const accessToken = response.data.access_token;
+
+        // Use access token to call the Auth0 Management API
+        const userResponse = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users`, {
+            email: req.body.email,  // User's email
+            password: req.body.password,// User's password
+            name: req.body.name,
+            connection: 'Username-Password-Authentication',  // Specify the Auth0 connection
+            user_metadata: {               // Optional: any additional metadata for the user
+                subscription: 'free'
+            }
+
+        }, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+        const userId = userResponse.data.user_id;
+        const roleId = req.body.role;
+
+        await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/${roleId}/users`, {
+            users: [userId]  // Send the user ID in the request body
+        }, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        });
+
+        // Respond with user data from Auth0
+        console.log('User created:', userResponse.data);
+        res.redirect("/admin-panel")
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error making request to Auth0 API');
+    }
+
+});
+
+
 
 Router.get("/changeCategory", requiresAuth(), async (req, res) => {
     await helpers.changeCategory(req.query.category_id, req.query.ticketID);

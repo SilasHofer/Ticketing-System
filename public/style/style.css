@@ -91,7 +91,9 @@
 
 
         /* Styling the form inputs and button */
-        form input[type="text"] {
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"] {
           width: 75%;
           padding: 10px;
           margin-bottom: 15px;
