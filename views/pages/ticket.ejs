@@ -19,39 +19,60 @@
                     <h4>Updated:</h4>
                     <%= ticket.updated_datetime%>
                 </div>
+                <div class="category">
+                    <h4>Category:</h4>
+                    <div class="category-text">
+                        <select name="invincibleDropdown" onchange="
+                                    window.location='/changeCategory?ticketID=<%=ticket.idTickets%>&category_id='
+                        + this.value">
+                            <% showCategories.forEach(Category=> { %>
+                                <option value="<%= Category.idCategory %>" <%=ticket.category_id===Category.idCategory
+                                    ? 'selected' : '' %>><%= Category.category_name %>
+                                        <%=ticket.category_id===Category.idCategory ? '▼' : '' %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+
+                </div>
                 <div class="status">
-                    <div class="status-indicator <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
+                    <% if (role !='user' && ticket.agent_id===userId && ticket.status !=='Solved' && ticket.status
+                        !=='Closed' ) { %>
+                        <select name='invincibleDropdown'
+                            class=" <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
                                             ticket.status === 'Closed' ? 'status-background-color-closed' :
                                             ticket.status === 'Processed' ? 'status-background-color-processed' :
-                                            ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>
-                                    "">
-                <% if (role !='user' && ticket.agent_id === userId && ticket.status !=='Solved' && ticket.status !=='Closed' ) { %>
-                        <select name='ticketStatus' onchange="
+                                            ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>"
+                            onchange="
                         window.location='/changeStatus?ticketID=<%=ticket.idTickets%>&creatorEmail=<%=ticket.creator_email %>&ticketTitle=<%= ticket.title %>&status='
                         + this.value ">
-                    <option value=" <%=ticket.status %>" selected disabled>
-                        <%= ticket.status %>
+                            <option value=" <%=ticket.status %>" selected disabled>
+                                <%= ticket.status %>
                             </option>
                             <option value="Processed" <%=ticket.status==='Processed' ? 'selected' : '' %>>Processed
                             </option>
                             <option value="Solved" <%=ticket.status==='Solved' ? 'selected' : '' %>>Solved</option>
                             <option value="Closed" <%=ticket.status==='Closed' ? 'selected' : '' %>>Closed</option>
-                            </select>
-                            <% } else { %>
-                                <b>
-                                    <%= ticket.status %>
-                                </b>
-                                <% } %>
-                    </div>
-                    <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
-                        <a class="red-button " href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
+                        </select>
+                        <% } else { %>
+                            <b
+                                class="status-indicator <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
+                                            ticket.status === 'Closed' ? 'status-background-color-closed' :
+                                            ticket.status === 'Processed' ? 'status-background-color-processed' :
+                                            ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>">
+                                <%= ticket.status %>
+                            </b>
+                            <% } %>
+
+                                <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
+                                    <a class="red-button" href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
                     <%=ticket.creator_email %>&ticketTitle=<%= ticket.title %> %>"
-                            onclick="return confirm('Are you sure you want to close this ticket?');">
-                            <h2>Close Ticket</h2>
-                        </a>
-                        <% } else {%>
-                            <%= ticket.closed_datetime %>
-                                <% } %>
+                                        onclick="return confirm('Are you sure you want to close this ticket?');">
+                                        Close Ticket
+                                    </a>
+                                    <% } else {%>
+                                        <%= ticket.closed_datetime %>
+                                            <% } %>
                 </div>
             </div>
             <div class=" ticket-bottom-row">
@@ -118,7 +139,7 @@
                         <input type="hidden" name="ticketTitle" value="<%= ticket.title %>">
                         <input type="hidden" name="userName" value="<%= userName %>">
                         <input type="hidden" name="creatorEmail" value="<%= ticket.creator_email %>">
-                        <% if (role!="user" ) { %>
+                        <% if (role !="user" ) { %>
                             <label for="hide" class="hide-comment"><b>hide form user</b></label>
                             <input type="checkbox" name="hide" value="on">
                             <% }%>

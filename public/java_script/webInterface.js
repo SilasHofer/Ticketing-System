@@ -1,5 +1,37 @@
 
 document.addEventListener("DOMContentLoaded", function () {
+    const table = document.getElementById("sortableTable");
+    const headers = table.querySelectorAll("th");
+    let direction = 1; // 1 for ascending, -1 for descending
+    let lastSortedIndex = -1;
+
+
+    headers.forEach((header, index) => {
+        if (index === headers.length) return;
+
+        header.addEventListener("click", () => {
+            // Reset the previous sorted column's indicator
+            if (lastSortedIndex !== -1 && lastSortedIndex !== index) {
+                headers[lastSortedIndex].querySelector('.sort-indicator').textContent = "";
+            }
+
+            sortTableByColumn(table, index, direction);
+            // Set the sort indicator on the current column
+            const indicator = headers[index].querySelector('.sort-indicator');
+            if (direction === 1) {
+                indicator.textContent = "▲"; // Ascending triangle
+            } else {
+                indicator.textContent = "▼"; // Descending triangle
+            }
+            direction *= -1; // Toggle sorting direction on each click
+            lastSortedIndex = index;
+        });
+    });
+
+    headers[0].click();
+    headers[0].click();
+
+
     // Attach event listener to each image
     document.querySelectorAll('.ticket-images').forEach(img => {
         img.addEventListener('click', function () {
@@ -46,6 +78,10 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             row.style.display = shouldDisplay ? '' : 'none';
         });
+    });
+
+    document.getElementById('claimed-filter').addEventListener('input', function () {
+
     });
 
     // Code for the file input functionality
@@ -112,6 +148,29 @@ if (lightbox) {
             lightbox.style.display = 'none'; // Hide lightbox
         }
     });
+}
+
+function sortTableByColumn(table, columnIndex, direction) {
+    const rowsArray = Array.from(table.querySelectorAll("tbody tr"));
+
+    rowsArray.sort((rowA, rowB) => {
+        const cellA = rowA.children[columnIndex].innerText.toLowerCase();
+        const cellB = rowB.children[columnIndex].innerText.toLowerCase();
+
+        // Check if the column is numeric and sort accordingly
+        const aIsNumeric = !isNaN(cellA);
+        const bIsNumeric = !isNaN(cellB);
+
+        if (aIsNumeric && bIsNumeric) {
+            return direction * (Number(cellA) - Number(cellB));
+        } else {
+            return direction * cellA.localeCompare(cellB);
+        }
+    });
+
+    // Append sorted rows back to the table body
+    const tbody = table.querySelector("tbody");
+    rowsArray.forEach(row => tbody.appendChild(row));
 }
 
 // Check if there is an 'error' query parameter in the URL

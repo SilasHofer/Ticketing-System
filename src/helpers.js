@@ -21,6 +21,7 @@ module.exports = {
     "deleteCategory": require("./deleteCategory.js"),
     "addFileToTicket": require("./addFileToTicket.js"),
     "getAttachments": require("./getAttachments.js"),
+    "changeCategory": require("./changeCategory.js")
 
 
 

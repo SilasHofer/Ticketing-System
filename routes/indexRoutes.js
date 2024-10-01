@@ -154,10 +154,11 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     data.userName = req.oidc.user.name;
     data.userEmail = req.oidc.user.email;
     data.showAttachments = await helpers.getAttachments(req.query.ticketID)
+    data.showCategories = await helpers.showCategories();
     data.showAttachments.forEach(attachment => {
         attachment.isImage = /\.(jpg|jpeg|png|gif)$/i.test(attachment.file_name);
     });
-    if (data.role == "agent") {
+    if (data.role == "agent" || data.role == "admin") {
         data.showComments = await helpers.showComments(req.query.ticketID, 1);
     } else {
         data.showComments = await helpers.showComments(req.query.ticketID, 0);
@@ -168,6 +169,11 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
 
 Router.get("/claimTicket", requiresAuth(), async (req, res) => {
     await helpers.claimTicket(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
+    res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
+});
+
+Router.get("/changeCategory", requiresAuth(), async (req, res) => {
+    await helpers.changeCategory(req.query.category_id, req.query.ticketID);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 Router.get("/closeTicket", requiresAuth(), async (req, res) => {
@@ -186,7 +192,7 @@ Router.get("/changeStatus", requiresAuth(), async (req, res) => {
 
 Router.post("/addComment", requiresAuth(), async (req, res) => {
     let hide;
-    if (req.oidc.user.role[0] == "agent") {
+    if (req.oidc.user.role[0] == "agent" || req.oidc.user.role[0] == "admin") {
         hide = req.body.hide === "on"
     } else {
         hide = false;

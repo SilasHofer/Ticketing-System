@@ -214,34 +214,34 @@ CREATE PROCEDURE get_ticket(
   p_id VARCHAR(45)
 )
 SELECT 
-    idTickets,
-    category_id,
-    title,
-    description,
-    creator_id,
-    creator_name,
-    creator_email,
-    agent_id,
-    agent_name,
-    agent_email,
-    DATE_FORMAT(created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
-    DATE_FORMAT(processed, '%Y-%m-%d %H:%i:%s') AS processed_datetime,
-    DATE_FORMAT(closed, '%Y-%m-%d %H:%i:%s') AS closed_datetime,
-    DATE_FORMAT(updated, '%Y-%m-%d %H:%i:%s') AS updated_datetime,
-
-    solved,
-    department,
+    t.idTickets,
+    c.category_name,
+    t.category_id,
+    t.title,
+    t.description,
+    t.creator_id,
+    t.creator_name,
+    t.creator_email,
+    t.agent_id,
+    t.agent_name,
+    t.agent_email,
+    DATE_FORMAT(t.created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
+    DATE_FORMAT(t.processed, '%Y-%m-%d %H:%i:%s') AS processed_datetime,
+    DATE_FORMAT(t.closed, '%Y-%m-%d %H:%i:%s') AS closed_datetime,
+    DATE_FORMAT(t.updated, '%Y-%m-%d %H:%i:%s') AS updated_datetime,
     CASE
-        WHEN solved IS NOT NULL THEN 'Solved'
-        WHEN closed IS NOT NULL THEN 'Closed'
-        WHEN processed IS NOT NULL THEN 'Processed'
-        WHEN created IS NOT NULL THEN 'Created'
+        WHEN t.solved IS NOT NULL THEN 'Solved'
+        WHEN t.closed IS NOT NULL THEN 'Closed'
+        WHEN t.processed IS NOT NULL THEN 'Processed'
+        WHEN t.created IS NOT NULL THEN 'Created'
         ELSE 'Unknown'
     END AS status
 FROM 
-    tickets
+    tickets t
+    LEFT JOIN 
+    categories c ON t.category_id = c.idCategory
 WHERE 
-    idTickets = p_id
+    t.idTickets = p_id
 
 ;;
 
@@ -506,6 +506,24 @@ p_id INT
 BEGIN
 SELECT file_name FROM attachments WHERE ticket_id = p_id;
 END;;
+
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS change_category;
+
+DELIMITER ;;
+
+CREATE PROCEDURE change_category(
+  p_category_id INT,
+  p_ticket_id INT
+
+
+)
+UPDATE tickets
+SET category_id = p_category_id
+WHERE idTickets = p_ticket_id;
 
 ;;
 
