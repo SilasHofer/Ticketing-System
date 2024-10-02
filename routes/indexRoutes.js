@@ -8,73 +8,13 @@ if (process.env.NODE_ENV != "production") {
 }
 const express = require("express");
 const Router = express.Router();
-const nodemailer = require('nodemailer');
 const helpers = require("../src/helpers.js");
-const multer = require('multer');
+const email = require("./email.js");
+const files = require("./files.js");
 const config = require('../config/config.js');
-const path = require('path');
 const axios = require('axios');
 
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'public/user_files/'); // Directory where files will be saved
-    },
-    filename: (req, file, cb) => {
-        // Use the original file name, but you can also add a timestamp or a unique ID
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const originalName = file.originalname.replace(path.extname(file.originalname), ''); // Get the original name without extension
-        const extension = path.extname(file.originalname); // Get the extension
-        cb(null, `${originalName}-${uniqueSuffix}${extension}`); // Retain original name and add unique suffix
-    }
-});
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: config.file.max_file_size * 1024 * 1024, files: config.file.max_files }, // 2 MB file size limit
-    fileFilter: (req, file, cb) => {
-
-        const isMimeTypeAllowed = config.file.allowed_mime_types.includes(file.mimetype);
-        const isExtensionAllowed = config.file.allowed_extensions.some(type => type === path.extname(file.originalname).toLowerCase());
-
-        if (isMimeTypeAllowed && isExtensionAllowed) {
-            cb(null, true);
-        } else {
-            cb(new Error('File type not allowed!'), false);
-        }
-    }
-});
-
-
 const { auth } = require('express-openid-connect');
-
-let transporter = nodemailer.createTransport({
-    service: 'gmail', // You can use any provider like 'yahoo', 'hotmail', 'outlook', etc.
-    auth: {
-        user: process.env.source_email,   // The email to send from
-        pass: process.env.source_email_password     // The email password or app-specific password
-    }
-});
-
-function sendEmailToUser(req, transporter, to, emailsubject, emailText) {
-    // Define mail options
-    const mailOptions = {
-        from: 'ticketsystem8@gmail.com',
-        to: to,
-        subject: emailsubject,
-        text: emailText
-    };
-
-    // Send the email
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            //console.error('Error:', error);
-            return false;
-        }
-        console.log('Email sent:', info.response);
-        return true;
-    });
-}
 
 const authConfig = {
     authRequired: false,
@@ -117,7 +57,7 @@ Router.get("", requiresAuth(), async (req, res) => {
 });
 
 Router.post("/create-ticket", requiresAuth(), (req, res) => {
-    upload.array('filename', config.file.max_files)(req, res, function (err) {
+    files.upload.array('filename', config.file.max_files)(req, res, function (err) {
         if (err) {
             return res.redirect(`/?error=${encodeURIComponent(err.message)}`);
         }
@@ -132,7 +72,7 @@ Router.post("/create-ticket", requiresAuth(), (req, res) => {
                 }
 
 
-                //sendEmailToUser(req, transporter, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
+                email.sendEmailToUser(req, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
 
                 res.redirect("/")
             } catch (error) {
@@ -230,13 +170,13 @@ Router.get("/changeCategory", requiresAuth(), async (req, res) => {
 });
 Router.get("/closeTicket", requiresAuth(), async (req, res) => {
     await helpers.closeTicket(req.query.ticketID);
-    //sendEmailToUser(req, transporter, req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')
+    email.sendEmailToUser(req, req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')
 
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 
 Router.get("/changeStatus", requiresAuth(), async (req, res) => {
-    //sendEmailToUser(req, transporter, req.query.creatorEmail, 'Ticket updated', 'Your ticket ' + req.query.ticketTitle + ' has ben updated')
+    email.sendEmailToUser(req, req.query.creatorEmail, 'Ticket updated', 'Your ticket ' + req.query.ticketTitle + ' has ben updated')
     await helpers.changeStatus(req.query.ticketID, req.query.status);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -251,7 +191,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
     }
     await helpers.addComment(req.body.ticketID, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
     if (hide == false) {
-        //sendEmailToUser(req, transporter, req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
+        email.sendEmailToUser(req, req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
     }
 
     res.redirect(`/ticket?ticketID=${req.body.ticketID}`)
@@ -260,7 +200,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
 
 Router.post("/delete-ticket", requiresAuth(), async (req, res) => {
     var userData = await helpers.deleteComment(req.body.ticketID);
-    //sendEmailToUser(req, transporter, userData[0].creator_email, 'Ticket removal', 'Your ticket ' + userData[0].title + ' has ben removed')
+    email.sendEmailToUser(req, userData[0].creator_email, 'Ticket removal', 'Your ticket ' + userData[0].title + ' has ben removed')
     res.redirect("/")
 });
 

@@ -32,14 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
     headers[0].click();
 
 
-    // Attach event listener to each image
-    document.querySelectorAll('.ticket-images').forEach(img => {
-        img.addEventListener('click', function () {
-            const imageSrc = this.getAttribute('data-image'); // Get image source
-            document.getElementById('lightbox-img').src = imageSrc; // Set image src for lightbox
-            document.getElementById('lightbox').style.display = 'flex'; // Show lightbox
-        });
-    });
 
     document.querySelectorAll(".openTicket").forEach(button => {
         button.addEventListener("click", function () {
@@ -49,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = `/ticket?ticketID=${ticketID}`;
         });
     });
+
     document.getElementById('filter-input').addEventListener('input', function () {
         // Get the value of the input field and convert it to lowercase for case-insensitive matching
         let filterValue = this.value.toLowerCase();
@@ -78,10 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
             });
             row.style.display = shouldDisplay ? '' : 'none';
         });
-    });
-
-    document.getElementById('claimed-filter').addEventListener('input', function () {
-
     });
 
     // Code for the file input functionality
@@ -131,6 +120,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// Attach event listener to each image
+document.querySelectorAll('.ticket-images').forEach(img => {
+    img.addEventListener('click', function () {
+        const imageSrc = this.getAttribute('data-image'); // Get image source
+        document.getElementById('lightbox-img').src = imageSrc; // Set image src for lightbox
+        document.getElementById('lightbox').style.display = 'flex'; // Show lightbox
+    });
+});
+
 // Check if the elements exist before adding the event listeners
 const closeButton = document.getElementById('close');
 const lightbox = document.getElementById('lightbox');
