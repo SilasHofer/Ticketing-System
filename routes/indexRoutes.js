@@ -9,22 +9,14 @@ if (process.env.NODE_ENV != "production") {
 const express = require("express");
 const Router = express.Router();
 const helpers = require("../src/helpers.js");
-const email = require("./email.js");
+const email = require("./mail.js");
 const files = require("./files.js");
+const auth0 = require("./auth0.js");
 const config = require('../config/config.js');
-const axios = require('axios');
 
 const { auth } = require('express-openid-connect');
 
-const authConfig = {
-    authRequired: false,
-    auth0Logout: true,
-    secret: process.env.AUTH_SECRET,
-    baseURL: 'http://localhost:3000',
-    clientID: process.env.AUTH_CLIENTID,
-    issuerBaseURL: process.env.AUTH_ISSUERBASEURL
-};
-Router.use(auth(authConfig));
+Router.use(auth(auth0.authConfig));
 
 const { requiresAuth } = require('express-openid-connect');
 
@@ -72,7 +64,7 @@ Router.post("/create-ticket", requiresAuth(), (req, res) => {
                 }
 
 
-                email.sendEmailToUser(req, req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
+                email.sendEmailToUser(req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
 
                 res.redirect("/")
             } catch (error) {
@@ -115,45 +107,8 @@ Router.get("/claimTicket", requiresAuth(), async (req, res) => {
 
 Router.post("/create-account", requiresAuth(), async (req, res) => {
     try {
-        // Get access token from Auth0
-        const response = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/oauth/token`, {
-            client_id: process.env.AUTH_CLIENTID,
-            client_secret: process.env.AUTH_CLIENTSECRET,
-            audience: `${process.env.AUTH_ISSUERBASEURL}/api/v2/`,
-            grant_type: 'client_credentials',
-            scope: 'create:users update:roles create:role_members'
-        });
+        auth0.createAccount(req.body.email, req.body.password, req.body.name, req.body.role);
 
-        const accessToken = response.data.access_token;
-
-        // Use access token to call the Auth0 Management API
-        const userResponse = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users`, {
-            email: req.body.email,  // User's email
-            password: req.body.password,// User's password
-            name: req.body.name,
-            connection: 'Username-Password-Authentication',  // Specify the Auth0 connection
-            user_metadata: {               // Optional: any additional metadata for the user
-                subscription: 'free'
-            }
-
-        }, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-        const userId = userResponse.data.user_id;
-        const roleId = req.body.role;
-
-        await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/${roleId}/users`, {
-            users: [userId]  // Send the user ID in the request body
-        }, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-
-        // Respond with user data from Auth0
-        console.log('User created:', userResponse.data);
         res.redirect("/admin-panel")
     } catch (error) {
         console.error(error);
@@ -163,20 +118,19 @@ Router.post("/create-account", requiresAuth(), async (req, res) => {
 });
 
 
-
 Router.get("/changeCategory", requiresAuth(), async (req, res) => {
     await helpers.changeCategory(req.query.category_id, req.query.ticketID);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 Router.get("/closeTicket", requiresAuth(), async (req, res) => {
     await helpers.closeTicket(req.query.ticketID);
-    email.sendEmailToUser(req, req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')
+    email.sendEmailToUser(req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')
 
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 
 Router.get("/changeStatus", requiresAuth(), async (req, res) => {
-    email.sendEmailToUser(req, req.query.creatorEmail, 'Ticket updated', 'Your ticket ' + req.query.ticketTitle + ' has ben updated')
+    email.sendEmailToUser(req.query.creatorEmail, 'Ticket updated', 'Your ticket ' + req.query.ticketTitle + ' has ben updated')
     await helpers.changeStatus(req.query.ticketID, req.query.status);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -191,7 +145,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
     }
     await helpers.addComment(req.body.ticketID, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
     if (hide == false) {
-        email.sendEmailToUser(req, req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
+        email.sendEmailToUser(req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
     }
 
     res.redirect(`/ticket?ticketID=${req.body.ticketID}`)
@@ -200,7 +154,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
 
 Router.post("/delete-ticket", requiresAuth(), async (req, res) => {
     var userData = await helpers.deleteComment(req.body.ticketID);
-    email.sendEmailToUser(req, userData[0].creator_email, 'Ticket removal', 'Your ticket ' + userData[0].title + ' has ben removed')
+    email.sendEmailToUser(userData[0].creator_email, 'Ticket removal', 'Your ticket ' + userData[0].title + ' has ben removed')
     res.redirect("/")
 });
 

@@ -22,6 +22,14 @@ const config = {
             ".pdf",
             ".docx"
         ]
+    },
+    mail: {
+        allowed_mail_domains: [
+            "bth.se",
+            "student.bth.se"
+
+
+        ],
     }
 };
 
