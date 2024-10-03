@@ -22,11 +22,13 @@ const { requiresAuth } = require('express-openid-connect');
 
 Router.get("", requiresAuth(), async (req, res) => {
     let data = {};
-    if (req.query.error) {
 
-    }
     data.title = "Home";
     data.role = req.oidc.user.role[0];
+    if (!data.role) {
+        res.redirect("/new-user");
+    }
+
     data.name = req.oidc.user.name;
     var userId = req.oidc.user.user_id;
     data.showCategories = await helpers.showCategories();
@@ -114,6 +116,20 @@ Router.post("/create-account", requiresAuth(), async (req, res) => {
         console.error(error);
         res.status(500).send('Error making request to Auth0 API');
     }
+
+});
+
+Router.get("/new-user", requiresAuth(), async (req, res) => {
+    let data = {};
+    data.role = req.oidc.user.role[0];
+    data.title = "newUser";
+    res.render("pages/new-user.ejs", data);
+});
+
+Router.post("/edit-account", requiresAuth(), async (req, res) => {
+    await auth0.editAccount(req.oidc.user.user_id, req.body.name, req.body.password)
+
+    res.redirect(`/logout`);
 
 });
 

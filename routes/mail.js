@@ -139,7 +139,7 @@ async function emailReceived(mail) {
             lowercase: true,      // Include lowercase letters
             excludeSimilarCharacters: true // Exclude similar characters like 'i', 'l', '1', 'O', '0'
         });
-        auth0.createAccount(fromAddress, password, 'temp', 'rol_SbiBHiolJfOexDLM');
+        auth0.createAccount(fromAddress, password, 'temp', '');
         sendEmailToUser(fromAddress, 'An account has ben created for you', 'You can now login with this mail: ' + fromAddress + ' and this password: ' + password + ' on this  http://localhost:3000/ ');
 
     } else {

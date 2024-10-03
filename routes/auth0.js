@@ -53,14 +53,39 @@ async function createAccount(email, password, name, role_id) {
         }
     });
     const userId = userResponse.data.user_id;
+    if (role_id != "") {
+        await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/${role_id}/users`, {
+            users: [userId]  // Send the user ID in the request body
+        }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }
 
-    await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/${role_id}/users`, {
-        users: [userId]  // Send the user ID in the request body
+}
+
+async function editAccount(user_id, name, password) {
+    const token = await getAccessToken('update:users update:roles create:role_members')
+
+    const userResponse = await axios.patch(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users/${user_id}`, {
+        password: password,// User's password
+        name: name,
+
     }, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     });
+
+    await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/rol_SbiBHiolJfOexDLM/users`, {
+        users: [user_id]  // Send the user ID in the request body
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
 }
 
 async function getUsers() {
@@ -80,5 +105,6 @@ async function getUsers() {
 module.exports = {
     authConfig,
     createAccount,
-    getUsers
+    getUsers,
+    editAccount
 };

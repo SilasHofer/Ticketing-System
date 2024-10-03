@@ -66,6 +66,7 @@
                                 <th>Agent <span class="sort-indicator"></span></th>
                                 <th>Created <span class="sort-indicator"></span></th>
                                 <th>Category <span class="sort-indicator"></span></th>
+                                <th>updated <span class="sort-indicator"></span></th>
                                 <th>Status <span class="sort-indicator"></span></th>
                                 <% if (role=="admin" ) { %>
                                     <th class="table-delete">Delete</th>
@@ -88,13 +89,20 @@
                                         <%= ticket.creator_name %>
                                     </td>
                                     <td class="filter">
-                                        <%= ticket.agent_name %>
+                                        <%if(ticket.agent_name){%>
+                                            <%= ticket.agent_name %>
+                                                <%}else {%>
+                                                    No agent assigned
+                                                    <%} %>
                                     </td>
                                     <td class="filter">
                                         <%= ticket.created_datetime %>
                                     </td>
                                     <td class="filter">
                                         <%= ticket.category_name %>
+                                    </td>
+                                    <td class="filter">
+                                        <%= ticket.updated_datetime %>
                                     </td>
                                     <td class="filter
                                         <%= ticket.status === 'Solved' ? 'status-color-solved' :

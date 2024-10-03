@@ -186,7 +186,14 @@ SELECT
     t.creator_name,
     t.agent_name,
     DATE_FORMAT(t.created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
-    t.department,
+    CASE
+        WHEN TIMESTAMPDIFF(SECOND, IFNULL(t.updated, t.created), NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, IFNULL(t.updated, t.created), NOW()), ' seconds ago')
+        WHEN TIMESTAMPDIFF(MINUTE, IFNULL(t.updated, t.created), NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(MINUTE, IFNULL(t.updated, t.created), NOW()), ' minutes ago')
+        WHEN TIMESTAMPDIFF(HOUR, IFNULL(t.updated, t.created), NOW()) < 24 THEN CONCAT(TIMESTAMPDIFF(HOUR, IFNULL(t.updated, t.created), NOW()), ' hours ago')
+        WHEN TIMESTAMPDIFF(DAY, IFNULL(t.updated, t.created), NOW()) < 30 THEN CONCAT(TIMESTAMPDIFF(DAY, IFNULL(t.updated, t.created), NOW()), ' days ago')
+        WHEN TIMESTAMPDIFF(MONTH, IFNULL(t.updated, t.created), NOW()) < 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, IFNULL(t.updated, t.created), NOW()), ' months ago')
+        ELSE CONCAT(TIMESTAMPDIFF(YEAR, IFNULL(t.updated, t.created), NOW()), ' years ago')
+    END AS updated_datetime,
     CASE
         WHEN t.solved IS NOT NULL THEN 'Solved'
         WHEN t.closed IS NOT NULL THEN 'Closed'
