@@ -39,12 +39,10 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   `agent_id` VARCHAR(45) NULL,
   `agent_name` VARCHAR(45) NULL,
   `agent_email` VARCHAR(45) NULL,
-  `created` TIMESTAMP NULL,
-  `processed` TIMESTAMP NULL,
-  `updated` TIMESTAMP NULL,
-  `closed` TIMESTAMP NULL,
-  `solved` TIMESTAMP NULL,
-  `department` VARCHAR(45) NULL,
+  `created` TIMESTAMP, 
+  `updated` TIMESTAMP,
+  `status` VARCHAR(50),
+  `status_timestamp` TIMESTAMP,
   PRIMARY KEY (`idTickets`),
   INDEX `category_id_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_id`
@@ -126,13 +124,11 @@ INSERT INTO `tickets` (
   `creator_email`, 
   `agent_id`,
   `agent_name`,
-  `agent_email`, 
+  `agent_email`,
+  `status`,
+  `status_timestamp`, 
   `created`, 
-  `processed`,
-  `updated`, 
-  `closed`, 
-  `solved`, 
-  `department`
+  `updated`
 ) VALUES (
   NULL,                  -- Assuming `idTickets` is an auto-incrementing primary key
   p_category_id,                  -- `category_id` can be set to NULL if not available
@@ -143,12 +139,10 @@ INSERT INTO `tickets` (
   p_user_email,
   NULL,                  -- `agent_id` can be set to NULL if not assigned yet
   NULL,
-  NULL,
-  NOW(),                 -- `created` timestamp (current time)
-  NULL,
-  NUll,                  -- `processed` timestamp (NULL if not processed yet)
-  NULL,                  -- `closed` timestamp (NULL if not closed yet)
-  NULL,                     -- `solved` (0 for not solved, adjust as needed)
+  NULL,                 -- `created` timestamp (current time)
+  "Created",                  -- `processed` timestamp (NULL if not processed yet)
+  NOW(),                  -- `closed` timestamp (NULL if not closed yet)
+  NOW(),                     -- `solved` (0 for not solved, adjust as needed)
   NULL                   -- `department` can be set to NULL if not specified
 );
     SELECT LAST_INSERT_ID() AS ticket_id; 
@@ -181,13 +175,8 @@ SELECT
         WHEN TIMESTAMPDIFF(MONTH, IFNULL(t.updated, t.created), NOW()) < 12 THEN CONCAT(TIMESTAMPDIFF(MONTH, IFNULL(t.updated, t.created), NOW()), ' months ago')
         ELSE CONCAT(TIMESTAMPDIFF(YEAR, IFNULL(t.updated, t.created), NOW()), ' years ago')
     END AS updated_datetime,
-    CASE
-        WHEN t.solved IS NOT NULL THEN 'Solved'
-        WHEN t.closed IS NOT NULL THEN 'Closed'
-        WHEN t.processed IS NOT NULL THEN 'Processed'
-        WHEN t.created IS NOT NULL THEN 'Created'
-        ELSE 'Unknown'
-    END AS status
+    t.status,
+    DATE_FORMAT(t.status_timestamp, '%Y-%m-%d %H:%i:%s') as status_timestamp
 FROM 
     tickets t
   LEFT JOIN 
@@ -220,16 +209,9 @@ SELECT
     t.agent_name,
     t.agent_email,
     DATE_FORMAT(t.created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
-    DATE_FORMAT(t.processed, '%Y-%m-%d %H:%i:%s') AS processed_datetime,
-    DATE_FORMAT(t.closed, '%Y-%m-%d %H:%i:%s') AS closed_datetime,
     DATE_FORMAT(t.updated, '%Y-%m-%d %H:%i:%s') AS updated_datetime,
-    CASE
-        WHEN t.solved IS NOT NULL THEN 'Solved'
-        WHEN t.closed IS NOT NULL THEN 'Closed'
-        WHEN t.processed IS NOT NULL THEN 'Processed'
-        WHEN t.created IS NOT NULL THEN 'Created'
-        ELSE 'Unknown'
-    END AS status
+    t.status,
+    DATE_FORMAT(t.status_timestamp, '%Y-%m-%d %H:%i:%s') as status_timestamp
 FROM 
     tickets t
     LEFT JOIN 
@@ -339,7 +321,7 @@ CREATE PROCEDURE close_ticket(
 
 )
 UPDATE tickets
-SET closed = NOW()
+SET status = "closed"
 WHERE idTickets = p_id;
 
 ;;
@@ -355,28 +337,11 @@ CREATE PROCEDURE change_status(
   p_status VARCHAR(45)
 
 )
-BEGIN
-    -- Update the correct column based on input
-    IF p_status = 'processed' THEN
-        UPDATE tickets
-        SET processed = NOW()
+      UPDATE tickets
+        SET `status` = p_status, `status_timestamp` = NOW() ,`updated` = NOW() 
         WHERE idTickets = p_id;
         
-    ELSEIF p_status = 'solved' THEN
-        UPDATE tickets
-        SET solved = NOW()
-        WHERE idTickets = p_id;
-
-    ELSEIF p_status = 'closed' THEN
-        UPDATE tickets
-        SET closed = NOW()
-        WHERE idTickets = p_id;
-
-    ELSE
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid column name';
-    END IF;
-END;;
-
+;;
 
 
 DELIMITER ;

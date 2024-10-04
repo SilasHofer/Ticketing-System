@@ -39,8 +39,7 @@
 
                 </div>
                 <div class="status">
-                    <% if (role !='user' && ticket.agent_id===userId && ticket.status !=='Solved' && ticket.status
-                        !=='Closed' ) { %>
+                    <% if (role !='user' && ticket.agent_id===userId) { %>
                         <select name='invincibleDropdown'
                             class=" <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
                                             ticket.status === 'Closed' ? 'status-background-color-closed' :
@@ -49,13 +48,12 @@
                             onchange="
                         window.location='/changeStatus?ticketID=<%=ticket.idTickets%>&creatorEmail=<%=ticket.creator_email %>&ticketTitle=<%= ticket.title %>&status='
                         + this.value ">
-                            <option value=" <%=ticket.status %>" selected disabled>
-                                <%= ticket.status %>
-                            </option>
-                            <option value="Processed" <%=ticket.status==='Processed' ? 'selected' : '' %>>Processed
-                            </option>
-                            <option value="Solved" <%=ticket.status==='Solved' ? 'selected' : '' %>>Solved</option>
-                            <option value="Closed" <%=ticket.status==='Closed' ? 'selected' : '' %>>Closed</option>
+                            <% availableStatuses.forEach(status=> { %>
+                                <option value="<%= status %>" <%=ticket.status===status ? 'selected' : '' %>><%= status
+                                        %>
+                                        <%=ticket.status===status ? '▼' : '' %>
+                                </option>
+                                <% }) %>
                         </select>
                         <% } else { %>
                             <b
@@ -74,7 +72,7 @@
                                         Close Ticket
                                     </a>
                                     <% } else {%>
-                                        <%= ticket.closed_datetime %>
+                                        <%= ticket.status_timestamp %>
                                             <% } %>
                 </div>
             </div>

@@ -30,6 +30,16 @@ const config = {
 
 
         ],
+    },
+    status: {
+        ticketStatuses: [
+            'Created',
+            'Processed',
+            'Solved',
+            'Closed'
+
+
+        ],
     }
 };
 

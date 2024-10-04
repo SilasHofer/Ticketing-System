@@ -83,6 +83,7 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     if (!data.ticket || req.oidc.user.role[0] == "user" && req.oidc.user.user_id != data.ticket.creator_id) {
         return res.redirect("/")
     }
+    data.availableStatuses = config.status.ticketStatuses;
     data.role = req.oidc.user.role[0];
     data.title = data.ticket.title;
     data.userId = req.oidc.user.user_id;
@@ -142,7 +143,7 @@ Router.get("/changeCategory", requiresAuth(), async (req, res) => {
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 Router.get("/closeTicket", requiresAuth(), async (req, res) => {
-    await helpers.closeTicket(req.query.ticketID);
+    await helpers.changeStatus(req.query.ticketID, "Closed");
     email.sendEmailToUser(req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')
 
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
