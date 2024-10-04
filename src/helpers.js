@@ -25,17 +25,7 @@ module.exports = {
     "removeAccountRequest": require("./removeAccountRequest.js"),
     "getRequestedAccounts": require("./getRequestedAccounts.js"),
     "createAccountRequest": require("./createAccountRequest.js"),
-
-
-
-
-
-
-
-
-
-
-
+    "showOldTickets": require("./showOldTickets.js"),
 
 
 };

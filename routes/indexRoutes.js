@@ -184,6 +184,7 @@ Router.get("/admin-panel", requiresAuth(), async (req, res) => {
     data.role = req.oidc.user.role[0];
     data.showCategories = await helpers.showCategories();
     data.accountRequests = await helpers.getRequestedAccounts();
+    data.showOldTickets = await helpers.showOldTickets();
     if (req.oidc.user.role[0] != "admin") {
         return res.redirect("/")
     }
