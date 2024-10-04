@@ -31,8 +31,6 @@ document.addEventListener("DOMContentLoaded", function () {
     headers[0].click();
     headers[0].click();
 
-
-
     document.querySelectorAll(".openTicket").forEach(button => {
         button.addEventListener("click", function () {
             // Get the ticket ID from the data attribute
@@ -126,6 +124,12 @@ document.querySelectorAll('.ticket-images').forEach(img => {
     img.addEventListener('click', function () {
         const imageSrc = this.getAttribute('data-image'); // Get image source
         document.getElementById('lightbox-img').src = imageSrc; // Set image src for lightbox
+        // Set the href of the download link to the image src
+        // Extract the filename from the imageSrc (after the last "/")
+        const fileName = imageSrc.substring(imageSrc.lastIndexOf('/') + 1);
+        const downloadLink = document.getElementById('lightbox-download');
+        downloadLink.href = imageSrc;  // Set the href to the image URL
+        downloadLink.download = fileName.replace(/-\d+-\d+(?=\.\w+$)/, '');
         document.getElementById('lightbox').style.display = 'flex'; // Show lightbox
     });
 });

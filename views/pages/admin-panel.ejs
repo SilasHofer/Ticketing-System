@@ -56,6 +56,37 @@
                     <button type="submit" class="btn " id="createAccount">add</button>
                 </form>
             </div>
+            <div class="account-requests">
+                <h2>requested accounts</h2>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>email</th>
+                            <th>yes/no</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% accountRequests.forEach(account=> { %>
+                            <tr>
+                                <td>
+                                    <%= account.idrequests %>
+                                </td>
+                                <td>
+                                    <%= account.email %>
+                                </td>
+                                <td>
+                                    <a href="/accept-account?id=<%= account.idrequests %>&email=<%= account.email %>"
+                                        class="button">yes</a>
+                                    <a href="/decline-account?id=<%= account.idrequests %>&email=<%= account.email %>"
+                                        class="button">no</a>
+                                </td>
+                            </tr>
+                            <% }) %>
+
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     </div>

@@ -288,10 +288,34 @@
         }
 
         .lightbox-image {
-          max-width: 90%;
+          width: 90%;
           /* Limit the width of the large image */
-          max-height: 90%;
+          height: 90%;
           /* Limit the height of the large image */
+        }
+
+        .lightbox #lightbox-download {
+          margin-top: 20px;
+          /* Adds space between the image and the download button */
+        }
+
+        .lightbox .button {
+          background-color: #4CAF50;
+          /* Green */
+          color: white;
+          padding: 10px 20px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          font-size: 16px;
+          border: none;
+          border-radius: 20px;
+          cursor: pointer;
+        }
+
+        .lightbox .button:hover {
+          background-color: #45a049;
+          /* Darker green on hover */
         }
 
         .close {

@@ -21,7 +21,11 @@ module.exports = {
     "deleteCategory": require("./deleteCategory.js"),
     "addFileToTicket": require("./addFileToTicket.js"),
     "getAttachments": require("./getAttachments.js"),
-    "changeCategory": require("./changeCategory.js")
+    "changeCategory": require("./changeCategory.js"),
+    "removeAccountRequest": require("./removeAccountRequest.js"),
+    "getRequestedAccounts": require("./getRequestedAccounts.js"),
+    "createAccountRequest": require("./createAccountRequest.js"),
+
 
 
 

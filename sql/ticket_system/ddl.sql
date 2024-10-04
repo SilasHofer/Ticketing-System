@@ -70,27 +70,14 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`comments` (
 
 
 -- -----------------------------------------------------
--- Table `ticket_system`.`Comments_Tickets`
+-- Table `ticket_system`.`account_requests`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `ticket_system`.`comments_tickets` (
-  `idComments_Tickets` INT NOT NULL,
-  `comment_id` INT NULL,
-  `ticket_id` INT NULL,
-  PRIMARY KEY (`idComments_Tickets`),
-  INDEX `comment_id_idx` (`comment_id` ASC) VISIBLE,
-  INDEX `ticket_id_idx` (`ticket_id` ASC) VISIBLE,
-  CONSTRAINT `comment_id`
-    FOREIGN KEY (`comment_id`)
-    REFERENCES `ticket_system`.`comments` (`idComments`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `fk_ticket_id`
-    FOREIGN KEY (`ticket_id`)
-    REFERENCES `ticket_system`.`tickets` (`idTickets`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+CREATE TABLE IF NOT EXISTS `ticket_system`.`account_requests` (
+  `idrequests` INT NOT NULL AUTO_INCREMENT,
+  `email` VARCHAR(45) NULL,
+  PRIMARY KEY (`idrequests`)
+  )
 ENGINE = InnoDB;
-
 
 -- -----------------------------------------------------
 -- Table `ticket_system`.`Attachments`
@@ -531,6 +518,52 @@ CREATE PROCEDURE change_category(
 UPDATE tickets
 SET category_id = p_category_id
 WHERE idTickets = p_ticket_id;
+
+;;
+
+DELIMITER ;
+
+
+
+DROP PROCEDURE IF EXISTS create_account_request;
+
+DELIMITER ;;
+
+CREATE PROCEDURE create_account_request(
+  p_email VARCHAR(45)
+
+
+)
+INSERT INTO `account_requests` (
+  `email`
+) VALUES (
+  p_email
+);
+
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS get_requested_accounts;
+
+DELIMITER ;;
+
+CREATE PROCEDURE get_requested_accounts()
+SELECT * FROM `account_requests`;
+
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS remove_account_request;
+
+DELIMITER ;;
+
+CREATE PROCEDURE remove_account_request(
+  p_id INT
+)
+DELETE FROM `account_requests`
+  WHERE `idrequests` = p_id;
 
 ;;
 

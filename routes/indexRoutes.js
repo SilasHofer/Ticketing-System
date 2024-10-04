@@ -104,6 +104,9 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
 
 Router.get("/claimTicket", requiresAuth(), async (req, res) => {
     await helpers.claimTicket(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
+    await helpers.changeStatus(req.query.ticketID, "Processed");
+
+
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 
@@ -179,11 +182,32 @@ Router.get("/admin-panel", requiresAuth(), async (req, res) => {
     data.title = "Admin Panel";
     data.role = req.oidc.user.role[0];
     data.showCategories = await helpers.showCategories();
+    data.accountRequests = await helpers.getRequestedAccounts();
     if (req.oidc.user.role[0] != "admin") {
         return res.redirect("/")
     }
 
     res.render("pages/admin-panel.ejs", data);
+});
+
+Router.get("/accept-account", requiresAuth(), async (req, res) => {
+    if (req.oidc.user.role[0] != "admin") {
+        return res.redirect("/")
+    }
+    email.createAccountFromMail(req.query.email);
+    helpers.removeAccountRequest(req.query.id)
+
+    res.redirect("/admin-panel")
+});
+
+Router.get("/decline-account", requiresAuth(), async (req, res) => {
+    if (req.oidc.user.role[0] != "admin") {
+        return res.redirect("/")
+    }
+    email.sendEmailToUser(req.query.email, 'account declined', 'The admin declined your request')
+    helpers.removeAccountRequest(req.query.id)
+
+    res.redirect("/admin-panel")
 });
 
 Router.post("/add-category", requiresAuth(), async (req, res) => {

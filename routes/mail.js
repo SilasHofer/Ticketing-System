@@ -131,23 +131,48 @@ async function emailReceived(mail) {
         sendEmailToUser(user.email, 'Ticket Created', 'Your ticket ' + mail.subject + ' has been successfully created!');
 
     } else if (config.mail.allowed_mail_domains.includes(fromAddress.split('@')[1])) {
-        const password = generatePassword.generate({
-            length: 10,           // Length of the password
-            numbers: true,        // Include numbers
-            symbols: true,        // Include symbols
-            uppercase: true,      // Include uppercase letters
-            lowercase: true,      // Include lowercase letters
-            excludeSimilarCharacters: true // Exclude similar characters like 'i', 'l', '1', 'O', '0'
-        });
-        auth0.createAccount(fromAddress, password, 'temp', '');
-        sendEmailToUser(fromAddress, 'An account has ben created for you', 'You can now login with this mail: ' + fromAddress + ' and this password: ' + password + ' on this  http://localhost:3000/ ');
 
+        await createAccountFromMail(fromAddress);
     } else {
-
+        helpers.createAccountRequest(fromAddress);
+        sendEmailToUser(fromAddress, 'Account request', 'An admin will look att your request to create an account');
     }
+}
+
+function generateValidPassword() {
+    const password = generatePassword.generate({
+        length: 10,                    // Minimum of 8 characters
+        numbers: true,                 // Include numbers
+        symbols: true,                 // Include special characters
+        uppercase: true,               // Include uppercase letters
+        lowercase: true,               // Include lowercase letters
+        excludeSimilarCharacters: true // Exclude similar characters like 'i', 'l', '1', 'O', '0'
+    });
+
+    // Regular expressions to check if the password meets the requirements
+    const hasUpperCase = /[A-Z]/.test(password);
+    const hasLowerCase = /[a-z]/.test(password);
+    const hasNumber = /[0-9]/.test(password);
+    const hasSpecialChar = /[!@#$%^&*]/.test(password);
+
+    // Ensure the password meets all the conditions
+    if (hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar) {
+        return password;
+    } else {
+        // If not, call the function again until a valid password is generated
+        return generateValidPassword();
+    }
+}
+
+async function createAccountFromMail(mail) {
+    const password = generateValidPassword();
+    auth0.createAccount(mail, password, 'temp', '');
+    sendEmailToUser(mail, 'An account has ben created for you', 'You can now login with this mail: ' + mail + ' and this password: ' + password + ' on this  http://localhost:3000/ ');
+
 }
 
 
 module.exports = {
-    sendEmailToUser
+    sendEmailToUser,
+    createAccountFromMail
 };
