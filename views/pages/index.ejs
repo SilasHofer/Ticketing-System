@@ -1,4 +1,5 @@
 <%- include("./../partials/header.ejs") %>
+    <script type="module" src="/java_script/eventHandlersIndex.js"></script>
 
     <div class="container">
         <div class="top-text">
@@ -52,7 +53,6 @@
                     <% if (role !="user" ) { %>
                         <label>claimed tickets</label>
                         <input type="checkbox" id="claimed-filter" name="claimed-filter">
-
                         <% } %>
                 </form>
                 <div class="table-container">

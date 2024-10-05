@@ -78,7 +78,8 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`Knowledge` (
   `user_name` VARCHAR(45) NOT NULL,
   `category_id` INT NOT NULL,
   `time` TIMESTAMP NULL,
-  PRIMARY KEY (`idKnowledge`));
+  PRIMARY KEY (`idKnowledge`),
+  FOREIGN KEY (`category_id`) REFERENCES `ticket_system`.`categories` (`idCategory`) ON DELETE CASCADE ON UPDATE CASCADE);
 
 -- -----------------------------------------------------
 -- Table `ticket_system`.`account_requests`
@@ -624,14 +625,17 @@ CREATE PROCEDURE show_knowleges(
 p_category_id INT
 )
 SELECT 
-  `idKnowledge`,
-  `title`,
-  `description`,
-  `user_name`,
-  `category_id`,
-DATE_FORMAT(`time`, '%Y-%m-%d %H:%i:%s') as time 
-From Knowledge
-WHERE (p_category_id IS NULL OR category_id = p_category_id);
+  k.idKnowledge,
+  k.title,
+  k.description,
+  k.user_name,
+  k.category_id,
+  c.category_name,
+DATE_FORMAT(k.time, '%Y-%m-%d %H:%i:%s') as time 
+From Knowledge k
+  LEFT JOIN 
+    categories c ON k.category_id = c.idCategory
+WHERE (p_category_id IS NULL OR k.category_id = p_category_id);
 ;;
 
 DELIMITER ;

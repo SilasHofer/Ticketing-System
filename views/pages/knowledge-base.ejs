@@ -1,4 +1,6 @@
 <%- include("./../partials/header.ejs") %>
+    <script type="module" src="/java_script/eventHandlersKnowledge.js"></script>
+
     <div class="container">
         <div class="create">
             <button class="button" id="openAddFormButton">Create Knowledge</button>
@@ -19,19 +21,30 @@
                 <button type="button" class="btn cancel" id="closeAddForm">Close</button>
             </form>
         </div>
-        <select class="category_dropdown" onchange="">
-            <% showCategories.forEach(Category=> { %>
-                <option value="<%= Category.idCategory %>">
-                    <%= Category.category_name %>
+        <div class="dropdown-wrapper">
+            <select class="category_dropdown">
+                <option value="">
+                    All categories
                 </option>
-                <% }) %>
-        </select>
+                <% showCategories.forEach(Category=> { %>
+                    <option value="<%= Category.idCategory %>">
+                        <%= Category.category_name %>
+                    </option>
+                    <% }) %>
+            </select>
+            <form id="knowledge-filter">
+                <input type="text" id="knowledge-filter-input" placeholder="filter" name="filter" required>
+            </form>
+        </div>
         <div class="knowledge-base">
             <% showKnowleges.forEach(Knowlege=> { %>
-                <div class="knowledge-card">
+                <div class="knowledge-card" data-category-id="<%= Knowlege.category_id %>">
                     <div class="knowledge-header">
                         <div class="knowledge-title">
                             <%= Knowlege.title %>
+                        </div>
+                        <div class="knowledge-category">
+                            <%= Knowlege.category_name %>
                         </div>
                         <div class="knowledge-author">
                             <%= Knowlege.user_name %>
