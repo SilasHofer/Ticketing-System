@@ -169,6 +169,34 @@
                         </div>
             </div>
         </div>
+        <% if (role !='user' ) { %>
+            <div class="knowledge-base-top">
+                <h2 class="knowledge-top">Knowledge base</h2>
+            </div>
+            <div class="knowledge-base">
+                <% showKnowleges.slice(0, 3).forEach(Knowlege=> { %>
+                    <div class="knowledge-card">
+                        <div class="knowledge-header">
+                            <div class="knowledge-title">
+                                <%= Knowlege.title %>
+                            </div>
+                            <div class="knowledge-author">
+                                <%= Knowlege.user_name %>
+                            </div>
+                            <div class="knowledge-time">
+                                <%=Knowlege.time %>
+                            </div>
+                        </div>
+                        <hr class="divider">
+                        <div class="knowledge-body">
+                            <p class="knowledge-description">
+                                <%= Knowlege.description %>
+                            </p>
+                        </div>
+                    </div>
+                    <% }) %>
+            </div>
+            <% }%>
     </div>
 
     <%- include("./../partials/footer.ejs") %>

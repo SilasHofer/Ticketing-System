@@ -96,6 +96,7 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     });
     if (data.role == "agent" || data.role == "admin") {
         data.showComments = await helpers.showComments(req.query.ticketID, 1);
+        data.showKnowleges = await helpers.showKnowleges(data.ticket.category_id);
     } else {
         data.showComments = await helpers.showComments(req.query.ticketID, 0);
     }
@@ -137,11 +138,28 @@ Router.post("/edit-account", requiresAuth(), async (req, res) => {
 
 });
 
+Router.get("/knowledge-base", requiresAuth(), async (req, res) => {
+    let data = {};
+    data.role = req.oidc.user.role[0];
+    data.showKnowleges = await helpers.showKnowleges(null);
+    data.showCategories = await helpers.showCategories();
+
+    data.title = "Knowledge Base"
+    res.render("pages/knowledge-base.ejs", data);
+});
+Router.post("/addKnowledge", requiresAuth(), async (req, res) => {
+
+    await helpers.addKnowledge(req.body.title, req.body.description, req.body.category, req.oidc.user.name)
+    res.redirect(`/knowledge-base`)
+
+});
+
 
 Router.get("/changeCategory", requiresAuth(), async (req, res) => {
     await helpers.changeCategory(req.query.category_id, req.query.ticketID);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
+
 Router.get("/closeTicket", requiresAuth(), async (req, res) => {
     await helpers.changeStatus(req.query.ticketID, "Closed");
     email.sendEmailToUser(req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Closed')

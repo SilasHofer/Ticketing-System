@@ -59,6 +59,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `ticket_system`.`comments` (
   `idComments` INT NOT NULL AUTO_INCREMENT,
   `text` VARCHAR(2000) NULL,
+  `description` VARCHAR(2000) NULL,
   `user_name` VARCHAR(45) NOT NULL,
   `ticket_id` INT NOT NULL,
   `user_access` TINYINT NOT NULL,
@@ -66,6 +67,18 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`comments` (
   `time` TIMESTAMP NULL,
   PRIMARY KEY (`idComments`));
 
+
+-- -----------------------------------------------------
+-- Table `ticket_system`.`Knowledge`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `ticket_system`.`Knowledge` (
+  `idKnowledge` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(200) NULL,
+  `description` VARCHAR(2000) NULL,
+  `user_name` VARCHAR(45) NOT NULL,
+  `category_id` INT NOT NULL,
+  `time` TIMESTAMP NULL,
+  PRIMARY KEY (`idKnowledge`));
 
 -- -----------------------------------------------------
 -- Table `ticket_system`.`account_requests`
@@ -568,6 +581,57 @@ WHERE
     t.status != 'Solved' 
     AND t.status != 'Closed' AND TIMESTAMPDIFF(DAY, IFNULL(t.updated, t.created), NOW()) >= 3;
 
+;;
+
+DELIMITER ;
+
+DROP PROCEDURE IF EXISTS add_knowledge;
+
+DELIMITER ;;
+
+CREATE PROCEDURE add_knowledge(
+  p_title VARCHAR(200),
+  P_description VARCHAR(2000),
+  p_category_id INT,
+  p_user_name VARCHAR(45)
+
+)
+INSERT INTO `Knowledge` (
+  `idKnowledge`,
+  `title`,
+  `description`,
+  `user_name`,
+  `category_id`,
+  `time`
+) VALUES (
+  NULL,                  
+  p_title,
+  P_description,
+  p_user_name,
+  p_category_id,
+  NOW()
+);
+;;
+
+DELIMITER ;
+
+
+DROP PROCEDURE IF EXISTS show_knowleges;
+
+DELIMITER ;;
+
+CREATE PROCEDURE show_knowleges(
+p_category_id INT
+)
+SELECT 
+  `idKnowledge`,
+  `title`,
+  `description`,
+  `user_name`,
+  `category_id`,
+DATE_FORMAT(`time`, '%Y-%m-%d %H:%i:%s') as time 
+From Knowledge
+WHERE (p_category_id IS NULL OR category_id = p_category_id);
 ;;
 
 DELIMITER ;

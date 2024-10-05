@@ -1,0 +1,54 @@
+<%- include("./../partials/header.ejs") %>
+    <div class="container">
+        <div class="create">
+            <button class="button" id="openAddFormButton">Create Knowledge</button>
+        </div>
+        <div class="form-popup" id="form">
+            <form class="popup-container" action="/addKnowledge" method="POST">
+                <input type="text" placeholder="Title" name="title" value="" maxlength="50" required>
+                <textarea type="text" placeholder="Description" name="description" value="" required
+                    maxlength="2000"></textarea>
+                <select name="category" onchange="">
+                    <% showCategories.forEach(Category=> { %>
+                        <option value="<%= Category.idCategory %>">
+                            <%= Category.category_name %>
+                        </option>
+                        <% }) %>
+                </select>
+                <button type="submit" class="btn">Add</button>
+                <button type="button" class="btn cancel" id="closeAddForm">Close</button>
+            </form>
+        </div>
+        <select class="category_dropdown" onchange="">
+            <% showCategories.forEach(Category=> { %>
+                <option value="<%= Category.idCategory %>">
+                    <%= Category.category_name %>
+                </option>
+                <% }) %>
+        </select>
+        <div class="knowledge-base">
+            <% showKnowleges.forEach(Knowlege=> { %>
+                <div class="knowledge-card">
+                    <div class="knowledge-header">
+                        <div class="knowledge-title">
+                            <%= Knowlege.title %>
+                        </div>
+                        <div class="knowledge-author">
+                            <%= Knowlege.user_name %>
+                        </div>
+                        <div class="knowledge-time">
+                            <%=Knowlege.time %>
+                        </div>
+                    </div>
+                    <hr class="divider">
+                    <div class="knowledge-body">
+                        <p class="knowledge-description">
+                            <%= Knowlege.description %>
+                        </p>
+                    </div>
+                </div>
+                <% }) %>
+        </div>
+
+    </div>
+    <%- include("./../partials/footer.ejs") %>

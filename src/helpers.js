@@ -26,6 +26,8 @@ module.exports = {
     "getRequestedAccounts": require("./getRequestedAccounts.js"),
     "createAccountRequest": require("./createAccountRequest.js"),
     "showOldTickets": require("./showOldTickets.js"),
+    "addKnowledge": require("./addKnowledge.js"),
+    "showKnowleges": require("./showKnowleges.js")
 
 
 };
