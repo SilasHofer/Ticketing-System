@@ -52,24 +52,54 @@ document.addEventListener("DOMContentLoaded", function () {
         tableRows.forEach(function (row) {
             let shouldDisplay = false; // Flag to track if row should be displayed
 
-            // Loop through each cell in the row
-            row.querySelectorAll('td.filter').forEach(function (cell) {
-                // Get the original text and check if it includes the filter value
-                let cellText = cell.textContent.toLowerCase();
-                if (cellText.includes(filterValue)) {
-                    shouldDisplay = true; // Mark row for display
-                    // Highlight matching text
-                    const highlightedText = cellText.replace(
-                        new RegExp(`(${filterValue})`, 'gi'),
-                        '<span class="highlight">$1</span>'
-                    );
-                    cell.innerHTML = highlightedText; // Update cell HTML with highlighted text
+            if (row.getAttribute('data-claimed-filter') === 'true') {
+                // Loop through each cell in the row
+                row.querySelectorAll('td.filter').forEach(function (cell) {
+                    // Get the original text and check if it includes the filter value
+                    let cellText = cell.textContent.toLowerCase();
+                    if (cellText.includes(filterValue)) {
+                        shouldDisplay = true; // Mark row for display
+                        // Highlight matching text
+                        const highlightedText = cellText.replace(
+                            new RegExp(`(${filterValue})`, 'gi'),
+                            '<span class="highlight">$1</span>'
+                        );
+                        cell.innerHTML = highlightedText; // Update cell HTML with highlighted text
+                    } else {
+                        cell.innerHTML = cell.textContent; // Reset to original text if no match
+                    }
+                });
+                row.style.display = shouldDisplay ? '' : 'none';
+            }
+        });
+    });
+
+    const claimedFilterCheckbox = document.getElementById('claimed-filter');
+    claimedFilterCheckbox.addEventListener('change', function () {
+        let tableRows = document.querySelectorAll('#ticket-table-body tr');
+        const userName = document.querySelector('input[name="user_name"]').value;
+        // Reset the text filter input when claimed filter is checked
+        if (claimedFilterCheckbox.checked) {
+            document.getElementById('filter-input').value = ''; // Reset the text filter input
+            tableRows.forEach(function (row) {
+                let agentCell = row.querySelector('.filter-agent');
+
+                // Show the row if it matches the user's name
+                if (agentCell.textContent.trim() === userName) {
+                    row.style.display = "table-row"; // Show the claimed ticket
+                    row.setAttribute('data-claimed-filter', 'true');
                 } else {
-                    cell.innerHTML = cell.textContent; // Reset to original text if no match
+                    row.style.display = "none"; // Hide rows that don't match
+                    row.setAttribute('data-claimed-filter', 'false');
                 }
             });
-            row.style.display = shouldDisplay ? '' : 'none';
-        });
+        } else {
+            // If checkbox is unchecked, show all rows
+            tableRows.forEach(function (row) {
+                row.style.display = "table-row"; // Show all rows
+                row.setAttribute('data-claimed-filter', 'true');
+            });
+        }
     });
 
     // Code for the file input functionality

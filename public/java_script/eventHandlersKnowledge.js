@@ -47,52 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-const dropdown = document.querySelector('.category_dropdown');
-const knowledgeCards = document.querySelectorAll('.knowledge-card');
-
-// Function to filter cards based on category
-function filterByCategory() {
-    const selectedCategory = dropdown.value;
-
-    // Loop through all knowledge cards
-    knowledgeCards.forEach(card => {
-        const cardCategoryId = card.getAttribute('data-category-id');
-
-        // If "All categories" is selected or the category matches, show the card
-        if (selectedCategory === "" || cardCategoryId === selectedCategory) {
-            card.style.display = "block"; // Show the card
-        } else {
-            card.style.display = "none"; // Hide the card
-        }
-    });
-
-    // After filtering by category, apply the text filter
-    filterByText();
-}
-
-// Function to filter cards based on text input
-function filterByText() {
-    const filterValue = document.getElementById('filter-input').value.toLowerCase();
-
-    // Get all currently visible cards
-    const visibleCards = Array.from(knowledgeCards).filter(card => card.style.display !== 'none');
-
-    visibleCards.forEach(card => {
-        const title = card.querySelector('.knowledge-title').textContent.toLowerCase();
-        const author = card.querySelector('.knowledge-author').textContent.toLowerCase();
-        const description = card.querySelector('.knowledge-description').textContent.toLowerCase();
-
-        // Check if the filter value matches the title, author, or description
-        if (title.includes(filterValue) || author.includes(filterValue) || description.includes(filterValue)) {
-            card.style.display = 'block'; // Show the card
-        } else {
-            card.style.display = 'none'; // Hide the card
-        }
-    });
-}
-
-
-
 
 
 
