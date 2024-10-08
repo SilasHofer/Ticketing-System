@@ -150,7 +150,8 @@ Router.get("/knowledge-base", requiresAuth(), async (req, res) => {
 Router.post("/addKnowledge", requiresAuth(), async (req, res) => {
 
     await helpers.addKnowledge(req.body.title, req.body.description, req.body.category, req.oidc.user.name)
-    res.redirect(`/knowledge-base`)
+    const referer = req.get('Referer'); // Get the Referer header
+    res.redirect(referer || '/');
 
 });
 

@@ -6,9 +6,23 @@
 
         <div class="lightbox" id="lightbox">
             <span class="close" id="close">&times;</span>
-            <img class="lightbox-image" id="lightbox-img" src="" alt="Large Image">
+            <img class="lightbox-image" id="lightbox-img" src="" alt="Large Image" style="display: none;">
+
+            <!-- Container for displaying knowledge card details -->
+            <div class="lightbox-content" id="lightbox-content" style="display: none;">
+                <div class="knowledge-header">
+                    <div class="knowledge-title" id="lightbox-title"></div>
+                    <div class="knowledge-author" id="lightbox-author"></div>
+                    <div class="knowledge-time" id="lightbox-time"></div>
+                </div>
+                <hr class="divider">
+                <div class="knowledge-body">
+                    <p class="knowledge-description" id="lightbox-description"></p>
+                </div>
+            </div>
+
             <a id="lightbox-download" download="">
-                <button class="button">Download Image</button>
+                <button class="button" id="download-button" style="display: none;">Download Image</button>
             </a>
         </div>
 
@@ -161,6 +175,15 @@
                                         <div class="time">
                                             <%= comment.time_datetime %>
                                         </div>
+                                        <% if (role !="user" ) { %>
+                                            <form action="/addKnowledge" method="POST">
+                                                <input type="hidden" name="category" value="<%= ticket.category_id %> ">
+                                                <input type="hidden" name="title" value="<%= ticket.title %>">
+                                                <input type="hidden" name="description" value="<%= comment.text %>">
+                                                <button type="submit" class="knowledge-comment-button">add
+                                                    knowledge</button>
+                                            </form>
+                                            <% }%>
                                     </div>
                                     <div
                                         class="ticket-comment-text <% if (comment.user_access==1) { %> hide-comment-color <% } %>">
@@ -175,7 +198,7 @@
             <div class="knowledge-base-top">
                 <h2 class="knowledge-top">Knowledge base</h2>
             </div>
-            <div class="knowledge-base">
+            <div class="knowledge-base-ticket ">
                 <% showKnowleges.slice(0, 3).forEach(Knowlege=> { %>
                     <div class="knowledge-card">
                         <div class="knowledge-header">

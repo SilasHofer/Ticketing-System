@@ -2,6 +2,25 @@
     <script type="module" src="/java_script/eventHandlersKnowledge.js"></script>
 
     <div class="container">
+
+        <div class="lightbox" id="lightbox">
+            <span class="close" id="close">&times;</span>
+            <div class="lightbox-content">
+                <div class="knowledge-card">
+                    <div class="knowledge-header">
+                        <div class="knowledge-title" id="lightbox-title"></div>
+                        <div class="knowledge-category" id="lightbox-category"></div>
+                        <div class="knowledge-author" id="lightbox-author"></div>
+                        <div class="knowledge-time" id="lightbox-time"></div>
+                    </div>
+                    <hr class="divider">
+                    <div class="knowledge-body">
+                        <p class="knowledge-description" id="lightbox-description"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="create">
             <button class="button" id="openAddFormButton">Create Knowledge</button>
         </div>
@@ -38,7 +57,7 @@
         </div>
         <div class="knowledge-base">
             <% showKnowleges.forEach(Knowlege=> { %>
-                <div class="knowledge-card" data-category-id="<%= Knowlege.category_id %>">
+                <div class="knowledge-card" data-category-id="<%= Knowlege.category_id %>" data-claimed-filter="true">
                     <div class="knowledge-header">
                         <div class="knowledge-title">
                             <%= Knowlege.title %>
@@ -55,7 +74,7 @@
                     </div>
                     <hr class="divider">
                     <div class="knowledge-body">
-                        <p class="knowledge-description">
+                        <p class="knowledge-description toLong">
                             <%= Knowlege.description %>
                         </p>
                     </div>

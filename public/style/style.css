@@ -311,7 +311,7 @@
 
         .knowledge-base-top {
           margin-top: 20px;
-          width: 50%;
+          width: 60%;
           margin-right: auto;
           margin-left: auto;
           border-radius: 20px 20px 0 0 !important;
@@ -334,9 +334,29 @@
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: 20px;
           padding: 20px;
-          width: 50%;
+          width: 60%;
           margin-right: auto;
           margin-left: auto;
+          border-radius: 0 0 20px 20px !important;
+        }
+
+        .knowledge-base-ticket {
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          padding: 20px;
+          width: 60%;
+          margin-right: auto;
+          margin-left: auto;
+          border-radius: 0 0 20px 20px !important;
+        }
+
+        @media (max-width: 1400px) {
+          .knowledge-base-ticket {
+            grid-template-columns: 1fr;
+            /* Stack all cards vertically in one column on mobile */
+          }
         }
 
         .knowledge-card {
@@ -360,7 +380,6 @@
           align-items: center;
           margin-bottom: 10px;
           gap: 20px;
-
         }
 
         .divider {
@@ -388,6 +407,7 @@
           margin: 0;
           font-size: 18px;
           color: #333;
+          font-weight: bold;
         }
 
         .knowledge-body {
@@ -403,6 +423,41 @@
           white-space: normal;
           margin: 0;
         }
+
+
+        .lightbox-content {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background-color: white;
+          padding: 20px;
+          border-radius: 10px;
+          width: 80%;
+        }
+
+        /* Make the font size larger specifically inside the lightbox */
+        .lightbox .knowledge-title {
+          font-size: 3em;
+          /* Bigger font size for the title */
+          font-weight: bold;
+        }
+
+        .lightbox .knowledge-category,
+        .lightbox .knowledge-author,
+        .lightbox .knowledge-time {
+          font-size: 1.8em;
+          /* Larger font size for these details */
+          margin: 10px 0;
+        }
+
+        .lightbox .knowledge-description {
+          font-size: 1.8em;
+          /* Larger font for description */
+          line-height: 1.5;
+        }
+
+
 
         .lightbox-image {
           width: 90%;
@@ -861,6 +916,20 @@
         }
 
         .button:hover {
+          background-color: #050A44;
+        }
+
+        .knowledge-comment-button {
+          cursor: pointer;
+          font-weight: bold;
+          background-color: #0a21c0;
+          color: white;
+          border-radius: 20px;
+          padding: 10px;
+          border: none;
+        }
+
+        .knowledge-comment-button:hover {
           background-color: #050A44;
         }
 
