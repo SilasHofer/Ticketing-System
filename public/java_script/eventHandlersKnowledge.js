@@ -30,21 +30,18 @@ document.addEventListener("DOMContentLoaded", function () {
         // Get the value of the input field and convert it to lowercase for case-insensitive matching
         const cards = document.querySelectorAll('.knowledge-card');
         cards.forEach(card => {
-            if (card.style.display !== 'none') {
-                const title = card.querySelector('.knowledge-title').textContent.toLowerCase();
-                const author = card.querySelector('.knowledge-author').textContent.toLowerCase();
-                const description = card.querySelector('.knowledge-description').textContent.toLowerCase();
+            const title = card.querySelector('.knowledge-title').textContent.toLowerCase();
+            const author = card.querySelector('.knowledge-author').textContent.toLowerCase();
+            const description = card.querySelector('.knowledge-description').textContent.toLowerCase();
 
-                if (title.includes(filterValue) || author.includes(filterValue) || description.includes(filterValue)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
+            if (title.includes(filterValue) || author.includes(filterValue) || description.includes(filterValue)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
 
-                }
             }
         });
     });
-
 });
 
 
