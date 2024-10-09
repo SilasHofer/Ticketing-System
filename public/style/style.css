@@ -37,15 +37,7 @@
           padding-bottom: 100px;
         }
 
-        .admin-panel {
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          max-width: 50%;
-          margin-top: 20px;
-          padding-bottom: 20px;
-          border-radius: 20px;
-          margin-left: auto;
-          margin-right: auto;
-        }
+
 
         .add-category {
           padding-top: 20px;
@@ -263,6 +255,53 @@
           box-sizing: border-box;
         }
 
+        .admin-card {
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+          padding: 20px;
+          margin-bottom: 20px;
+          border-radius: 20px;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .admin-panel {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 20px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          flex-wrap: wrap;
+          /* This allows items to wrap to the next row */
+          justify-content: space-between;
+          /* Distribute cards evenly */
+          max-width: 75%;
+          margin-top: 20px;
+          padding: 20px;
+          border-radius: 20px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        @media (max-width: 1200px) {
+          .admin-panel {
+            grid-template-columns: repeat(3, 1fr);
+            /* 3 columns for medium screens */
+          }
+        }
+
+        @media (max-width: 900px) {
+          .admin-panel {
+            grid-template-columns: repeat(2, 1fr);
+            /* 2 columns for smaller screens */
+          }
+        }
+
+        @media (max-width: 600px) {
+          .admin-panel {
+            grid-template-columns: 1fr;
+            /* 1 column for very small screens */
+          }
+        }
+
 
         /* Lightbox styles */
         .lightbox {
@@ -331,7 +370,7 @@
         .knowledge-base {
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
           gap: 20px;
           padding: 20px;
           width: 60%;
@@ -637,6 +676,11 @@
           text-align: left;
         }
 
+        .admin-tables {
+          max-height: 350px;
+          overflow-y: auto;
+        }
+
         .description-ticket {
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
           border-radius: 20px;
@@ -661,19 +705,22 @@
 
         /* For WebKit browsers */
         .table-container::-webkit-scrollbar,
-        .ticket-comments::-webkit-scrollbar {
+        .ticket-comments::-webkit-scrollbar,
+        .admin-tables::-webkit-scrollbar {
           width: 10px;
           /* Width of the scrollbar */
         }
 
         .table-container::-webkit-scrollbar-track,
-        .ticket-comments::-webkit-scrollbar-track {
+        .ticket-comments::-webkit-scrollbar-track,
+        .admin-tables::-webkit-scrollbar-track {
           background: #f1f1f1;
           /* Background of the scrollbar track */
         }
 
         .table-container::-webkit-scrollbar-thumb,
-        .ticket-comments::-webkit-scrollbar-thumb {
+        .ticket-comments::-webkit-scrollbar-thumb,
+        .admin-tables::-webkit-scrollbar-thumb {
           background-color: #888;
           /* Color of the scrollbar thumb */
           border-radius: 10px;
@@ -683,7 +730,8 @@
         }
 
         .table-container::-webkit-scrollbar-thumb:hover,
-        .ticket-comments::-webkit-scrollbar-thumb:hover {
+        .ticket-comments::-webkit-scrollbar-thumb:hover,
+        .admin-tables::-webkit-scrollbar-thumb:hover {
           background-color: #555;
           /* Color when hovering over the scrollbar thumb */
         }
@@ -697,6 +745,7 @@
           margin-top: 25px;
           margin-left: auto;
           margin-right: auto;
+          margin-bottom: 10px;
           font-size: 1.2em;
           min-width: 50%;
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);

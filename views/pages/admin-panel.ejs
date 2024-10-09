@@ -1,15 +1,17 @@
 <%- include("./../partials/header.ejs") %>
+    <script type="module" src="/java_script/eventHandlersAdmin.js"></script>
+
     <div class="container">
         <div class="admin-panel">
-            <div class="categories">
+            <div class="admin-card">
                 <div class="add-category">
-                    <h2>add Category</h2>
+                    <h2>Add Category</h2>
                     <form class="admin-form" action="/add-category" method="POST">
                         <input type="text" placeholder="Category" name="category" value="" maxlength="200" required>
                         <button type="submit" class="btn " id="addCategory">add</button>
                     </form>
                 </div>
-                <div class="show-categories">
+                <div class="admin-tables">
                     <table class="styled-table">
                         <thead>
                             <tr>
@@ -35,14 +37,13 @@
                                     </td>
                                 </tr>
                                 <% }) %>
-
                         </tbody>
                     </table>
                 </div>
             </div>
-            <div class="accounts">
+            <div class="admin-card">
                 <div class="create-account"></div>
-                <h2>create account</h2>
+                <h2>Create account</h2>
                 <form class="admin-form" action="/create-account" method="POST">
                     <input type="text" placeholder="Name" name="name" value="" required>
                     <input type="email" placeholder="Email" name="email" value="" required>
@@ -56,107 +57,111 @@
                     <button type="submit" class="btn " id="createAccount">add</button>
                 </form>
             </div>
-            <div class="account-requests">
-                <h2>requested accounts</h2>
-                <table class="styled-table">
+            <div class="admin-card">
+                <h2>Requested accounts</h2>
+                <div class="admin-tables">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>email</th>
+                                <th>yes/no</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% accountRequests.forEach(account=> { %>
+                                <tr>
+                                    <td>
+                                        <%= account.idrequests %>
+                                    </td>
+                                    <td>
+                                        <%= account.email %>
+                                    </td>
+                                    <td>
+                                        <a href="/accept-account?id=<%= account.idrequests %>&email=<%= account.email %>"
+                                            class="button">yes</a>
+                                        <a href="/decline-account?id=<%= account.idrequests %>&email=<%= account.email %>"
+                                            class="button">no</a>
+                                    </td>
+                                </tr>
+                                <% }) %>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="admin-card">
+                <h2>Old Tickets</h2>
+                <table id="sortableTable" class="styled-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>email</th>
-                            <th>yes/no</th>
+                            <th>ID <span class="sort-indicator"></span></th>
+                            <th>Title <span class="sort-indicator"></span></th>
+                            <th>Description <span class="sort-indicator"></span></th>
+                            <th>Creator <span class="sort-indicator"></span></th>
+                            <th>Agent <span class="sort-indicator"></span></th>
+                            <th>Created <span class="sort-indicator"></span></th>
+                            <th>Category <span class="sort-indicator"></span></th>
+                            <th>updated <span class="sort-indicator"></span></th>
+                            <th>Status <span class="sort-indicator"></span></th>
+                            <% if (role=="admin" ) { %>
+                                <th class="table-delete">Delete</th>
+                                <% }%>
                         </tr>
                     </thead>
-                    <tbody>
-                        <% accountRequests.forEach(account=> { %>
-                            <tr>
-                                <td>
-                                    <%= account.idrequests %>
+                    <tbody id="ticket-table-body">
+                        <% showOldTickets.forEach(ticket=> { %>
+                            <tr class="openTicket" data-ticket-id="<%= ticket.idTickets %>">
+                                <td class="filter">
+                                    <%= ticket.idTickets %>
                                 </td>
-                                <td>
-                                    <%= account.email %>
+                                <td class="toLong filter">
+                                    <%= ticket.title %>
                                 </td>
-                                <td>
-                                    <a href="/accept-account?id=<%= account.idrequests %>&email=<%= account.email %>"
-                                        class="button">yes</a>
-                                    <a href="/decline-account?id=<%= account.idrequests %>&email=<%= account.email %>"
-                                        class="button">no</a>
+                                <td class="toLong filter">
+                                    <%= ticket.description %>
                                 </td>
-                            </tr>
-                            <% }) %>
-
-                    </tbody>
-                </table>
-            </div>
-            <h2>old Tickets</h2>
-            <table id="sortableTable" class="styled-table">
-                <thead>
-                    <tr>
-                        <th>ID <span class="sort-indicator"></span></th>
-                        <th>Title <span class="sort-indicator"></span></th>
-                        <th>Description <span class="sort-indicator"></span></th>
-                        <th>Creator <span class="sort-indicator"></span></th>
-                        <th>Agent <span class="sort-indicator"></span></th>
-                        <th>Created <span class="sort-indicator"></span></th>
-                        <th>Category <span class="sort-indicator"></span></th>
-                        <th>updated <span class="sort-indicator"></span></th>
-                        <th>Status <span class="sort-indicator"></span></th>
-                        <% if (role=="admin" ) { %>
-                            <th class="table-delete">Delete</th>
-                            <% }%>
-                    </tr>
-                </thead>
-                <tbody id="ticket-table-body">
-                    <% showOldTickets.forEach(ticket=> { %>
-                        <tr class="openTicket" data-ticket-id="<%= ticket.idTickets %>">
-                            <td class="filter">
-                                <%= ticket.idTickets %>
-                            </td>
-                            <td class="toLong filter">
-                                <%= ticket.title %>
-                            </td>
-                            <td class="toLong filter">
-                                <%= ticket.description %>
-                            </td>
-                            <td class="filter">
-                                <%= ticket.creator_name %>
-                            </td>
-                            <td class="filter">
-                                <%if(ticket.agent_name){%>
-                                    <%= ticket.agent_name %>
-                                        <%}else {%>
-                                            No agent assigned
-                                            <%} %>
-                            </td>
-                            <td class="filter">
-                                <%= ticket.created_datetime %>
-                            </td>
-                            <td class="filter">
-                                <%= ticket.category_name %>
-                            </td>
-                            <td class="filter">
-                                <%= ticket.updated_datetime %>
-                            </td>
-                            <td class="filter
+                                <td class="filter">
+                                    <%= ticket.creator_name %>
+                                </td>
+                                <td class="filter">
+                                    <%if(ticket.agent_name){%>
+                                        <%= ticket.agent_name %>
+                                            <%}else {%>
+                                                No agent assigned
+                                                <%} %>
+                                </td>
+                                <td class="filter">
+                                    <%= ticket.created_datetime %>
+                                </td>
+                                <td class="filter">
+                                    <%= ticket.category_name %>
+                                </td>
+                                <td class="filter">
+                                    <%= ticket.updated_datetime %>
+                                </td>
+                                <td class="filter
                                                     <%= ticket.status === 'Solved' ? 'status-color-solved' :
                                                         ticket.status === 'Closed' ? 'status-color-closed' :
                                                         ticket.status === 'Processed' ? 'status-color-processed' :
                                                         ticket.status === 'Created' ? 'status-color-created' : 'status-color-unknown' %>
                                                 ">
-                                <%= ticket.status %>
-                            </td>
-                            <% if (role=="admin" ) { %>
-                                <td>
-                                    <form action="/delete-ticket" method="POST">
-                                        <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">
-                                        <button type="submit" class="red-button"
-                                            onclick="return confirm('Are you sure you want to close this ticket?');">Delete</button>
-                                    </form>
+                                    <%= ticket.status %>
                                 </td>
-                                <% }%>
-                        </tr>
-                        <% }) %>
-                </tbody>
-            </table>
+                                <% if (role=="admin" ) { %>
+                                    <td>
+                                        <form action="/delete-ticket" method="POST">
+                                            <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">
+                                            <button type="submit" class="red-button"
+                                                onclick="return confirm('Are you sure you want to close this ticket?');">Delete</button>
+                                        </form>
+                                    </td>
+                                    <% }%>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

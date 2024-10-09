@@ -495,7 +495,7 @@ CREATE PROCEDURE change_category(
 
 )
 UPDATE tickets
-SET category_id = p_category_id
+SET category_id = p_category_id,`updated` = NOW()
 WHERE idTickets = p_ticket_id;
 
 ;;

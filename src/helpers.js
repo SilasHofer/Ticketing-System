@@ -29,6 +29,5 @@ module.exports = {
     "addKnowledge": require("./addKnowledge.js"),
     "showKnowleges": require("./showKnowleges.js")
 
-
 };
 

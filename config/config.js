@@ -27,8 +27,6 @@ const config = {
         allowed_mail_domains: [
             "bth.se",
             "student.bth.se"
-
-
         ],
     },
     status: {
