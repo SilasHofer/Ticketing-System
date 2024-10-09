@@ -5,6 +5,27 @@
           box-sizing: border-box;
         }
 
+        .comment-role {
+          padding: 3px 5px 3px 5px;
+
+          width: 80%;
+          color: white;
+          border-radius: 20px;
+          margin-left: auto;
+          margin-right: auto;
+          text-align: center;
+          margin-top: 2px;
+        }
+
+        .comment-role-red {
+          background-color: red;
+        }
+
+        .comment-role-blue {
+          background-color: blue;
+        }
+
+
         input[type="file"] {
           display: none;
         }

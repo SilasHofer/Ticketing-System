@@ -171,6 +171,13 @@
                                     <div class="comment-top">
                                         <div class="user_name">
                                             <%= comment.user_name %>
+                                                <% if (comment.user_role !='user' ) { %>
+                                                    <div
+                                                        class="comment-role <% if (comment.user_role =='agent' ) { %> comment-role-blue <%}else{%>comment-role-red<%}%> ">
+                                                        <%=comment.user_role%>
+                                                    </div>
+                                                    <%} %>
+
                                         </div>
                                         <div class="time">
                                             <%= comment.time_datetime %>
@@ -196,7 +203,8 @@
         </div>
         <% if (role !='user' ) { %>
             <div class="knowledge-base-top">
-                <h2 class="knowledge-top">Knowledge base</h2>
+                <h2 class="knowledge-top">Knowledge base <a class="button" href="/knowledge-base">more..</a></h2>
+
             </div>
             <div class="knowledge-base-ticket ">
                 <% showKnowleges.slice(0, 3).forEach(Knowlege=> { %>
