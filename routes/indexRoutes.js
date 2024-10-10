@@ -23,11 +23,11 @@ const { requiresAuth } = require('express-openid-connect');
 Router.get("", requiresAuth(), async (req, res) => {
     let data = {};
 
-    data.title = "Home";
     data.role = req.oidc.user.role[0];
     if (!data.role) {
-        res.redirect("/new-user");
+        return res.redirect("/new-user");
     }
+    data.title = "Home";
 
     data.name = req.oidc.user.name;
     var userId = req.oidc.user.user_id;

@@ -30,11 +30,12 @@
                 <textarea type="text" placeholder="Description" name="description" value="" required
                     maxlength="2000"></textarea>
                 <select name="category" onchange="">
-                    <% showCategories.forEach(Category=> { %>
+                    <% showCategories.forEach(Category=> {
+                        if (Category.idCategory !== 1) { %>
                         <option value="<%= Category.idCategory %>">
                             <%= Category.category_name %>
                         </option>
-                        <% }) %>
+                        <%} }) %>
                 </select>
                 <button type="submit" class="btn">Add</button>
                 <button type="button" class="btn cancel" id="closeAddForm">Close</button>
@@ -45,11 +46,12 @@
                 <option value="">
                     All categories
                 </option>
-                <% showCategories.forEach(Category=> { %>
+                <% showCategories.forEach(Category=> {
+                    if (Category.idCategory !== 1) { %>
                     <option value="<%= Category.idCategory %>">
                         <%= Category.category_name %>
                     </option>
-                    <% }) %>
+                    <%} }) %>
             </select>
             <form id="knowledge-filter">
                 <input type="text" id="knowledge-filter-input" placeholder="filter" name="filter" required>

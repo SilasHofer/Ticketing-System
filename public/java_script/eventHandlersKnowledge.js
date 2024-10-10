@@ -88,9 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
-
 document.getElementById("openAddFormButton").addEventListener("click", openAddForm);
 function openAddForm() {
     document.getElementById("form").style.display = "block";

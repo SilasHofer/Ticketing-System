@@ -283,18 +283,19 @@
           border-radius: 20px;
           display: flex;
           flex-direction: column;
+          min-width: 0;
         }
 
         .admin-panel {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 20px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           flex-wrap: wrap;
           /* This allows items to wrap to the next row */
           justify-content: space-between;
           /* Distribute cards evenly */
-          max-width: 75%;
+          max-width: 90%;
           margin-top: 20px;
           padding: 20px;
           border-radius: 20px;

@@ -90,11 +90,13 @@ function fetchUnseenEmails() {
                     if (err) {
                         console.error('Error parsing email:', err);
                         return;
+                    } if (mail.from?.value?.[0]?.address != "mailer-daemon@googlemail.com") {
+                        console.log('New email received:', mail.subject);
+                        console.log('From:', mail.from.text);
+                        console.log('Body:', mail.text);
+                        emailReceived(mail)
                     }
-                    console.log('New email received:', mail.subject);
-                    console.log('From:', mail.from.text);
-                    console.log('Body:', mail.text);
-                    emailReceived(mail)
+
 
                 });
             });
@@ -131,7 +133,6 @@ async function emailReceived(mail) {
         sendEmailToUser(user.email, 'Ticket Created', 'Your ticket ' + mail.subject + ' has been successfully created!');
 
     } else if (config.mail.allowed_mail_domains.includes(fromAddress.split('@')[1])) {
-
         await createAccountFromMail(fromAddress);
     } else {
         helpers.createAccountRequest(fromAddress);

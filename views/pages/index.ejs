@@ -28,11 +28,13 @@
                         <label for="category"><b>Category</b></label>
                         <select name="category" required>
                             <option value="" disabled selected hidden></option>
-                            <% showCategories.forEach(Category=> { %>
+                            <% showCategories.forEach(Category=> {
+                                if (Category.idCategory !== 1) { %>
                                 <option value="<%=Category.idCategory %>">
                                     <%= Category.category_name %>
                                 </option>
-                                <% }) %>
+                                <% } }) %>
+
                         </select>
                         Allowed file types: JPEG, PNG, PDF, DOCX | Max file size: 2 MB each | Max 3 files. <br>
                         <label class="custom-file-upload">

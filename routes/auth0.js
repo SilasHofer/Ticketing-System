@@ -35,34 +35,44 @@ async function getAccessToken(scope) {
 }
 
 async function createAccount(email, password, name, role_id) {
+    try {
+        const token = await getAccessToken('create:users update:roles create:role_members')
+        // Use access token to call the Auth0 Management API
+        const userResponse = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users`, {
+            email: email,  // User's email
+            password: password,// User's password
+            name: name,
+            connection: 'Username-Password-Authentication',  // Specify the Auth0 connection
+            user_metadata: {               // Optional: any additional metadata for the user
+                subscription: 'free'
+            }
 
-    const token = await getAccessToken('create:users update:roles create:role_members')
-    // Use access token to call the Auth0 Management API
-    const userResponse = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users`, {
-        email: email,  // User's email
-        password: password,// User's password
-        name: name,
-        connection: 'Username-Password-Authentication',  // Specify the Auth0 connection
-        user_metadata: {               // Optional: any additional metadata for the user
-            subscription: 'free'
-        }
-
-    }, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-    const userId = userResponse.data.user_id;
-    if (role_id != "") {
-        await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/${role_id}/users`, {
-            users: [userId]  // Send the user ID in the request body
         }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
-    }
+        const userId = userResponse.data.user_id;
+        if (role_id != "") {
+            await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/${role_id}/users`, {
+                users: [userId]  // Send the user ID in the request body
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        }
+        return { success: true, message: 'User created and role assigned', userId: userId };
 
+    } catch (error) {
+        // Handle 409 Conflict error when the user already exists
+        if (error.response && error.response.status === 409) {
+            return { success: false, message: 'The user already exists.' };
+        } else {
+            // Handle any other error
+            return { success: false, message: `Error: ${error.message}` };
+        }
+    }
 }
 
 async function editAccount(user_id, name, password) {
