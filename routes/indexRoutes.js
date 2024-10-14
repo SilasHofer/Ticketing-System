@@ -63,7 +63,7 @@ Router.post("/create-ticket", requiresAuth(), (req, res) => {
                 }
 
 
-                email.sendEmailToUser(req.oidc.user.email, 'Ticket Created', 'Your ticket ' + req.body.title + ' has been successfully created!')
+                email.sendEmailToUser(req.oidc.user.email, `Ticket Created TicketID:${ticketId}`, 'Your ticket ' + req.body.title + ' has been successfully created!')
 
                 res.redirect("/")
             } catch (error) {
@@ -80,6 +80,7 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     if (!data.ticket || req.oidc.user.role[0] == "user" && req.oidc.user.user_id != data.ticket.creator_id) {
         return res.redirect("/")
     }
+    data.agents = await auth0.getAgentUsers();
     data.availableStatuses = config.status.ticketStatuses;
     data.role = req.oidc.user.role[0];
     data.title = data.ticket.title;
@@ -102,11 +103,23 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
 });
 
 Router.get("/claimTicket", requiresAuth(), async (req, res) => {
-    await helpers.claimTicket(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
+    await helpers.assignAgent(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
     await helpers.changeStatus(req.query.ticketID, "Processed");
-
+    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${req.query.userName} has claimed your Ticket.`)
 
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
+});
+
+Router.get("/assignAgent", requiresAuth(), async (req, res) => {
+    const { ticketID, agentInfo } = req.query;
+
+    // agentInfo will be in the format "userID,userName,userEmail"
+    const [userId, userName, userEmail, creatorEmail] = agentInfo.split(',');
+
+    await helpers.assignAgent(ticketID, userId, userName, userEmail);
+    await helpers.changeStatus(ticketID, "Processed");
+    email.sendEmailToUser(creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${userName} has been assigned to your Ticket. `)
+    res.redirect(`/ticket?ticketID=${ticketID}`)
 });
 
 Router.post("/create-account", requiresAuth(), async (req, res) => {
@@ -159,7 +172,7 @@ Router.get("/closeTicket", requiresAuth(), async (req, res) => {
 });
 
 Router.get("/changeStatus", requiresAuth(), async (req, res) => {
-    email.sendEmailToUser(req.query.creatorEmail, 'Ticket updated', 'Your ticket ' + req.query.ticketTitle + ' has ben updated')
+    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, `The Status for your ticket  ${req.query.ticketTitle}  has ben changed to ${req.query.status}\n You can reply to comment on the ticket`)
     await helpers.changeStatus(req.query.ticketID, req.query.status);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -173,8 +186,8 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
         hide = false;
     }
     await helpers.addComment(req.body.ticketID, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
-    if (hide == false) {
-        email.sendEmailToUser(req.body.creatorEmail, 'Ticket updated', 'Your ticket ' + req.body.ticketTitle + ' has ben updated')
+    if (hide == false && req.oidc.user.role[0] != "user") {
+        email.sendEmailToUser(req.body.creatorEmail, `Ticket updated TicketID:${req.body.ticketID}`, `Your ticket ${req.body.ticketTitle} has ben updated\n Comment: ${req.body.comment}\n You can reply to comment on the ticket`)
     }
 
     res.redirect(`/ticket?ticketID=${req.body.ticketID}`)

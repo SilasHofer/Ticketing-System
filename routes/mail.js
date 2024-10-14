@@ -123,14 +123,26 @@ imap.once('close', function (hasError) {
 
 async function emailReceived(mail) {
     const fromAddress = mail.from?.value?.[0]?.address;
-    const users = await auth0.getUsers();
+    const users = await auth0.getAllUsers();
     // Extract the email addresses
     const emailAddresses = users.map(user => user.email);
 
     if (emailAddresses.includes(fromAddress)) {
         const user = users.find(user => user.email === fromAddress);
-        await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
-        sendEmailToUser(user.email, 'Ticket Created', 'Your ticket ' + mail.subject + ' has been successfully created!');
+        // Check if the email subject indicates a reply to a ticket
+        const ticketId = extractTicketIdFromSubject(mail.subject);
+        if (ticketId) {
+            if (mail.text.split("\n")[0] == "CLOSE") {
+                return await helpers.changeStatus(ticketId, "Closed");
+            }
+            // Handle the reply to the existing ticket
+            await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
+            sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
+        } else {
+            // Create a new ticket if no ticket ID found in the subject
+            const ticket = await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
+            sendEmailToUser(user.email, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!');
+        }
 
     } else if (config.mail.allowed_mail_domains.includes(fromAddress.split('@')[1])) {
         await createAccountFromMail(fromAddress);
@@ -141,6 +153,23 @@ async function emailReceived(mail) {
         sendEmailToUser(fromAddress, 'Account request', 'An admin will look att your request to create an account');
     }
 }
+function extractReplyText(mailText, userMail) {
+    let new_comment = "";
+    let line = "";
+    for (let i = 0; !line.includes(process.env.source_email) && line != "________________________________" && !line.includes(userMail); i++) {
+        new_comment += line + "\n";
+        line = mailText.split("\n")[i];
+    }
+    return new_comment;
+}
+
+// Helper function to extract the ticket ID from the email subject
+function extractTicketIdFromSubject(subject) {
+    const ticketIdPattern = /TicketID:(\d+)/; // Adjust the regex pattern according to your ticket ID format
+    const match = subject.match(ticketIdPattern);
+    return match ? match[1] : null;
+}
+
 
 function generateValidPassword() {
     const password = generatePassword.generate({

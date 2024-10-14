@@ -5,7 +5,7 @@ auther:Silas Hofer
 const mysql = require("promise-mysql");
 const config = require("../config/db/ticket_system.json");
 
-async function claimTicket(ticket_id, agent_id, agent_name, agent_email) {
+async function assignAgent(ticket_id, agent_id, agent_name, agent_email) {
     const db = await mysql.createConnection(config);
     let res;
 
@@ -18,4 +18,4 @@ async function claimTicket(ticket_id, agent_id, agent_name, agent_email) {
 }
 
 
-module.exports = claimTicket;
+module.exports = assignAgent;

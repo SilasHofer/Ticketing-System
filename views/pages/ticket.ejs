@@ -115,7 +115,21 @@
                     <div class="agent">
                         <h3>Agent</h3>
                         <% if (role=="admin" ) { %>
-                            selection for changing agent <br>
+                            Change Agent:
+                            <form method="GET" action="/assignAgent">
+                                <select name="agentInfo" onchange="this.form.submit()">
+                                    <% agents.forEach(agent=> { %>
+                                        <option
+                                            value="<%= agent.id %>,<%= agent.name %>,<%= agent.email %>,<%= ticket.creator_email %>"
+                                            <%=agent.name===ticket.agent_name ? 'selected' : '' %>>
+                                            <%= agent.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+
+                                <!-- Hidden input to pass the ticket ID -->
+                                <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">
+                            </form>
                             <% }%>
                                 <% if (ticket.agent_name) { %>
                                     <h5>Name</h5>
@@ -128,7 +142,7 @@
                                                 <br>
                                                 <% if (role!="user" ) { %>
                                                     <a class="button "
-                                                        href="/claimTicket?ticketID=<%= ticket.idTickets %>&userID=<%= userId %>&userName=<%= userName %>&userEmail=<%= userEmail %>">Claim
+                                                        href="/claimTicket?ticketID=<%= ticket.idTickets %>&userID=<%= userId %>&userName=<%= userName %>&userEmail=<%= userEmail %>&creatorEmail=<%= ticket.creator_email %>">Claim
                                                         Ticket</a>
                                                     <% }%>
 

@@ -128,7 +128,7 @@ async function getResetPasswordLink(mail) {
     }
 }
 
-async function getUsers() {
+async function getAllUsers() {
     const token = await getAccessToken('read:users');
 
     const usersResponse = await axios.get(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users`, {
@@ -136,16 +136,52 @@ async function getUsers() {
             Authorization: `Bearer ${token}`
         }
     });
-
     return usersResponse.data;
+}
 
+async function getAgentUsers() {
+    const token = await getAccessToken("read:roles");
+
+    try {
+        // Fetch users associated with the first role
+        const response1 = await axios.get(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/rol_iUczGqqs32uPEhUe/users`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        // Fetch users associated with the second role
+        const response2 = await axios.get(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/rol_q8gMQ7JR1S2hYePM/users`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        // Combine the users from both responses using a Set to eliminate duplicates by user ID
+        const usersMap = new Map();
+
+        // Add users from the first response
+        response1.data.forEach(user => usersMap.set(user.user_id, user));
+
+        // Add users from the second response (overwrite if the user already exists)
+        response2.data.forEach(user => usersMap.set(user.user_id, user));
+
+        // Convert the map back to an array of user objects
+        const combinedUsers = Array.from(usersMap.values());
+
+        return combinedUsers; // Return combined users array
+    } catch (error) {
+        console.error('Error fetching users by roles:', error.message);
+        throw error; // Rethrow the error for further handling
+    }
 }
 
 
 module.exports = {
     authConfig,
     createAccount,
-    getUsers,
+    getAllUsers,
     editAccount,
-    getResetPasswordLink
+    getResetPasswordLink,
+    getAgentUsers
 };

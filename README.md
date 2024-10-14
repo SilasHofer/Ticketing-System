@@ -1,3 +1,6 @@
 # Ticketing-System
 
 This is my ticketing system and i am using express and node.js for this project. I am also using auth0 for authentication
+
+outh0-mail:ticketsystem017@gmail.com
+outh0-password:m3YbsCRsT3iSBK3
