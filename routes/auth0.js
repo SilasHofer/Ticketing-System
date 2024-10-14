@@ -98,6 +98,36 @@ async function editAccount(user_id, name, password) {
 
 }
 
+
+async function getResetPasswordLink(mail) {
+    try {
+        // Get a management API token with the necessary scope
+        const token = await getAccessToken('update:users create:user_tickets');
+
+        // Prepare the request body
+        const data = {
+            email: mail,
+            connection_id: process.env.AUTH_CONNECTIONID
+            // Optionally specify the connection_id if you have multiple database connections
+            // connection_id: 'YOUR_AUTH0_CONNECTION_ID' // Only required if you have multiple connections
+        };
+
+        // Send the request to create a password change ticket
+        const response = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/tickets/password-change`, data, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+        // Return the response (which contains the password reset ticket link)
+        return response.data.ticket;
+
+    } catch (error) {
+        console.error('Error sending password reset link:', error);
+        throw error; // Optionally re-throw the error for further handling
+    }
+}
+
 async function getUsers() {
     const token = await getAccessToken('read:users');
 
@@ -116,5 +146,6 @@ module.exports = {
     authConfig,
     createAccount,
     getUsers,
-    editAccount
+    editAccount,
+    getResetPasswordLink
 };

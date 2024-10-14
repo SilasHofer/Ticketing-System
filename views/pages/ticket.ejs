@@ -114,22 +114,25 @@
                     </div>
                     <div class="agent">
                         <h3>Agent</h3>
-                        <% if (ticket.agent_name) { %>
-                            <h5>Name</h5>
-                            <%= ticket.agent_name %>
-                                <h5>Email</h5>
-                                <%= ticket.agent_email %>
-                                    <% } else { %>
-                                        No agent assigned
-                                        <br>
-                                        <br>
-                                        <% if (role!="user" ) { %>
-                                            <a class="button "
-                                                href="/claimTicket?ticketID=<%= ticket.idTickets %>&userID=<%= userId %>&userName=<%= userName %>&userEmail=<%= userEmail %>">Claim
-                                                Ticket</a>
-                                            <% }%>
+                        <% if (role=="admin" ) { %>
+                            selection for changing agent <br>
+                            <% }%>
+                                <% if (ticket.agent_name) { %>
+                                    <h5>Name</h5>
+                                    <%= ticket.agent_name %>
+                                        <h5>Email</h5>
+                                        <%= ticket.agent_email %>
+                                            <% } else { %>
+                                                No agent assigned
+                                                <br>
+                                                <br>
+                                                <% if (role!="user" ) { %>
+                                                    <a class="button "
+                                                        href="/claimTicket?ticketID=<%= ticket.idTickets %>&userID=<%= userId %>&userName=<%= userName %>&userEmail=<%= userEmail %>">Claim
+                                                        Ticket</a>
+                                                    <% }%>
 
-                                                <% }%>
+                                                        <% }%>
                     </div>
                     <div class="attachments">
                         <h3>Attachments</h3>

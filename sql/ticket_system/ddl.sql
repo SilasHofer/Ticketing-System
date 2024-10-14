@@ -439,6 +439,9 @@ CREATE PROCEDURE delete_category(
 p_id INT
 )
 BEGIN
+UPDATE tickets
+SET category_id = (SELECT idCategory FROM categories WHERE category_name = 'Uncategorized')
+WHERE category_id = p_id;
   DELETE FROM `categories`
   WHERE `idCategory` = p_id;
 END;;

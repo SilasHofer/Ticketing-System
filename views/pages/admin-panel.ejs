@@ -2,8 +2,18 @@
     <script type="module" src="/java_script/eventHandlersAdmin.js"></script>
 
     <div class="container">
+
+        <div class="vertical-navbar">
+            <ul>
+                <li><a href="#add-category">Add Category</a></li>
+                <li><a href="#create-account">Create Account</a></li>
+                <li><a href="#requested-accounts">Requested Accounts</a></li>
+                <li><a href="#old-Tickets">Old Tickets</a></li>
+            </ul>
+        </div>
+
         <div class="admin-panel">
-            <div class="admin-card">
+            <div class="admin-card" id="add-category">
                 <div class="add-category">
                     <h2>Add Category</h2>
                     <form class="admin-form" action="/add-category" method="POST">
@@ -30,7 +40,7 @@
                                         <%= Category.category_name %>
                                     </td>
                                     <td>
-                                        <%if(Category.idCategory !=1){ %>
+                                        <%if(Category.idCategory !=1 && Category.idCategory !=2){ %>
                                             <form action="/delete-category" method="POST">
                                                 <input type="hidden" name="categoryID"
                                                     value="<%= Category.idCategory %>">
@@ -44,7 +54,7 @@
                     </table>
                 </div>
             </div>
-            <div class="admin-card">
+            <div class="admin-card" id="create-account">
                 <div class="create-account"></div>
                 <h2>Create account</h2>
                 <form class="admin-form" action="/create-account" method="POST">
@@ -60,7 +70,7 @@
                     <button type="submit" class="btn " id="createAccount">add</button>
                 </form>
             </div>
-            <div class="admin-card">
+            <div class="admin-card" id="requested-accounts">
                 <h2>Requested accounts</h2>
                 <div class="admin-tables">
                     <table class="styled-table">
@@ -93,7 +103,7 @@
                     </table>
                 </div>
             </div>
-            <div class="admin-card">
+            <div class="admin-card" id="old-Tickets">
                 <h2>Old Tickets</h2>
                 <div class="admin-tables">
                     <table id="sortableTable" class="styled-table">

@@ -24,9 +24,6 @@ Router.get("", requiresAuth(), async (req, res) => {
     let data = {};
 
     data.role = req.oidc.user.role[0];
-    if (!data.role) {
-        return res.redirect("/new-user");
-    }
     data.title = "Home";
 
     data.name = req.oidc.user.name;
@@ -122,13 +119,6 @@ Router.post("/create-account", requiresAuth(), async (req, res) => {
         res.status(500).send('Error making request to Auth0 API');
     }
 
-});
-
-Router.get("/new-user", requiresAuth(), async (req, res) => {
-    let data = {};
-    data.role = req.oidc.user.role[0];
-    data.title = "newUser";
-    res.render("pages/new-user.ejs", data);
 });
 
 Router.post("/edit-account", requiresAuth(), async (req, res) => {

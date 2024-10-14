@@ -43,7 +43,7 @@ const imapConfig = {
     host: 'imap.gmail.com',
     port: 993,
     tls: true,
-
+    authTimeout: 10000,
     keepalive: true,
 };
 
@@ -60,9 +60,11 @@ imap.once('ready', function () {
     openInbox(function (err, box) {
         if (err) throw err;
         console.log('IMAP connection ready and listening for new emails.');
-        setInterval(() => {
+        // Start listening for new emails using IDLE
+        imap.on('mail', function () {
+            console.log('New email received, fetching unseen emails.');
             fetchUnseenEmails();
-        }, 10000);
+        });
     });
 });
 
@@ -96,8 +98,6 @@ function fetchUnseenEmails() {
                         console.log('Body:', mail.text);
                         emailReceived(mail)
                     }
-
-
                 });
             });
         });
@@ -134,6 +134,8 @@ async function emailReceived(mail) {
 
     } else if (config.mail.allowed_mail_domains.includes(fromAddress.split('@')[1])) {
         await createAccountFromMail(fromAddress);
+        const user = users.find(user => user.email === fromAddress);
+        await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
     } else {
         helpers.createAccountRequest(fromAddress);
         sendEmailToUser(fromAddress, 'Account request', 'An admin will look att your request to create an account');
@@ -167,8 +169,10 @@ function generateValidPassword() {
 
 async function createAccountFromMail(mail) {
     const password = generateValidPassword();
-    auth0.createAccount(mail, password, 'temp', '');
-    sendEmailToUser(mail, 'An account has ben created for you', 'You can now login with this mail: ' + mail + ' and this password: ' + password + ' on this  http://localhost:3000/ ');
+    const username = mail.split('@')[0];
+    await auth0.createAccount(mail, password, username, 'rol_SbiBHiolJfOexDLM');
+    const passwordLink = await auth0.getResetPasswordLink(mail);
+    sendEmailToUser(mail, 'An account has ben created for you', 'Please shows a password here:\n' + passwordLink + '\n You can already create new tickets by sending an new mail to the system');
 
 }
 

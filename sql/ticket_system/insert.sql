@@ -6,5 +6,6 @@ INSERT INTO `categories` (
 ) VALUES (
   "fromMail"
 );
+INSERT INTO `categories` (`category_name`) VALUES ('Uncategorized');
 
 

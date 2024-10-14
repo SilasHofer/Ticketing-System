@@ -72,6 +72,11 @@
           padding: 15px, 20px;
         }
 
+        .status-indicator {
+          width: 100%;
+          margin: 0;
+        }
+
         .top-text {
           font-size: 50px;
           margin-top: 20px;
@@ -242,17 +247,15 @@
           align-items: center;
           justify-content: space-between;
           /* Distribute space between items */
-          gap: 20px;
+          gap: 0px;
           /* Vertically align items to the center */
           margin-bottom: 10px;
-          height: 80px;
+          height: 100px;
 
         }
 
         .ticket-top-row>div {
           flex: 1;
-          /* Make each div take up an equal amount of space */
-          padding: 10px;
           /* Optional padding for each column */
           text-align: center;
           /* Optional: for visual clarity */
@@ -286,16 +289,18 @@
           min-width: 0;
         }
 
+        .vertical-navbar a.active {
+          background-color: #2196f3;
+          color: white;
+        }
+
         .admin-panel {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 20px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           flex-wrap: wrap;
           /* This allows items to wrap to the next row */
           justify-content: space-between;
           /* Distribute cards evenly */
-          max-width: 90%;
+          max-width: 80%;
           margin-top: 20px;
           padding: 20px;
           border-radius: 20px;
@@ -360,6 +365,37 @@
           width: 100%;
         }
 
+        .vertical-navbar {
+          width: 5%;
+          background-color: #333;
+          position: fixed;
+          height: 100%;
+          padding-top: 20px;
+        }
+
+        .vertical-navbar ul {
+          list-style-type: none;
+          padding: 0;
+        }
+
+        .vertical-navbar ul li {
+          padding: 10px;
+          text-align: center;
+          margin-bottom: 10px;
+        }
+
+        .vertical-navbar ul li a {
+          color: white;
+          text-decoration: none;
+          display: block;
+          font-size: 16px;
+          transition: background-color 0.3s ease;
+        }
+
+        .vertical-navbar ul li a:hover {
+          background-color: #575757;
+        }
+
         .dropdown-wrapper {
           display: flex;
           justify-content: center;
@@ -372,7 +408,7 @@
 
         .knowledge-base-top {
           margin-top: 20px;
-          width: 60%;
+          width: 70%;
           margin-right: auto;
           margin-left: auto;
           border-radius: 20px 20px 0 0 !important;
@@ -407,7 +443,7 @@
           grid-template-columns: repeat(3, 1fr);
           gap: 20px;
           padding: 20px;
-          width: 60%;
+          width: 70%;
           margin-right: auto;
           margin-left: auto;
           border-radius: 0 0 20px 20px !important;
@@ -628,7 +664,6 @@
           /* Adds spacing below the text (ticket.agent_name and ticket.agent_email) */
         }
 
-
         /* Media query to change layout on smaller screens */
         @media (max-width: 768px) {
           .ticket-bottom-row {
@@ -658,7 +693,7 @@
           padding-top: 10px;
           margin-left: auto;
           margin-right: auto;
-          max-width: 60%;
+          max-width: 70%;
         }
 
         .ticket-left {
@@ -699,7 +734,7 @@
         }
 
         .admin-tables {
-          max-height: 350px;
+          max-height: 70vh;
           overflow-y: auto;
         }
 
@@ -1069,7 +1104,7 @@
         }
 
         .container {
-          padding-top: 60px;
+          padding-top: 40px;
         }
 
         input[type=text],
