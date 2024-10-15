@@ -176,6 +176,30 @@ async function getAgentUsers() {
     }
 }
 
+async function deleteUser(userID) {
+    try {
+        // Get the access token for the Management API
+        const token = await getAccessToken("delete:users");
+
+        // Send a DELETE request to the Auth0 Management API to delete the user
+        const response = await axios.delete(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users/${userID}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        // Optionally handle the response (e.g., log success or return a message)
+        console.log(`User with ID ${userID} deleted successfully.`);
+        return response.data; // or handle as needed
+
+    } catch (error) {
+        // Handle errors (e.g., user not found, insufficient permissions)
+        console.error(`Error deleting user with ID ${userID}:`, error.response ? error.response.data : error.message);
+        throw error; // Re-throw the error if you want it to propagate
+    }
+}
+
+
 
 module.exports = {
     authConfig,
@@ -183,5 +207,6 @@ module.exports = {
     getAllUsers,
     editAccount,
     getResetPasswordLink,
-    getAgentUsers
+    getAgentUsers,
+    deleteUser
 };

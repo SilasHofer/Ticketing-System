@@ -642,3 +642,26 @@ WHERE (p_category_id IS NULL OR k.category_id = p_category_id);
 ;;
 
 DELIMITER ;
+
+
+DELIMITER ;;
+
+CREATE PROCEDURE system_statistics(
+
+  )
+BEGIN
+    SELECT 
+        COUNT(*) AS total_tickets, 
+        COALESCE(SUM(CASE 
+            WHEN `status` != 'Solved' AND `status` != 'Closed' AND TIMESTAMPDIFF(DAY, IFNULL(updated, created), NOW()) >= 3 
+            THEN 1 
+            ELSE 0 
+        END),0) AS total_old_tickets,
+        (SELECT COUNT(*) FROM `ticket_system`.`categories`) AS total_categories,
+        (SELECT COUNT(*) FROM `ticket_system`.`account_requests`) AS total_account_requests
+        FROM `ticket_system`.`tickets`;
+
+
+END ;;
+
+DELIMITER ;

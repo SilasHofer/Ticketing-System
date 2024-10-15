@@ -204,9 +204,12 @@ Router.get("/admin-panel", requiresAuth(), async (req, res) => {
     let data = {};
     data.title = "Admin Panel";
     data.role = req.oidc.user.role[0];
+    data.userId = req.oidc.user.user_id;
+    data.statistics = await helpers.systemStatistics();
     data.showCategories = await helpers.showCategories();
     data.accountRequests = await helpers.getRequestedAccounts();
     data.showOldTickets = await helpers.showOldTickets();
+    data.showUsers = await auth0.getAllUsers();
     if (req.oidc.user.role[0] != "admin") {
         return res.redirect("/")
     }
@@ -244,6 +247,13 @@ Router.post("/add-category", requiresAuth(), async (req, res) => {
 Router.post("/delete-category", requiresAuth(), async (req, res) => {
 
     await helpers.deleteCategory(req.body.categoryID)
+
+    res.redirect("/admin-panel")
+});
+
+Router.post("/delete-user", requiresAuth(), async (req, res) => {
+
+    await auth0.deleteUser(req.body.userID)
 
     res.redirect("/admin-panel")
 });

@@ -5,11 +5,30 @@
 
         <div class="vertical-navbar">
             <ul>
-                <li><a href="#add-category">Add Category</a></li>
+                <li><a href="#add-category" class="active">Add Category</a></li>
                 <li><a href="#create-account">Create Account</a></li>
                 <li><a href="#requested-accounts">Requested Accounts</a></li>
                 <li><a href="#old-Tickets">Old Tickets</a></li>
             </ul>
+            <div class="statistics-colum">
+                <div class="statistics">
+                    <h3>Tickets</h3>
+                    <%=statistics.total_tickets%>
+                </div>
+                <div class="statistics">
+                    <h3>Old Tickets</h3>
+                    <%=statistics.total_old_tickets%>
+                </div>
+                <div class="statistics">
+                    <h3>categories</h3>
+                    <%=statistics.total_categories%>
+                </div>
+                <div class="statistics">
+                    <h3>Account Requests</h3>
+                    <%=statistics.total_account_requests%>
+                </div>
+            </div>
+
         </div>
 
         <div class="admin-panel">
@@ -21,6 +40,7 @@
                         <button type="submit" class="btn " id="addCategory">add</button>
                     </form>
                 </div>
+                <hr>
                 <div class="admin-tables">
                     <table class="styled-table">
                         <thead>
@@ -55,7 +75,6 @@
                 </div>
             </div>
             <div class="admin-card" id="create-account">
-                <div class="create-account"></div>
                 <h2>Create account</h2>
                 <form class="admin-form" action="/create-account" method="POST">
                     <input type="text" placeholder="Name" name="name" value="" required>
@@ -69,6 +88,43 @@
                     </select>
                     <button type="submit" class="btn " id="createAccount">add</button>
                 </form>
+                <hr>
+                <div class="admin-tables">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>mail</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% showUsers.forEach(User=> { %>
+                                <tr>
+                                    <td>
+                                        <%= User.user_id %>
+                                    </td>
+                                    <td>
+                                        <%= User.name %>
+                                    </td>
+                                    <td>
+                                        <%= User.email %>
+                                    </td>
+
+                                    <td>
+                                        <% if (User.user_id !=userId) {%>
+                                            <form action="/delete-user" method="POST">
+                                                <input type="hidden" name="userID" value="<%= User.user_id %>">
+                                                <button type="submit" class="red-button">Delete</button>
+                                            </form>
+                                            <%}%>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
             <div class="admin-card" id="requested-accounts">
                 <h2>Requested accounts</h2>

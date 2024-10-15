@@ -289,13 +289,12 @@
           min-width: 0;
         }
 
-        .vertical-navbar a.active {
-          background-color: #2196f3;
-          color: white;
+        hr {
+          margin-top: 10px;
+          margin-bottom: 10px;
         }
 
         .admin-panel {
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
           flex-wrap: wrap;
           /* This allows items to wrap to the next row */
           justify-content: space-between;
@@ -366,34 +365,66 @@
         }
 
         .vertical-navbar {
-          width: 5%;
+          width: 7%;
           background-color: #333;
           position: fixed;
           height: 100%;
           padding-top: 20px;
+          flex-direction: column;
+          display: flex;
         }
 
         .vertical-navbar ul {
           list-style-type: none;
           padding: 0;
+          flex-grow: 1;
         }
 
         .vertical-navbar ul li {
-          padding: 10px;
+          width: 75%;
           text-align: center;
-          margin-bottom: 10px;
+          margin-bottom: 20%;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .vertical-navbar ul li a {
           color: white;
           text-decoration: none;
           display: block;
-          font-size: 16px;
-          transition: background-color 0.3s ease;
+          padding: 10px;
+          border-radius: 5px;
+          font-size: 20px;
+          background-color: #555;
+        }
+
+        .statistics {
+          padding: 10px;
+          width: 75%;
+          border-radius: 10px;
+          margin-bottom: 20%;
+          background-color: #555;
+          color: white;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .statistics-colum {
+          margin-top: auto;
+          margin-bottom: 82%;
         }
 
         .vertical-navbar ul li a:hover {
-          background-color: #575757;
+          background-color: #666;
+        }
+
+        .vertical-navbar a.active {
+          background-color: #00ff55;
+          color: rgb(0, 0, 0);
+        }
+
+        .vertical-navbar a.active:hover {
+          background-color: rgb(0, 110, 43);
         }
 
         .dropdown-wrapper {
@@ -734,7 +765,7 @@
         }
 
         .admin-tables {
-          max-height: 70vh;
+          max-height: 50vh;
           overflow-y: auto;
         }
 
