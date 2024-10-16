@@ -58,8 +58,6 @@
           padding-bottom: 100px;
         }
 
-
-
         .add-category {
           padding-top: 20px;
           margin-left: 15px;
@@ -279,7 +277,8 @@
           box-sizing: border-box;
         }
 
-        .admin-card {
+        .admin-card,
+        .account-card {
           box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
           padding: 20px;
           margin-bottom: 20px;
@@ -294,7 +293,203 @@
           margin-bottom: 10px;
         }
 
-        .admin-panel {
+        .profile-header {
+          position: relative;
+          /* Position relative to position the icon correctly */
+          display: flex;
+          justify-content: center;
+          margin-bottom: 20px;
+          /* Allow the label to wrap around the image */
+        }
+
+        .profile-picture-label {
+          cursor: pointer;
+          /* Show pointer on hover */
+        }
+
+        .profile-picture {
+          width: 50px;
+          /* Set width */
+          height: 50px;
+          /* Set height */
+          border-radius: 50%;
+          /* Make it circular */
+          transition: transform 0.2s ease;
+          /* Smooth transform */
+        }
+
+        .change-icon {
+          position: absolute;
+          /* Adjust positioning to right */
+          font-size: 16px;
+          right: 49%;
+          bottom: 40%;
+          /* Size of the icon, you can adjust this as needed */
+          color: white;
+          /* Icon color */
+          background-color: rgba(0, 0, 0, 0.6);
+          /* Background with transparency */
+          border-radius: 50%;
+          /* Rounded background */
+          padding: 5px;
+          /* Padding around the icon */
+          opacity: 0;
+          /* Initially hidden */
+          transition: opacity 0.3s ease;
+          /* Smooth transition */
+        }
+
+        /* Show the icon on hover */
+        .profile-picture-label:hover .change-icon {
+          opacity: 1;
+          /* Show the icon when hovering */
+        }
+
+        .profile-picture-label:hover .profile-picture {
+          transform: scale(1.05);
+          /* Slightly enlarge the picture on hover */
+        }
+
+
+        .profile-header img {
+          width: 150px;
+          /* Set the size of the round image */
+          height: 150px;
+          border-radius: 50%;
+          /* Make the image round */
+          object-fit: cover;
+          /* Ensure image fits well inside the circle */
+          border: 5px solid #fff;
+          /* Optional: add a border around the image */
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          /* Optional: add a subtle shadow */
+        }
+
+        /* User info section: Spread information across the full width */
+        .user-info {
+          display: flex;
+          justify-content: space-between;
+          /* Spread items across the card */
+          align-items: center;
+          /* Vertically center the text */
+          padding: 20px;
+          /* Add padding for spacing */
+          background-color: #f9f9f9;
+          /* Optional: light background for contrast */
+          border-radius: 10px;
+        }
+
+        .user-info-item {
+          flex: 1;
+          /* Make each item take up equal space */
+          text-align: center;
+          font-size: 20px;
+          /* Center the text in each section */
+        }
+
+        .user-info-item strong {
+          display: block;
+          /* Display name/email/ID label on its own line */
+          margin-bottom: 5px;
+          font-weight: bold;
+        }
+
+        .forms-container {
+          display: flex;
+          /* Use flexbox to arrange forms side by side */
+          justify-content: space-between;
+          /* Space between the two forms */
+          margin-top: 30px;
+          /* Space between user info and forms */
+        }
+
+        /* Styles for the password change form */
+        .password-change-form,
+        .name-change-form {
+          padding: 20px;
+          /* Padding inside the form */
+          background-color: #f9f9f9;
+          /* Light background for the form */
+          border-radius: 10px;
+          /* Rounded corners */
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          /* Subtle shadow */
+          flex: 1;
+          /* Allow it to take equal width */
+          margin-right: 10px;
+          /* Space between the two forms */
+        }
+
+        /* Remove margin from the last form */
+        .name-change-form {
+          margin-right: 0;
+          /* Remove margin on the right side for the last form */
+        }
+
+        h3 {
+          margin-bottom: 20px;
+          /* Space below the heading */
+          font-size: 1.5em;
+          /* Font size for the heading */
+        }
+
+        /* Ensure forms have consistent styles */
+        .form-group {
+          margin-bottom: 15px;
+          /* Space between form fields */
+        }
+
+        .form-group label {
+          display: block;
+          /* Block label for each input */
+          margin-bottom: 5px;
+          /* Space below the label */
+          font-weight: bold;
+          /* Bold labels */
+        }
+
+        .form-group input {
+          width: 100%;
+          /* Full width for inputs */
+          padding: 10px;
+          /* Padding inside inputs */
+          border: 1px solid #ccc;
+          /* Border style */
+          border-radius: 5px;
+          /* Rounded corners for inputs */
+        }
+
+        .form-group input:focus {
+          border-color: #007BFF;
+          /* Change border color on focus */
+          outline: none;
+          /* Remove outline */
+        }
+
+        .submit-button {
+          background-color: #007BFF;
+          /* Button color */
+          color: #fff;
+          /* Text color */
+          padding: 10px 15px;
+          /* Padding inside button */
+          border: none;
+          /* Remove border */
+          border-radius: 5px;
+          /* Rounded corners for button */
+          cursor: pointer;
+          /* Change cursor to pointer */
+          font-size: 1em;
+          /* Font size for button */
+        }
+
+        .submit-button:hover {
+          background-color: #0056b3;
+          /* Darker shade on hover */
+        }
+
+        .admin-panel,
+        .account-settings {
           flex-wrap: wrap;
           /* This allows items to wrap to the next row */
           justify-content: space-between;

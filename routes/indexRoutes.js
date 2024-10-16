@@ -149,11 +149,14 @@ Router.post("/create-account", requiresAuth(), async (req, res) => {
 
 });
 
-Router.post("/edit-account", requiresAuth(), async (req, res) => {
-    await auth0.editAccount(req.oidc.user.user_id, req.body.name, req.body.password)
+Router.get("/account-setting", requiresAuth(), async (req, res) => {
 
-    res.redirect(`/logout`);
+    let data = {};
+    data.role = req.oidc.user.role[0];
+    data.user = req.oidc.user;
 
+    data.title = "Account Setting"
+    res.render("pages/account-setting.ejs", data);
 });
 
 Router.get("/knowledge-base", requiresAuth(), async (req, res) => {

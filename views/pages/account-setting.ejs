@@ -1,0 +1,67 @@
+<%- include("./../partials/header.ejs") %>
+    <div class="container">
+        <div class="account-settings">
+            <div class="account-card">
+                <!-- Profile picture -->
+                <div class="profile-header">
+                    <label for="profile-picture-input" class="profile-picture-label">
+                        <img src="<%= user.picture %>" alt="User Picture" class="profile-picture">
+                        <span class="change-icon">✏️</span> <!-- Change icon -->
+                    </label>
+                    <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
+                </div>
+
+                <!-- User information spread across the width -->
+                <div class="user-info">
+                    <div class="user-info-item">
+                        <strong>UserID:</strong>
+                        <%= user.user_id %>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>Name:</strong>
+                        <%= user.name %>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>Email:</strong>
+                        <%= user.email %>
+                    </div>
+                    <div class="user-info-item">
+                        <strong>Role:</strong>
+                        <%= role %>
+                    </div>
+                </div>
+                <!-- Container for forms -->
+                <div class="forms-container">
+                    <!-- Password Change Form -->
+                    <div class="password-change-form">
+                        <h3>Change Password</h3>
+                        <form action="/change-password" method="POST">
+                            <div class="form-group">
+                                <label for="new-password">New Password</label>
+                                <input type="password" id="new-password" name="newPassword" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-password">Confirm New Password</label>
+                                <input type="password" id="confirm-password" name="confirmPassword" required>
+                            </div>
+                            <button type="submit" class="submit-button">Change Password</button>
+                        </form>
+                    </div>
+
+                    <!-- Name Change Form -->
+                    <div class="name-change-form">
+                        <h3>Change Name</h3>
+                        <form action="/change-name" method="POST">
+                            <div class="form-group">
+                                <label for="new-name">New Name</label>
+                                <input type="text" id="new-name" name="newName" value="<%= user.name %>" required>
+                            </div>
+                            <button type="submit" class="submit-button">Change Name</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include("./../partials/footer.ejs") %>
