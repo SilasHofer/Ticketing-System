@@ -5,9 +5,9 @@
 
         <div class="vertical-navbar">
             <ul>
-                <li><a href="#add-category" class="active">Add Category</a></li>
-                <li><a href="#create-account">Create Account</a></li>
-                <li><a href="#requested-accounts">Requested Accounts</a></li>
+                <li><a href="#create-account" class="active">Create Account</a></li>
+                <li><a href="#add-category">Add Category</a></li>
+                <li><a href="#requested-accounts">Account Request</a></li>
                 <li><a href="#old-Tickets">Old Tickets</a></li>
             </ul>
             <div class="statistics-colum">
@@ -20,7 +20,7 @@
                     <%=statistics.total_old_tickets%>
                 </div>
                 <div class="statistics">
-                    <h3>categories</h3>
+                    <h3>Categories</h3>
                     <%=statistics.total_categories%>
                 </div>
                 <div class="statistics">
@@ -32,6 +32,64 @@
         </div>
 
         <div class="admin-panel">
+            <div class="admin-card" id="create-account">
+                <h2>Create account</h2>
+                <form class="admin-form" action="/create-account" method="POST" id="accountForm">
+                    <input type="text" placeholder="Name" name="name" value="" required>
+                    <input type="email" placeholder="Email" name="email" value="" required>
+                    <input type="password" placeholder="Password" name="password" value="" required minlength="8"
+                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}"
+                        title="Password must be 8-20 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=)">
+                    <input type="password" placeholder="Confirm Password" name="confirm_password" id="confirm_password"
+                        required minlength="8"><br>
+                    <span class="error">
+                        <%= error%>
+                    </span><br>
+                    <select name="role" required>
+                        <option value="<%= roleID.user%>">user</option>
+                        <option value="<%= roleID.agent%>">agent</option>
+                    </select>
+
+                    <button type="submit" class="btn " id="createAccount">add</button>
+                </form>
+                <hr>
+                <div class="admin-tables">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>mail</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% showUsers.forEach(User=> { %>
+                                <tr>
+                                    <td>
+                                        <%= User.user_id %>
+                                    </td>
+                                    <td>
+                                        <%= User.name %>
+                                    </td>
+                                    <td>
+                                        <%= User.email %>
+                                    </td>
+
+                                    <td>
+                                        <% if (User.user_id !=userId) {%>
+                                            <form action="/delete-user" method="POST">
+                                                <input type="hidden" name="userID" value="<%= User.user_id %>">
+                                                <button type="submit" class="red-button">Delete</button>
+                                            </form>
+                                            <%}%>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
             <div class="admin-card" id="add-category">
                 <div class="add-category">
                     <h2>Add Category</h2>
@@ -67,58 +125,6 @@
                                                 <button type="submit" class="red-button">Delete</button>
                                             </form>
                                             <%} %>
-                                    </td>
-                                </tr>
-                                <% }) %>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="admin-card" id="create-account">
-                <h2>Create account</h2>
-                <form class="admin-form" action="/create-account" method="POST">
-                    <input type="text" placeholder="Name" name="name" value="" required>
-                    <input type="email" placeholder="Email" name="email" value="" required>
-                    <input type="password" placeholder="Password" name="password" value="" required minlength="8"
-                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}"
-                        title="Password must be 8-20 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=)">
-                    <select name="role" required>
-                        <option value="rol_SbiBHiolJfOexDLM">user</option>
-                        <option value="rol_q8gMQ7JR1S2hYePM">agent</option>
-                    </select>
-                    <button type="submit" class="btn " id="createAccount">add</button>
-                </form>
-                <hr>
-                <div class="admin-tables">
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>mail</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% showUsers.forEach(User=> { %>
-                                <tr>
-                                    <td>
-                                        <%= User.user_id %>
-                                    </td>
-                                    <td>
-                                        <%= User.name %>
-                                    </td>
-                                    <td>
-                                        <%= User.email %>
-                                    </td>
-
-                                    <td>
-                                        <% if (User.user_id !=userId) {%>
-                                            <form action="/delete-user" method="POST">
-                                                <input type="hidden" name="userID" value="<%= User.user_id %>">
-                                                <button type="submit" class="red-button">Delete</button>
-                                            </form>
-                                            <%}%>
                                     </td>
                                 </tr>
                                 <% }) %>

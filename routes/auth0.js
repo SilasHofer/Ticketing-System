@@ -1,23 +1,23 @@
 const axios = require('axios');
-require("dotenv").config()
+const config = require('../config/config.js');
 
 
 const authConfig = {
     authRequired: false,
     auth0Logout: true,
-    secret: process.env.AUTH_SECRET,
+    secret: config.auth0.AUTH_SECRET,
     baseURL: 'http://localhost:3000',
-    clientID: process.env.AUTH_CLIENTID,
-    issuerBaseURL: process.env.AUTH_ISSUERBASEURL
+    clientID: config.auth0.AUTH_CLIENTID,
+    issuerBaseURL: config.auth0.AUTH_ISSUERBASEURL
 };
 
 async function getAccessToken(scope) {
     try {
         // Get access token from Auth0
-        const response = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/oauth/token`, {
-            client_id: process.env.AUTH_CLIENTID,
-            client_secret: process.env.AUTH_CLIENTSECRET,
-            audience: `${process.env.AUTH_ISSUERBASEURL}/api/v2/`,
+        const response = await axios.post(`${config.auth0.AUTH_ISSUERBASEURL}/oauth/token`, {
+            client_id: config.auth0.AUTH_CLIENTID,
+            client_secret: config.auth0.AUTH_CLIENTSECRET,
+            audience: `${config.auth0.AUTH_ISSUERBASEURL}/api/v2/`,
             grant_type: 'client_credentials',
             scope: scope
         });
@@ -38,7 +38,7 @@ async function createAccount(email, password, name, role_id) {
     try {
         const token = await getAccessToken('create:users update:roles create:role_members')
         // Use access token to call the Auth0 Management API
-        const userResponse = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users`, {
+        const userResponse = await axios.post(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/users`, {
             email: email,  // User's email
             password: password,// User's password
             name: name,
@@ -54,7 +54,7 @@ async function createAccount(email, password, name, role_id) {
         });
         const userId = userResponse.data.user_id;
         if (role_id != "") {
-            await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/${role_id}/users`, {
+            await axios.post(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/${role_id}/users`, {
                 users: [userId]  // Send the user ID in the request body
             }, {
                 headers: {
@@ -78,7 +78,7 @@ async function createAccount(email, password, name, role_id) {
 async function editAccount(user_id, name, password) {
     const token = await getAccessToken('update:users update:roles create:role_members')
 
-    const userResponse = await axios.patch(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users/${user_id}`, {
+    const userResponse = await axios.patch(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/users/${user_id}`, {
         password: password,// User's password
         name: name,
 
@@ -88,7 +88,7 @@ async function editAccount(user_id, name, password) {
         }
     });
 
-    await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/rol_SbiBHiolJfOexDLM/users`, {
+    await axios.post(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/rol_SbiBHiolJfOexDLM/users`, {
         users: [user_id]  // Send the user ID in the request body
     }, {
         headers: {
@@ -107,13 +107,13 @@ async function getResetPasswordLink(mail) {
         // Prepare the request body
         const data = {
             email: mail,
-            connection_id: process.env.AUTH_CONNECTIONID
+            connection_id: config.auth0.AUTH_CONNECTIONID
             // Optionally specify the connection_id if you have multiple database connections
             // connection_id: 'YOUR_AUTH0_CONNECTION_ID' // Only required if you have multiple connections
         };
 
         // Send the request to create a password change ticket
-        const response = await axios.post(`${process.env.AUTH_ISSUERBASEURL}/api/v2/tickets/password-change`, data, {
+        const response = await axios.post(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/tickets/password-change`, data, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -131,7 +131,7 @@ async function getResetPasswordLink(mail) {
 async function getAllUsers() {
     const token = await getAccessToken('read:users');
 
-    const usersResponse = await axios.get(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users`, {
+    const usersResponse = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/users`, {
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -144,14 +144,14 @@ async function getAgentUsers() {
 
     try {
         // Fetch users associated with the first role
-        const response1 = await axios.get(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/rol_iUczGqqs32uPEhUe/users`, {
+        const response1 = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/rol_iUczGqqs32uPEhUe/users`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
 
         // Fetch users associated with the second role
-        const response2 = await axios.get(`${process.env.AUTH_ISSUERBASEURL}/api/v2/roles/rol_q8gMQ7JR1S2hYePM/users`, {
+        const response2 = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/rol_q8gMQ7JR1S2hYePM/users`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -182,7 +182,7 @@ async function deleteUser(userID) {
         const token = await getAccessToken("delete:users");
 
         // Send a DELETE request to the Auth0 Management API to delete the user
-        const response = await axios.delete(`${process.env.AUTH_ISSUERBASEURL}/api/v2/users/${userID}`, {
+        const response = await axios.delete(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/users/${userID}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

@@ -12,8 +12,8 @@ const generatePassword = require('generate-password');
 let transporter = nodemailer.createTransport({
     service: 'gmail', // You can use any provider like 'yahoo', 'hotmail', 'outlook', etc.
     auth: {
-        user: process.env.source_email,   // The email to send from
-        pass: process.env.source_email_password     // The email password or app-specific password
+        user: config.mail.source_email,   // The email to send from
+        pass: config.mail.source_email_password     // The email password or app-specific password
     }
 });
 
@@ -38,8 +38,8 @@ function sendEmailToUser(to, emailsubject, emailText) {
 }
 
 const imapConfig = {
-    user: process.env.source_email,
-    password: process.env.source_email_password,
+    user: config.mail.source_email,
+    password: config.mail.source_email_password,
     host: 'imap.gmail.com',
     port: 993,
     tls: true,
@@ -156,7 +156,7 @@ async function emailReceived(mail) {
 function extractReplyText(mailText, userMail) {
     let new_comment = "";
     let line = "";
-    for (let i = 0; !line.includes(process.env.source_email) && line != "________________________________" && !line.includes(userMail); i++) {
+    for (let i = 0; !line.includes(config.mail.source_email) && line != "________________________________" && !line.includes(userMail); i++) {
         new_comment += line + "\n";
         line = mailText.split("\n")[i];
     }

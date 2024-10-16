@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (index !== 0) card.style.display = 'none';
     });
 
+
     // Add click event listeners to each link
     navbarLinks.forEach(link => {
         link.addEventListener('click', function (event) {
@@ -35,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
             this.classList.add('active');
         });
     });
+
     document.querySelectorAll(".openTicket").forEach(button => {
         button.addEventListener("click", function () {
             // Get the ticket ID from the data attribute
@@ -43,4 +45,5 @@ document.addEventListener("DOMContentLoaded", function () {
             window.location.href = `/ticket?ticketID=${ticketID}`;
         });
     });
+
 });

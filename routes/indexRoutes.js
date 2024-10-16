@@ -124,6 +124,13 @@ Router.get("/assignAgent", requiresAuth(), async (req, res) => {
 
 Router.post("/create-account", requiresAuth(), async (req, res) => {
     try {
+        const users = await auth0.getAllUsers()
+        if (req.body.password != req.body.confirm_password) {
+            return res.redirect("/admin-panel?error=passwords_do_not_match")
+        }
+        if (users.some(user => user.email.toLowerCase() === req.body.email.toLowerCase())) {
+            return res.redirect("/admin-panel?error=account_already_exists")
+        }
         auth0.createAccount(req.body.email, req.body.password, req.body.name, req.body.role);
 
         res.redirect("/admin-panel")
@@ -203,6 +210,7 @@ Router.post("/delete-ticket", requiresAuth(), async (req, res) => {
 Router.get("/admin-panel", requiresAuth(), async (req, res) => {
     let data = {};
     data.title = "Admin Panel";
+    data.error = req.query.error ? req.query.error.replace(/_/g, ' ') : null;
     data.role = req.oidc.user.role[0];
     data.userId = req.oidc.user.user_id;
     data.statistics = await helpers.systemStatistics();
@@ -210,6 +218,7 @@ Router.get("/admin-panel", requiresAuth(), async (req, res) => {
     data.accountRequests = await helpers.getRequestedAccounts();
     data.showOldTickets = await helpers.showOldTickets();
     data.showUsers = await auth0.getAllUsers();
+    data.roleID = config.role;
     if (req.oidc.user.role[0] != "admin") {
         return res.redirect("/")
     }
