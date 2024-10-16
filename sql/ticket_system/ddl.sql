@@ -43,6 +43,8 @@ CREATE TABLE IF NOT EXISTS `ticket_system`.`tickets` (
   `updated` TIMESTAMP,
   `status` VARCHAR(50),
   `status_timestamp` TIMESTAMP,
+  `agent_notification` TINYINT,
+  `user_notification` TINYINT,
   PRIMARY KEY (`idTickets`),
   INDEX `category_id_idx` (`category_id` ASC) VISIBLE,
   CONSTRAINT `category_id`
@@ -142,7 +144,9 @@ INSERT INTO `tickets` (
   `status`,
   `status_timestamp`, 
   `created`, 
-  `updated`
+  `updated`,
+  `agent_notification`,
+  `user_notification`
 ) VALUES (
   NULL,                  -- Assuming `idTickets` is an auto-incrementing primary key
   p_category_id,                  -- `category_id` can be set to NULL if not available
@@ -157,7 +161,9 @@ INSERT INTO `tickets` (
   "Created",                  -- `processed` timestamp (NULL if not processed yet)
   NOW(),                  -- `closed` timestamp (NULL if not closed yet)
   NOW(),                     -- `solved` (0 for not solved, adjust as needed)
-  NULL                   -- `department` can be set to NULL if not specified
+  NULL,             -- `department` can be set to NULL if not specified
+  1,
+  0                   
 );
     SELECT LAST_INSERT_ID() AS ticket_id; 
 END;;
@@ -190,7 +196,9 @@ SELECT
         ELSE CONCAT(TIMESTAMPDIFF(YEAR, IFNULL(t.updated, t.created), NOW()), ' years ago')
     END AS updated_datetime,
     t.status,
-    DATE_FORMAT(t.status_timestamp, '%Y-%m-%d %H:%i:%s') as status_timestamp
+    DATE_FORMAT(t.status_timestamp, '%Y-%m-%d %H:%i:%s') as status_timestamp,
+    t.agent_notification,
+    t.user_notification
 FROM 
     tickets t
   LEFT JOIN 
@@ -225,7 +233,9 @@ SELECT
     DATE_FORMAT(t.created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
     DATE_FORMAT(t.updated, '%Y-%m-%d %H:%i:%s') AS updated_datetime,
     t.status,
-    DATE_FORMAT(t.status_timestamp, '%Y-%m-%d %H:%i:%s') as status_timestamp
+    DATE_FORMAT(t.status_timestamp, '%Y-%m-%d %H:%i:%s') as status_timestamp,
+    t.agent_notification,
+    t.user_notification
 FROM 
     tickets t
     LEFT JOIN 
@@ -665,3 +675,47 @@ BEGIN
 END ;;
 
 DELIMITER ;
+
+DROP PROCEDURE IF EXISTS change_notification;
+
+DELIMITER ;;
+
+CREATE PROCEDURE change_notification(
+  p_id VARCHAR(45),
+  p_agent TINYINT,
+  p_user TINYINT
+
+)
+BEGIN
+  -- Check if p_agent is 1
+  IF p_agent = 1 THEN
+    -- Set agent_notification to 1 and user_notification to 0
+    UPDATE tickets
+    SET agent_notification = 1
+    WHERE idTickets = p_id;
+    END IF;
+
+  IF p_user = 1 THEN
+    -- Set agent_notification to 0 and user_notification to 1
+    UPDATE tickets
+    SET user_notification = 1
+    WHERE idTickets = p_id;
+    END IF;
+
+      IF p_agent = 0 THEN
+    -- Set agent_notification to 1 and user_notification to 0
+    UPDATE tickets
+    SET agent_notification = 0
+    WHERE idTickets = p_id;
+    END IF;
+
+  IF p_user = 0 THEN
+    -- Set agent_notification to 0 and user_notification to 1
+    UPDATE tickets
+    SET user_notification = 0
+    WHERE idTickets = p_id;
+  END IF;
+END;;
+
+DELIMITER ;
+

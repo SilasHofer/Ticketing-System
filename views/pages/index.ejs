@@ -56,8 +56,6 @@
                         <label>claimed tickets</label>
                         <input type="checkbox" id="claimed-filter" name="claimed-filter">
                         <input type="hidden" name="user_name" value="<%= name %>">
-
-
                         <% } %>
                 </form>
                 <div class="table-container">
@@ -80,8 +78,8 @@
                         </thead>
                         <tbody id="ticket-table-body">
                             <% showTickets.forEach(ticket=> { %>
-                                <tr class="openTicket" data-ticket-id="<%= ticket.idTickets %>"
-                                    data-claimed-filter="true">
+                                <tr class="openTicket <% if ((ticket.agent_notification === 1 && role !== 'user') || (ticket.user_notification === 1 && role === 'user')) { %>highlighted-row<% } %>"
+                                    data-ticket-id="<%= ticket.idTickets %>" data-claimed-filter="true">
                                     <td class="filter">
                                         <%= ticket.idTickets %>
                                     </td>

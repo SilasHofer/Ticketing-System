@@ -170,10 +170,8 @@
                     ticket.status !=='Solved' ) { %>
                     <form class="comment-form" action="/addComment" method="POST">
                         <input type="text" placeholder="Comment" name="comment" value="" maxlength="2000" required>
-                        <input type="hidden" name="ticketID" value="<%= ticket.idTickets %>">
-                        <input type="hidden" name="ticketTitle" value="<%= ticket.title %>">
+                        <input type="hidden" name="ticket" value="<%= JSON.stringify(ticket) %>">
                         <input type="hidden" name="userName" value="<%= userName %>">
-                        <input type="hidden" name="creatorEmail" value="<%= ticket.creator_email %>">
                         <% if (role !="user" ) { %>
                             <label for="hide" class="hide-comment"><b>hide form user</b></label>
                             <input type="checkbox" name="hide" value="on">

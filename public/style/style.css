@@ -848,13 +848,22 @@
           /* Ensure that the rounded corners are visible */
         }
 
+        .highlighted-row {
+          background-color: #f9e79f;
+          /* A soft yellow color */
+          font-weight: bold;
+          /* Makes the text bold for more emphasis */
+          border-left: 5px solid #f4d03f;
+          /* Adds a left border to make the highlight stand out */
+        }
+
         .styled-table thead tr {
           background-color: #0A21c0;
           color: #ffffff;
         }
 
         .styled-table tbody tr:hover {
-          background-color: #B3B4BD !important;
+          background-color: lightblue !important;
           cursor: pointer;
         }
 
@@ -1201,22 +1210,27 @@
 
         .status-color-solved {
           color: green !important;
+          font-weight: bold;
         }
 
         .status-color-closed {
           color: red !important;
+          font-weight: bold;
         }
 
         .status-color-processed {
           color: blue !important;
+          font-weight: bold;
         }
 
         .status-color-created {
           color: orange !important;
+          font-weight: bold;
         }
 
         .status-color-unknown {
           color: gray !important;
+          font-weight: bold;
         }
 
         .status-background-color-solved {

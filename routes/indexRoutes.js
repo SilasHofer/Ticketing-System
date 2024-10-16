@@ -80,9 +80,17 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     if (!data.ticket || req.oidc.user.role[0] == "user" && req.oidc.user.user_id != data.ticket.creator_id) {
         return res.redirect("/")
     }
-    data.agents = await auth0.getAgentUsers();
-    data.availableStatuses = config.status.ticketStatuses;
     data.role = req.oidc.user.role[0];
+    if (data.ticket.agent_notification == 1 && data.role != "user") {
+        helpers.changeNotification(data.ticket.idTickets, 0, 0);
+    }
+    if (data.ticket.user_notification == 1 && data.role == "user") {
+        helpers.changeNotification(data.ticket.idTickets, 0, 0);
+    }
+    if (data.role != "user") {
+        data.agents = await auth0.getAgentUsers();
+    }
+    data.availableStatuses = config.status.ticketStatuses;
     data.title = data.ticket.title;
     data.userId = req.oidc.user.user_id;
     data.userName = req.oidc.user.name;
@@ -192,12 +200,23 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
     } else {
         hide = false;
     }
-    await helpers.addComment(req.body.ticketID, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
+    const ticketJson = req.body.ticket;
+
+    // Parse the JSON string back into an object
+    const ticket = JSON.parse(ticketJson);
+    if (ticket.agent_notification != 1 && req.oidc.user.role[0] == "user") {
+        helpers.changeNotification(ticket.idTickets, 1, 0);
+    }
+    if (ticket.user_notification != 1 && req.oidc.user.role[0] != "user") {
+        helpers.changeNotification(ticket.idTickets, 0, 1);
+    }
+    console.log(ticket.creator_email);
+    await helpers.addComment(ticket.idTickets, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
     if (hide == false && req.oidc.user.role[0] != "user") {
-        email.sendEmailToUser(req.body.creatorEmail, `Ticket updated TicketID:${req.body.ticketID}`, `Your ticket ${req.body.ticketTitle} has ben updated\n Comment: ${req.body.comment}\n You can reply to comment on the ticket`)
+        email.sendEmailToUser(ticket.creator_email, `Ticket updated TicketID:${ticket.idTickets}`, `Your ticket ${ticket.title} has ben updated\n Comment: ${req.body.comment}\n You can reply to comment on the ticket`)
     }
 
-    res.redirect(`/ticket?ticketID=${req.body.ticketID}`)
+    res.redirect(`/ticket?ticketID=${ticket.idTickets}`)
 
 });
 

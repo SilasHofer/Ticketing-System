@@ -28,7 +28,8 @@ module.exports = {
     "showOldTickets": require("./showOldTickets.js"),
     "addKnowledge": require("./addKnowledge.js"),
     "showKnowleges": require("./showKnowleges.js"),
-    "systemStatistics": require("./systemStatistics.js")
+    "systemStatistics": require("./systemStatistics.js"),
+    "changeNotification": require("./changeNotification.js")
 
 };
 

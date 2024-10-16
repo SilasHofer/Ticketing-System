@@ -48,8 +48,8 @@ const config = {
     },
     role: {
         user: 'rol_noPghTuFtxv0p9Tc',
-        agent: 'rol_NJdhv6EIRy437s4h'
-
+        agent: 'rol_NJdhv6EIRy437s4h',
+        admin: 'rol_PDVEvsdkJ7mlG1BO'
     }
 };
 

@@ -144,14 +144,14 @@ async function getAgentUsers() {
 
     try {
         // Fetch users associated with the first role
-        const response1 = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/rol_iUczGqqs32uPEhUe/users`, {
+        const response1 = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/${config.role.agent}/users`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         });
 
         // Fetch users associated with the second role
-        const response2 = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/rol_q8gMQ7JR1S2hYePM/users`, {
+        const response2 = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/${config.role.admin}/users`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
