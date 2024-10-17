@@ -475,7 +475,7 @@
           /* Padding inside button */
           border: none;
           /* Remove border */
-          border-radius: 5px;
+          border-radius: 20px;
           /* Rounded corners for button */
           cursor: pointer;
           /* Change cursor to pointer */
@@ -585,6 +585,11 @@
 
         .error {
           color: red;
+
+        }
+
+        .success {
+          color: green;
         }
 
         .vertical-navbar ul li a {
@@ -1058,7 +1063,7 @@
         }
 
         .styled-table tbody tr:hover {
-          background-color: lightblue !important;
+          background-color: rgb(212, 229, 235) !important;
           cursor: pointer;
         }
 

@@ -152,11 +152,30 @@ Router.post("/create-account", requiresAuth(), async (req, res) => {
 Router.get("/account-setting", requiresAuth(), async (req, res) => {
 
     let data = {};
-    data.role = req.oidc.user.role[0];
-    data.user = req.oidc.user;
+    let role = req.oidc.user.role[0];
+    data.role = role.charAt(0).toUpperCase() + role.slice(1);
+    data.user = await auth0.getUser(req.oidc.user.sub);;
+    data.error = req.query.error ? req.query.error.replace(/_/g, ' ') : null;
+    data.successPassword = req.query.successPassword ? req.query.successPassword.replace(/_/g, ' ') : null;
+    data.successName = req.query.successName ? req.query.successName.replace(/_/g, ' ') : null;
+
 
     data.title = "Account Setting"
     res.render("pages/account-setting.ejs", data);
+});
+
+Router.post("/change-password", requiresAuth(), async (req, res) => {
+    if (req.body.newPassword != req.body.confirmPassword) {
+        return res.redirect("/account-setting?error=passwords_do_not_match")
+    }
+    await auth0.changeAccountPassword(req.body.userID, req.body.newPassword);
+
+    res.redirect('/account-setting?successPassword=passwords_changed');
+});
+
+Router.post("/change-name", requiresAuth(), async (req, res) => {
+    await auth0.changeAccountName(req.body.userID, req.body.newName);
+    res.redirect('/account-setting?successName=Name_changed');
 });
 
 Router.get("/knowledge-base", requiresAuth(), async (req, res) => {
@@ -168,6 +187,7 @@ Router.get("/knowledge-base", requiresAuth(), async (req, res) => {
     data.title = "Knowledge Base"
     res.render("pages/knowledge-base.ejs", data);
 });
+
 Router.post("/addKnowledge", requiresAuth(), async (req, res) => {
 
     await helpers.addKnowledge(req.body.title, req.body.description, req.body.category, req.oidc.user.name)

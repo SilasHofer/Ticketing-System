@@ -36,14 +36,23 @@
                     <div class="password-change-form">
                         <h3>Change Password</h3>
                         <form action="/change-password" method="POST">
+                            <input type="hidden" name="userID" value="<%= user.user_id %>">
                             <div class="form-group">
                                 <label for="new-password">New Password</label>
-                                <input type="password" id="new-password" name="newPassword" required>
+                                <input type="password" id="new-password" name="newPassword" required minlength="8"
+                                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}"
+                                    title="Password must be 8-20 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=)">
                             </div>
                             <div class="form-group">
                                 <label for="confirm-password">Confirm New Password</label>
                                 <input type="password" id="confirm-password" name="confirmPassword" required>
                             </div>
+                            <span class="error">
+                                <%= error%>
+                            </span>
+                            <span class="success">
+                                <%= successPassword%>
+                            </span><br><br>
                             <button type="submit" class="submit-button">Change Password</button>
                         </form>
                     </div>
@@ -52,10 +61,14 @@
                     <div class="name-change-form">
                         <h3>Change Name</h3>
                         <form action="/change-name" method="POST">
+                            <input type="hidden" name="userID" value="<%= user.user_id %>">
                             <div class="form-group">
                                 <label for="new-name">New Name</label>
                                 <input type="text" id="new-name" name="newName" value="<%= user.name %>" required>
                             </div>
+                            <span class="success">
+                                <%= successName%>
+                            </span><br><br>
                             <button type="submit" class="submit-button">Change Name</button>
                         </form>
                     </div>

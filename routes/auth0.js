@@ -75,28 +75,43 @@ async function createAccount(email, password, name, role_id) {
     }
 }
 
-async function editAccount(user_id, name, password) {
-    const token = await getAccessToken('update:users update:roles create:role_members')
+// Function to get updated user info from Auth0
+async function getUser(user_id) {
+    const token = await getAccessToken('read:users'); // Ensure this scope is granted
+    const response = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/users/${user_id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response.data;
+}
+
+async function changeAccountPassword(user_id, password) {
+    const token = await getAccessToken('update:users')
 
     const userResponse = await axios.patch(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/users/${user_id}`, {
         password: password,// User's password
-        name: name,
 
     }, {
         headers: {
             Authorization: `Bearer ${token}`
         }
     });
-
-    await axios.post(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/rol_SbiBHiolJfOexDLM/users`, {
-        users: [user_id]  // Send the user ID in the request body
-    }, {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
 }
+
+async function changeAccountName(user_id, newName) {
+    const token = await getAccessToken('update:users')
+
+    const userResponse = await axios.patch(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/users/${user_id}`, {
+        name: newName,
+
+    }, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+}
+
 
 
 async function getResetPasswordLink(mail) {
@@ -205,8 +220,10 @@ module.exports = {
     authConfig,
     createAccount,
     getAllUsers,
-    editAccount,
+    changeAccountPassword,
+    changeAccountName,
     getResetPasswordLink,
     getAgentUsers,
-    deleteUser
+    deleteUser,
+    getUser
 };
