@@ -1,16 +1,8 @@
 <%- include("./../partials/header.ejs") %>
+    <script type="module" src="/java_script/eventHandlersSettings.js"></script>
     <div class="container">
         <div class="account-settings">
             <div class="account-card">
-                <!-- Profile picture -->
-                <div class="profile-header">
-                    <label for="profile-picture-input" class="profile-picture-label">
-                        <img src="<%= user.picture %>" alt="User Picture" class="profile-picture">
-                        <span class="change-icon">✏️</span> <!-- Change icon -->
-                    </label>
-                    <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
-                </div>
-
                 <!-- User information spread across the width -->
                 <div class="user-info">
                     <div class="user-info-item">

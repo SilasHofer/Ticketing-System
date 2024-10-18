@@ -215,7 +215,6 @@ async function deleteUser(userID) {
 }
 
 
-
 module.exports = {
     authConfig,
     createAccount,

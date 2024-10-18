@@ -148,6 +148,11 @@ Router.post("/create-account", requiresAuth(), async (req, res) => {
     }
 
 });
+Router.get("/change-profile-picture", requiresAuth(), async (req, res) => {
+    auth0.changeProfilePicture(req.oidc.user.user_id, res.query.newProfilePictureUrl)
+
+    res.redirect("/account-setting");
+});
 
 Router.get("/account-setting", requiresAuth(), async (req, res) => {
 
@@ -236,7 +241,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
     console.log(ticket.creator_email);
     await helpers.addComment(ticket.idTickets, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
     if (hide == false && req.oidc.user.role[0] != "user") {
-        email.sendEmailToUser(ticket.creator_email, `Ticket updated TicketID:${ticket.idTickets}`, `Your ticket ${ticket.title} has ben updated\n Comment: ${req.body.comment}\n You can reply to comment on the ticket`)
+        email.sendEmailToUser(ticket.creator_email, `Ticket updated TicketID:${ticket.idTickets}`, `Your ticket ${ticket.title} has ben updated\n Comment: ${req.body.comment}\n You can reply to comment on the ticket Or send CLOSE to close the ticket`)
     }
 
     res.redirect(`/ticket?ticketID=${ticket.idTickets}`)

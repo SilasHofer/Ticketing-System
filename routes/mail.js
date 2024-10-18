@@ -132,12 +132,19 @@ async function emailReceived(mail) {
         // Check if the email subject indicates a reply to a ticket
         const ticketId = extractTicketIdFromSubject(mail.subject);
         if (ticketId) {
+            ticketData = await helpers.getTicket(ticketId);
             if (mail.text.split("\n")[0] == "CLOSE") {
+                email.sendEmailToUser(user.email, 'Ticket Closed', 'Your ticket ' + ticketData.title + ' has ben Closed')
                 return await helpers.changeStatus(ticketId, "Closed");
             }
-            // Handle the reply to the existing ticket
-            await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
-            sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
+            if (ticketData.status != "Closed" && ticketData.status != "Solved") {
+                // Handle the reply to the existing ticket
+                await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
+                sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
+            } else {
+                sendEmailToUser(user.email, `Ticket is ${ticketData.status}`, 'Your comment has not been added');
+            }
+
         } else {
             // Create a new ticket if no ticket ID found in the subject
             const ticket = await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
