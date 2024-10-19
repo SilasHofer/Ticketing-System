@@ -75,9 +75,10 @@ TODO: Add simple diagram that explains the architecture.
 
 9. Create admin account
 
-    Use the following credentials to at auth0.com:\n
+    Use the following credentials to at auth0.com:
+    
+    Auth0 Email: ticketingsystem821@gmail.com
 
-    Auth0 Email: ticketingsystem821@gmail.com \n
     Auth0 Password: m3YbsCRsT3iSBK3
 
     Once logged in, navigate to User Management and then Users.
