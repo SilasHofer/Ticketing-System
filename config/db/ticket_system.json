@@ -1,5 +1,5 @@
 {
-    "host": "LAPPIE.local",
+    "host": "localhost",
     "user": "dbadm",
     "password": "P@ssw0rd",
     "database": "ticket_system",
