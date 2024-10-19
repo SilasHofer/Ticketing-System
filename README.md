@@ -24,61 +24,68 @@ TODO: Add simple diagram that explains the architecture.
 ### Build
 
 
-Download the Project:
+1. Download the Project:
 
-Download the zip file from GitHub and extract it to your desired destination on your Unix machine.
-Navigate to the Project Directory:
+    Download the zip file from GitHub and extract it to your desired destination on your Unix machine.
 
+2. Navigate to the Project Directory:
 
-cd Ticketing-System-main/
-Install Node.js Dependencies:
+    cd Ticketing-System-main/
 
+3. Install Node.js Dependencies:
 
-npm install
-Set Up the Database:
+    npm install
 
-Navigate to the SQL directory:
+4. Set Up the Database:
 
-cd sql/ticket_system
-Install the MariaDB server (if not already installed):
+    Navigate to the SQL directory:
 
-sudo apt install mariadb-server
-Reset the Database:
+        cd sql/ticket_system
 
-Run the following command to reset the database:
+    Install the MariaDB server (if not already installed):
 
-sudo mariadb --execute "source reset.sql;"
-Then log into MariaDB:
+        sudo apt install mariadb-server
 
-sudo mariadb
-Create Database User:
+4. Reset the Database:
 
-Execute the following commands in the MariaDB shell:
+    Run the following command to reset the database:
 
-CREATE USER 'dbadm'@'localhost' IDENTIFIED BY 'P@ssw0rd';
-GRANT ALL PRIVILEGES ON ticket_system.* TO 'dbadm'@'localhost';
-FLUSH PRIVILEGES;
-After executing these commands, type exit to leave the MariaDB shell.
-Return to the Project Root Directory:
+        sudo mariadb --table < reset.sql
 
+5. Then log into MariaDB:
 
-cd ../..
-Start the Application:
+    sudo mariadb
 
-node index.js
-Log In to the Application:
+6. Create Database User:
 
-Use the following credentials to log in:
-Auth0 Email: ticketingsystem821@gmail.com
-Auth0 Password: m3YbsCRsT3iSBK3
-User Management:
+    Execute the following commands in the MariaDB shell:
 
-Once logged in, navigate to User Management and then Users.
-Create a new user by providing an email and password for the admin account.
-In the list of users, click on the three dots and select Assign Roles, then choose only Admin.
-Log In with the Admin User:
+        CREATE USER 'dbadm'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+        GRANT ALL PRIVILEGES ON ticket_system.* TO 'dbadm'@'localhost';
+        FLUSH PRIVILEGES;
+        After executing these commands, type exit to leave the MariaDB shell.
 
-Use the newly created admin account to log in to the software.
+7. Return to the Project Root Directory:
+
+    cd ../..
+
+8. Start the Application:
+
+    node index.js
+
+9. Create admin account
+
+    Use the following credentials to at auth0.com:
+    Auth0 Email: ticketingsystem821@gmail.com
+    Auth0 Password: m3YbsCRsT3iSBK3
+
+    Once logged in, navigate to User Management and then Users.
+    Create a new user by providing an email and password for the admin account.
+    In the list of users, click on the three dots and select Assign Roles, then choose only Admin.
+
+10. Log In with the Admin User:
+
+    Use the newly created admin account to log in to the software.
 
 ### Test
 
