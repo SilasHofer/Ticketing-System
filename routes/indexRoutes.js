@@ -134,14 +134,14 @@ Router.post("/create-account", requiresAuth(), async (req, res) => {
     try {
         const users = await auth0.getAllUsers()
         if (req.body.password != req.body.confirm_password) {
-            return res.redirect("/admin-panel?error=passwords_do_not_match")
+            return res.redirect("/panel?error=passwords_do_not_match")
         }
         if (users.some(user => user.email.toLowerCase() === req.body.email.toLowerCase())) {
-            return res.redirect("/admin-panel?error=account_already_exists")
+            return res.redirect("/panel?error=account_already_exists")
         }
         auth0.createAccount(req.body.email, req.body.password, req.body.name, req.body.role);
 
-        res.redirect("/admin-panel")
+        res.redirect("/panel")
     } catch (error) {
         console.error(error);
         res.status(500).send('Error making request to Auth0 API');
@@ -157,8 +157,8 @@ Router.get("/change-profile-picture", requiresAuth(), async (req, res) => {
 Router.get("/account-setting", requiresAuth(), async (req, res) => {
 
     let data = {};
-    let role = req.oidc.user.role[0];
-    data.role = role.charAt(0).toUpperCase() + role.slice(1);
+    data.role = req.oidc.user.role[0];
+    data.niceRole = data.role.charAt(0).toUpperCase() + data.role.slice(1);
     data.user = await auth0.getUser(req.oidc.user.sub);;
     data.error = req.query.error ? req.query.error.replace(/_/g, ' ') : null;
     data.successPassword = req.query.successPassword ? req.query.successPassword.replace(/_/g, ' ') : null;
@@ -254,11 +254,15 @@ Router.post("/delete-ticket", requiresAuth(), async (req, res) => {
     res.redirect("/")
 });
 
-Router.get("/admin-panel", requiresAuth(), async (req, res) => {
+Router.get("/panel", requiresAuth(), async (req, res) => {
     let data = {};
-    data.title = "Admin Panel";
-    data.error = req.query.error ? req.query.error.replace(/_/g, ' ') : null;
     data.role = req.oidc.user.role[0];
+    if (data.role == "admin") {
+        data.title = "Admin Panel";
+    } else {
+        data.title = "Agent Panel";
+    }
+    data.error = req.query.error ? req.query.error.replace(/_/g, ' ') : null;
     data.userId = req.oidc.user.user_id;
     data.statistics = await helpers.systemStatistics();
     data.showCategories = await helpers.showCategories();
@@ -266,11 +270,11 @@ Router.get("/admin-panel", requiresAuth(), async (req, res) => {
     data.showOldTickets = await helpers.showOldTickets();
     data.showUsers = await auth0.getAllUsers();
     data.roleID = config.role;
-    if (req.oidc.user.role[0] != "admin") {
+    if (data.role != "admin" && data.role != "agent") {
         return res.redirect("/")
     }
 
-    res.render("pages/admin-panel.ejs", data);
+    res.render("pages/panel.ejs", data);
 });
 
 Router.get("/accept-account", requiresAuth(), async (req, res) => {
@@ -280,7 +284,7 @@ Router.get("/accept-account", requiresAuth(), async (req, res) => {
     email.createAccountFromMail(req.query.email);
     helpers.removeAccountRequest(req.query.id)
 
-    res.redirect("/admin-panel")
+    res.redirect("/panel")
 });
 
 Router.get("/decline-account", requiresAuth(), async (req, res) => {
@@ -290,28 +294,28 @@ Router.get("/decline-account", requiresAuth(), async (req, res) => {
     email.sendEmailToUser(req.query.email, 'account declined', 'The admin declined your request')
     helpers.removeAccountRequest(req.query.id)
 
-    res.redirect("/admin-panel")
+    res.redirect("/panel")
 });
 
 Router.post("/add-category", requiresAuth(), async (req, res) => {
 
     await helpers.addCategory(req.body.category)
 
-    res.redirect("/admin-panel")
+    res.redirect("/panel")
 });
 
 Router.post("/delete-category", requiresAuth(), async (req, res) => {
 
     await helpers.deleteCategory(req.body.categoryID)
 
-    res.redirect("/admin-panel")
+    res.redirect("/panel")
 });
 
 Router.post("/delete-user", requiresAuth(), async (req, res) => {
 
     await auth0.deleteUser(req.body.userID)
 
-    res.redirect("/admin-panel")
+    res.redirect("/panel")
 });
 
 

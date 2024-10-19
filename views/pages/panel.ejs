@@ -1,0 +1,247 @@
+<%- include("./../partials/header.ejs") %>
+    <script type="module" src="/java_script/eventHandlersAdmin.js"></script>
+
+    <div class="container">
+
+        <div class="vertical-navbar">
+            <ul>
+                <% if(role=="admin" ){%>
+                    <li><a href="#create-account" class="active">Create Account</a></li>
+                    <%}%>
+                        <li><a href="#add-category" <% if(role!="admin" ){%>class="active"<%}%> >Add Category</a></li>
+                        <% if(role=="admin" ){%>
+                            <li><a href="#requested-accounts">Account Request</a></li>
+                            <li><a href="#old-Tickets">Old Tickets</a></li>
+                            <%}%>
+            </ul>
+            <div class="statistics-colum">
+                <div class="statistics">
+                    <h3>Tickets</h3>
+                    <%=statistics.total_tickets%>
+                </div>
+                <div class="statistics">
+                    <h3>Old Tickets</h3>
+                    <%=statistics.total_old_tickets%>
+                </div>
+                <div class="statistics">
+                    <h3>Categories</h3>
+                    <%=statistics.total_categories%>
+                </div>
+                <div class="statistics">
+                    <h3>Account Requests</h3>
+                    <%=statistics.total_account_requests%>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="admin-panel">
+            <% if(role=="admin" ){%>
+                <div class="admin-card" id="create-account">
+                    <h2>Create account</h2>
+                    <form class="admin-form" action="/create-account" method="POST" id="accountForm">
+                        <input type="text" placeholder="Name" name="name" value="" required>
+                        <input type="email" placeholder="Email" name="email" value="" required>
+                        <input type="password" placeholder="Password" name="password" value="" required minlength="8"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{8,}"
+                            title="Password must be 8-20 characters long, include at least one uppercase letter, one lowercase letter, one number, and one special character (@#$%^&+=)">
+                        <input type="password" placeholder="Confirm Password" name="confirm_password"
+                            id="confirm_password" required minlength="8"><br>
+                        <span class="error">
+                            <%= error%>
+                        </span><br>
+                        <select name="role" required>
+                            <option value="<%= roleID.user%>">user</option>
+                            <option value="<%= roleID.agent%>">agent</option>
+                        </select>
+
+                        <button type="submit" class="btn " id="createAccount">add</button>
+                    </form>
+                    <hr>
+                    <div class="admin-tables">
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>mail</th>
+                                    <th>Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% showUsers.forEach(User=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= User.user_id %>
+                                        </td>
+                                        <td>
+                                            <%= User.name %>
+                                        </td>
+                                        <td>
+                                            <%= User.email %>
+                                        </td>
+
+                                        <td>
+                                            <% if (User.user_id !=userId) {%>
+                                                <form action="/delete-user" method="POST">
+                                                    <input type="hidden" name="userID" value="<%= User.user_id %>">
+                                                    <button type="submit" class="red-button">Delete</button>
+                                                </form>
+                                                <%}%>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <%}%>
+                    <div class="admin-card" id="add-category">
+                        <div class="add-category">
+                            <h2>Add Category</h2>
+                            <form class="admin-form" action="/add-category" method="POST">
+                                <input type="text" placeholder="Category" name="category" value="" maxlength="200"
+                                    required>
+                                <button type="submit" class="btn " id="addCategory">add</button>
+                            </form>
+                        </div>
+                        <hr>
+                        <div class="admin-tables">
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% showCategories.forEach(Category=> { %>
+                                        <tr>
+                                            <td>
+                                                <%= Category.idCategory %>
+                                            </td>
+                                            <td>
+                                                <%= Category.category_name %>
+                                            </td>
+                                            <td>
+                                                <%if(Category.idCategory !=1 && Category.idCategory !=2){ %>
+                                                    <form action="/delete-category" method="POST">
+                                                        <input type="hidden" name="categoryID"
+                                                            value="<%= Category.idCategory %>">
+                                                        <button type="submit" class="red-button">Delete</button>
+                                                    </form>
+                                                    <%} %>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <% if(role=="admin" ){%>
+                        <div class="admin-card" id="requested-accounts">
+                            <h2>Requested accounts</h2>
+                            <div class="admin-tables">
+                                <table class="styled-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>email</th>
+                                            <th>yes/no</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% accountRequests.forEach(account=> { %>
+                                            <tr>
+                                                <td>
+                                                    <%= account.idrequests %>
+                                                </td>
+                                                <td>
+                                                    <%= account.email %>
+                                                </td>
+                                                <td>
+                                                    <a href="/accept-account?id=<%= account.idrequests %>&email=<%= account.email %>"
+                                                        class="button">yes</a>
+                                                    <a href="/decline-account?id=<%= account.idrequests %>&email=<%= account.email %>"
+                                                        class="button">no</a>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="admin-card" id="old-Tickets">
+                            <h2>Old Tickets</h2>
+                            <div class="admin-tables">
+                                <table id="sortableTable" class="styled-table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID <span class="sort-indicator"></span></th>
+                                            <th>Title <span class="sort-indicator"></span></th>
+                                            <th>Creator <span class="sort-indicator"></span></th>
+                                            <th>Agent <span class="sort-indicator"></span></th>
+                                            <th>Created <span class="sort-indicator"></span></th>
+                                            <th>updated <span class="sort-indicator"></span></th>
+                                            <th>Status <span class="sort-indicator"></span></th>
+                                            <% if (role=="admin" ) { %>
+                                                <th class="table-delete">Delete</th>
+                                                <% }%>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ticket-table-body">
+                                        <% showOldTickets.forEach(ticket=> { %>
+                                            <tr class="openTicket" data-ticket-id="<%= ticket.idTickets %>">
+                                                <td class="filter">
+                                                    <%= ticket.idTickets %>
+                                                </td>
+                                                <td class="toLong filter">
+                                                    <%= ticket.title %>
+                                                </td>
+                                                <td class="filter">
+                                                    <%= ticket.creator_name %>
+                                                </td>
+                                                <td class="filter">
+                                                    <%if(ticket.agent_name){%>
+                                                        <%= ticket.agent_name %>
+                                                            <%}else {%>
+                                                                No agent assigned
+                                                                <%} %>
+                                                </td>
+                                                <td class="filter">
+                                                    <%= ticket.created_datetime %>
+                                                </td>
+                                                <td class="filter">
+                                                    <%= ticket.updated_datetime %>
+                                                </td>
+                                                <td class="filter
+                                                    <%= ticket.status === 'Solved' ? 'status-color-solved' :
+                                                        ticket.status === 'Closed' ? 'status-color-closed' :
+                                                        ticket.status === 'Processed' ? 'status-color-processed' :
+                                                        ticket.status === 'Created' ? 'status-color-created' : 'status-color-unknown' %>
+                                                ">
+                                                    <%= ticket.status %>
+                                                </td>
+                                                <% if (role=="admin" ) { %>
+                                                    <td>
+                                                        <form action="/delete-ticket" method="POST">
+                                                            <input type="hidden" name="ticketID"
+                                                                value="<%= ticket.idTickets %>">
+                                                            <button type="submit" class="red-button"
+                                                                onclick="return confirm('Are you sure you want to close this ticket?');">Delete</button>
+                                                        </form>
+                                                    </td>
+                                                    <% }%>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <%}%>
+        </div>
+    </div>
+
+    <%- include("./../partials/footer.ejs") %>

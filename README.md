@@ -9,10 +9,6 @@ It serves as communication software between an agent and a user.
 TODO: Add image that helps to understand the project.
 This could be an architectural diagram or a screenshot of the application.
 
-## Architecture Overview (optional)
-
-TODO: Add simple diagram that explains the architecture.
-
 ## How to Use
 
 ### Prerequisites
@@ -63,7 +59,8 @@ TODO: Add simple diagram that explains the architecture.
         CREATE USER 'dbadm'@'localhost' IDENTIFIED BY 'P@ssw0rd';
         GRANT ALL PRIVILEGES ON ticket_system.* TO 'dbadm'@'localhost';
         FLUSH PRIVILEGES;
-        After executing these commands, type exit to leave the MariaDB shell.
+
+    After executing these commands, type exit to leave the MariaDB shell.
 
 7. Return to the Project Root Directory:
 

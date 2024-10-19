@@ -19,12 +19,11 @@
                 <div class="nav-link"><a href="/">Home</a></div>
                 <% if (role=="agent" ||role=="admin" ) { %>
                     <div class="nav-link"><a href="/knowledge-base">Knowledge Base</a></div>
+                    <div class="nav-link"><a href="/panel">
+                            <% if (role=="admin" ) { %>Admin Panel<% }else{ %>Agent Panel<% }%>
+                        </a></div>
                     <% } %>
-                        <% if (role=="admin" ) { %>
-                            <div class="nav-link"><a href="/admin-panel">Admin
-                                    Panel</a></div>
-                            <% } %>
-                                <div class="nav-link"><a href="/account-setting">Account Settings</a></div>
+                        <div class="nav-link"><a href="/account-setting">Account Settings</a></div>
             </div>
             <!-- Right-aligned logout button -->
             <div class="logout-button">
