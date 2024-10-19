@@ -30,11 +30,11 @@ TODO: Add simple diagram that explains the architecture.
 
 2. Navigate to the Project Directory:
 
-    cd Ticketing-System-main/
+        cd Ticketing-System-main/
 
 3. Install Node.js Dependencies:
 
-    npm install
+        npm install
 
 4. Set Up the Database:
 
@@ -54,7 +54,7 @@ TODO: Add simple diagram that explains the architecture.
 
 5. Then log into MariaDB:
 
-    sudo mariadb
+        sudo mariadb
 
 6. Create Database User:
 
@@ -67,11 +67,11 @@ TODO: Add simple diagram that explains the architecture.
 
 7. Return to the Project Root Directory:
 
-    cd ../..
+        cd ../..
 
 8. Start the Application:
 
-    node index.js
+        node index.js
 
 9. Create admin account
 
