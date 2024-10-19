@@ -76,7 +76,7 @@ TODO: Add simple diagram that explains the architecture.
 9. Create admin account
 
     Use the following credentials to at auth0.com:
-    
+
     Auth0 Email: ticketingsystem821@gmail.com
 
     Auth0 Password: m3YbsCRsT3iSBK3
@@ -87,7 +87,7 @@ TODO: Add simple diagram that explains the architecture.
 
 10. Log In with the Admin User:
 
-    Use the newly created admin account to log in to the software.
+    Use the newly created admin account to log in to the software at http://localhost:3000.
 
 ### Test
 
@@ -99,7 +99,9 @@ TODO: Explain how to run the project (client, server etc.).
 
 ## License
 
-TODO: Add license and copyright notice.
+This project is licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for details.
+
+Copyright (c) 2024 Silas Hofer.
 
 
  
