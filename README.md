@@ -17,49 +17,68 @@ TODO: Add simple diagram that explains the architecture.
 
 ### Prerequisites
 
-TODO: Explain which steps and dependencies are required to run and build the project (e.g., pip install -r requirements.txt)
+1. Node.js: You need to have Node.js installed on your Ubuntu machine  (version 20.x recommended). You can install it by running: sudo apt install nodejs
+
+2. MariaDB Server: You will also need the MariaDB server. You can install it by running: sudo apt install mariadb-server
 
 ### Build
 
-In your unix install npm (sudo apt install npm) and nodejs (sudo apt install nodejs)
 
-download the yip file form github and extrakt it to your desigerde destination in your unix. 
+Download the Project:
 
-do cd Ticketing-System-main/
-and the npm install
+Download the zip file from GitHub and extract it to your desired destination on your Unix machine.
+Navigate to the Project Directory:
 
-go to the directary cd sql/ticket_system
 
-and do this sudo apt install mariadb-server
+cd Ticketing-System-main/
+Install Node.js Dependencies:
 
-and there do this comment sudo mariadb --table < reset.sql
 
-then sudo mariadb 
+npm install
+Set Up the Database:
 
-and then this code CREATE USER 'dbadm'@'localhost' IDENTIFIED BY 'P@ssw0rd';
+Navigate to the SQL directory:
+
+cd sql/ticket_system
+Install the MariaDB server (if not already installed):
+
+sudo apt install mariadb-server
+Reset the Database:
+
+Run the following command to reset the database:
+
+sudo mariadb --execute "source reset.sql;"
+Then log into MariaDB:
+
+sudo mariadb
+Create Database User:
+
+Execute the following commands in the MariaDB shell:
+
+CREATE USER 'dbadm'@'localhost' IDENTIFIED BY 'P@ssw0rd';
 GRANT ALL PRIVILEGES ON ticket_system.* TO 'dbadm'@'localhost';
 FLUSH PRIVILEGES;
-
-after that write exit
-
-and then you need to go back to ther oterh diractory so cd ../..
-
-and then node index.js 
+After executing these commands, type exit to leave the MariaDB shell.
+Return to the Project Root Directory:
 
 
-then login to this auth account in your browser
-outh0-mail:ticketingsystem821@gmail.com
-outh0-password:m3YbsCRsT3iSBK3
+cd ../..
+Start the Application:
 
-and then go to User Management and the users
+node index.js
+Log In to the Application:
 
-and then create user 
+Use the following credentials to log in:
+Auth0 Email: ticketingsystem821@gmail.com
+Auth0 Password: m3YbsCRsT3iSBK3
+User Management:
 
-shows an mail and password for the admin user
+Once logged in, navigate to User Management and then Users.
+Create a new user by providing an email and password for the admin account.
+In the list of users, click on the three dots and select Assign Roles, then choose only Admin.
+Log In with the Admin User:
 
-then in the list of users click on the 3 dots and then assign roles and then pick only admin 
-
-now login with that user to the software
+Use the newly created admin account to log in to the software.
 
 ### Test
 
