@@ -90,47 +90,60 @@ This could be an architectural diagram or a screenshot of the application.
 
 To ensure the software functions correctly, I performed manual testing throughout the development process. Below are the key areas where manual tests were conducted:
 
-User Registration:
-    Log in as an Admin.
-    Navigate to the Admin Panel and then select Create Account.
-    Attempt to create an account using a weak password and passwords that do not match.
-    Create a valid account with strong and matching passwords.
-    Try to use the same email address again to create another account.
-    Log in to the account you just created to verify that the login works successfully.
+1. User Registration:
 
-Add Category
-    Log in as an Admin or Agent.
-    Navigate to the Admin Panel and select Create Category.
-    Enter a Category Name and click Add.
-    Verify that the Category appears in the table.
-    Log in as a User and attempt to create a ticket using that category.
-    Log in as Admin or Agent again and remove the category
+    1. Log in as an Admin.
 
-Ticket Creation:
-    Log in as a User.
-    Click on "Create Ticket."
-    Add a Title and Description.
-    Select a Category.
-    Attach Files:
-        Try to add too many files, files that are too large, or files in the wrong format.
-    Attempt to Create the Ticket.
-    Create a Ticket with the correct number of files, appropriate size, and acceptable format.
-    Open the Created Ticket to verify its contents.
-    Log in as an Admin or Agent and ensure that the ticket is displayed correctly.
+    2. Navigate to the Admin Panel and then select Create Account.
 
-Send Emails (Note: It may take time for the server to process emails)
-    Send an email to ticketsystem8@gmail.com from an account that is not an allowed mail domain (default not bth.se and student.bth.se).
-    Log in as Admin and navigate to the Admin Panel, then go to Account Requests.
-    Look for the email address that you just sent from.
-    Click "No" when prompted, and check the email you receive in response.
-    Send a new email from the same address but click "Yes" in the Admin Panel this time.
-    Check your email for the account data. You don’t need to reset the password, but you can if you wish.
-    Send a new email with the ticket title as the email subject and the ticket description in the body.
-    Log in to the web interface with the Admin account and look for the newly created ticket.
-    Open the ticket, claim it, and add a comment.
-    Check your email; you should have received three emails: one for creating the ticket, one for claiming it, and one for the comment.
-    Reply to one of these emails and verify that the text you included appears as a comment on the ticket when logged in with the Admin account.
-    Send a final reply that simply says "CLOSED" from the email address.
+    3. Attempt to create an account using a weak password and passwords that do not match.
+
+    4. Create a valid account with strong and matching passwords.
+
+    5. Try to use the same email address again to create another account.
+
+    6. Log in to the account you just created to verify that the login works successfully.
+
+2. Add Category:
+
+    1. Log in as an Admin or Agent.
+
+    2. Navigate to the Admin Panel and select Create Category.
+
+    3. Enter a Category Name and click Add.
+
+    4. Verify that the Category appears in the table.
+
+    5. Log in as a User and attempt to create a ticket using that category.
+
+    6. Log in as Admin or Agent again and remove the category
+
+
+3. Ticket Creation:
+    1. Log in as a User.
+    2. Click on "Create Ticket."
+    3. Add a Title and Description.
+    4. Select a Category.
+    5. Attach Files:
+    Try to add too many files, files that are too large, or files in the wrong format.
+    6. Attempt to Create the Ticket.
+    7. Create a Ticket with the correct number of files, appropriate size, and acceptable format.
+    8. Open the Created Ticket to verify its contents.
+    9. Log in as an Admin or Agent and ensure that the ticket is displayed correctly.
+
+4. Send Emails (Note: It may take time for the server to process emails)
+    1. Send an email to ticketsystem8@gmail.com from an account that is not an allowed mail domain (default not bth.se and student.bth.se).
+    2. Log in as Admin and navigate to the Admin Panel, then go to Account Requests.
+    3. Look for the email address that you just sent from.
+    4. Click "No" when prompted, and check the email you receive in response.
+    5. Send a new email from the same address but click "Yes" in the Admin Panel this time.
+    6. Check your email for the account data. You don’t need to reset the password, but you can if you wish.
+    8. Send a new email with the ticket title as the email subject and the ticket description in the body.
+    9. Log in to the web interface with the Admin account and look for the newly created ticket.
+    10. Open the ticket, claim it, and add a comment.
+    11. Check your email; you should have received three emails: one for creating the ticket, one for claiming it, and one for the comment.
+    12. Reply to one of these emails and verify that the text you included appears as a comment on the ticket when logged in with the Admin account.
+    13. Send a final reply that simply says "CLOSED" from the email address.
 
 
 
