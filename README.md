@@ -151,8 +151,8 @@ To ensure the software functions correctly, I performed manual testing throughou
 
 To use the software:
 
-    As an Agent/Admin: You can access the system via the web interface at http://localhost:3000.
-    As a Normal User: You can interact with the system either through the web interface or by sending emails to ticketsystem8@gmail.com.
+1. As an Agent/Admin: You can access the system via the web interface at http://localhost:3000.
+2. As a Normal User: You can interact with the system either through the web interface or by sending emails to ticketsystem8@gmail.com.
 
 Users can create accounts via email, so they don’t need to log in to the web interface to resolve their issues.
 
