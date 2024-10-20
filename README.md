@@ -88,11 +88,65 @@ This could be an architectural diagram or a screenshot of the application.
 
 ### Test
 
-TODO: Explain how unit- or integreation tests can be executed.
+To ensure the software functions correctly, I performed manual testing throughout the development process. Below are the key areas where manual tests were conducted:
+
+User Registration:
+    Log in as an Admin.
+    Navigate to the Admin Panel and then select Create Account.
+    Attempt to create an account using a weak password and passwords that do not match.
+    Create a valid account with strong and matching passwords.
+    Try to use the same email address again to create another account.
+    Log in to the account you just created to verify that the login works successfully.
+
+Add Category
+    Log in as an Admin or Agent.
+    Navigate to the Admin Panel and select Create Category.
+    Enter a Category Name and click Add.
+    Verify that the Category appears in the table.
+    Log in as a User and attempt to create a ticket using that category.
+    Log in as Admin or Agent again and remove the category
+
+Ticket Creation:
+    Log in as a User.
+    Click on "Create Ticket."
+    Add a Title and Description.
+    Select a Category.
+    Attach Files:
+        Try to add too many files, files that are too large, or files in the wrong format.
+    Attempt to Create the Ticket.
+    Create a Ticket with the correct number of files, appropriate size, and acceptable format.
+    Open the Created Ticket to verify its contents.
+    Log in as an Admin or Agent and ensure that the ticket is displayed correctly.
+
+Send Emails (Note: It may take time for the server to process emails)
+    Send an email to ticketsystem8@gmail.com from an account that is not an allowed mail domain (default not bth.se and student.bth.se).
+    Log in as Admin and navigate to the Admin Panel, then go to Account Requests.
+    Look for the email address that you just sent from.
+    Click "No" when prompted, and check the email you receive in response.
+    Send a new email from the same address but click "Yes" in the Admin Panel this time.
+    Check your email for the account data. You don’t need to reset the password, but you can if you wish.
+    Send a new email with the ticket title as the email subject and the ticket description in the body.
+    Log in to the web interface with the Admin account and look for the newly created ticket.
+    Open the ticket, claim it, and add a comment.
+    Check your email; you should have received three emails: one for creating the ticket, one for claiming it, and one for the comment.
+    Reply to one of these emails and verify that the text you included appears as a comment on the ticket when logged in with the Admin account.
+    Send a final reply that simply says "CLOSED" from the email address.
+
+
 
 ### Run
 
-TODO: Explain how to run the project (client, server etc.).
+To use the software:
+
+    As an Agent/Admin: You can access the system via the web interface at http://localhost:3000.
+    As a Normal User: You can interact with the system either through the web interface or by sending emails to ticketsystem8@gmail.com.
+
+Users can create accounts via email, so they don’t need to log in to the web interface to resolve their issues.
+
+In the config.js file, you can add trusted email domains. If someone with a trusted domain sends an email to the system but does not have an account, the system will automatically create one. However, if the domain is not trusted, an admin will need to approve the user in the admin panel.
+
+Additionally, in the config.js file, you can configure other options, such as the maximum number and size of files that can be attached to a ticket.
+
 
 ## License
 

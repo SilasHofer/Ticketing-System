@@ -112,7 +112,7 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
 
 Router.get("/claimTicket", requiresAuth(), async (req, res) => {
     await helpers.assignAgent(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
-    await helpers.changeStatus(req.query.ticketID, "Processed");
+    await helpers.changeStatus(req.query.ticketID, config.status.ticketStatuses[1]);
     email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${req.query.userName} has claimed your Ticket.`)
 
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
@@ -125,7 +125,7 @@ Router.get("/assignAgent", requiresAuth(), async (req, res) => {
     const [userId, userName, userEmail, creatorEmail] = agentInfo.split(',');
 
     await helpers.assignAgent(ticketID, userId, userName, userEmail);
-    await helpers.changeStatus(ticketID, "Processed");
+    await helpers.changeStatus(ticketID, config.status.ticketStatuses[1]);
     email.sendEmailToUser(creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${userName} has been assigned to your Ticket. `)
     res.redirect(`/ticket?ticketID=${ticketID}`)
 });
