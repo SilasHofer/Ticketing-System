@@ -27,7 +27,7 @@ Router.get("", requiresAuth(), async (req, res) => {
     data.title = "Home";
 
     data.name = req.oidc.user.name;
-    var userId = req.oidc.user.user_id;
+    data.userId = req.oidc.user.user_id;
     data.showCategories = await helpers.showCategories();
 
     try {
@@ -35,7 +35,7 @@ Router.get("", requiresAuth(), async (req, res) => {
         if (data.role != "user") {
             data.showTickets = await helpers.showTickets("");
         } else {
-            data.showTickets = await helpers.showTickets(userId);
+            data.showTickets = await helpers.showTickets(data.userId);
         }
 
         // Render the page

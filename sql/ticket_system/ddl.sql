@@ -186,6 +186,7 @@ SELECT
     t.description,
     t.creator_name,
     t.agent_name,
+    t.agent_id,
     DATE_FORMAT(t.created, '%Y-%m-%d %H:%i:%s') AS created_datetime,
     CASE
         WHEN TIMESTAMPDIFF(SECOND, IFNULL(t.updated, t.created), NOW()) < 60 THEN CONCAT(TIMESTAMPDIFF(SECOND, IFNULL(t.updated, t.created), NOW()), ' seconds ago')

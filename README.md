@@ -35,7 +35,7 @@ This could be an architectural diagram or a screenshot of the application.
 
 2. Navigate to the Project Directory:
 
-        cd Ticketing-System-main/
+        cd your-path/Ticketing-System-main/
 
 3. Install Node.js Dependencies:
 
@@ -75,15 +75,20 @@ This could be an architectural diagram or a screenshot of the application.
 
 9. Create admin account
 
-    Use the following credentials to at auth0.com:
+    1. Use the following credentials to at auth0.com:
 
-    Auth0 Email: ticketingsystem821@gmail.com
+        Auth0 Email: ticketingsystem821@gmail.com
 
-    Auth0 Password: m3YbsCRsT3iSBK3
+        Auth0 Password: m3YbsCRsT3iSBK3
 
-    Once logged in, navigate to User Management and then Users.
-    Create a new user by providing an email and password for the admin account.
-    In the list of users, click on the three dots and select Assign Roles, then choose only Admin.
+    2. Once logged in, navigate to User Management and then Users.
+
+    3. Create a new user by providing an email and password for the admin account.
+
+    4. On the user page click Roles and then assign Roles
+
+    5. select Admin and the hit assign
+
 
 10. Log In with the Admin User:
 
@@ -105,7 +110,7 @@ To ensure the software functions correctly, I performed manual testing throughou
 2. Add Category:
 
     1. Log in as an Admin or Agent.
-    2. Navigate to the Admin Panel and select Create Category.
+    2. Navigate to the Admin/Agent Panel and select Create Category.
     3. Enter a Category Name and click Add.
     4. Verify that the Category appears in the table.
     5. Log in as a User and attempt to create a ticket using that category.
@@ -125,9 +130,9 @@ To ensure the software functions correctly, I performed manual testing throughou
     9. Log in as an Admin or Agent and ensure that the ticket is displayed correctly.
 
 4. Send Emails (Note: It may take time for the server to process emails)
-    1. Send an email to ticketsystem8@gmail.com from an account that is not an allowed mail domain (default not bth.se and student.bth.se).
+    1. Send an email to ticketsystem8@gmail.com from an account that is not an allowed mail domain (default not bth.se and student.bth.se) and does not have an account in the system.
     2. Log in as Admin and navigate to the Admin Panel, then go to Account Requests.
-    3. Look for the email address that you just sent from.
+    3. Look for the email address that you just sent from (reload the page to update the table with requests).
     4. Click "No" when prompted, and check the email you receive in response.
     5. Send a new email from the same address but click "Yes" in the Admin Panel this time.
     6. Check your email for the account data. You don’t need to reset the password, but you can if you wish.

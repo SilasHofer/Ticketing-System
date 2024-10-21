@@ -78,7 +78,7 @@
                         </thead>
                         <tbody id="ticket-table-body">
                             <% showTickets.forEach(ticket=> { %>
-                                <tr class="openTicket <% if ((ticket.agent_notification === 1 && role !== 'user') || (ticket.user_notification === 1 && role === 'user')) { %>highlighted-row<% } %>"
+                                <tr class="openTicket <% if ((ticket.agent_notification === 1 && ticket.agent_id == userId ) || (ticket.user_notification === 1 && role === 'user')) { %>highlighted-row<% } %>"
                                     data-ticket-id="<%= ticket.idTickets %>" data-claimed-filter="true">
                                     <td class="filter">
                                         <%= ticket.idTickets %>

@@ -56,7 +56,7 @@
 
                 </div>
                 <div class="status">
-                    <% if (role !='user' && ticket.agent_id===userId) { %>
+                    <% if (role !='user' && ticket.agent_id==userId) { %>
                         <select name='invincibleDropdown'
                             class=" <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
                                             ticket.status === 'Closed' ? 'status-background-color-closed' :

@@ -65,7 +65,9 @@ imap.once('ready', function () {
         // Start listening for new emails using IDLE
         imap.on('mail', function () {
             console.log('New email received, fetching unseen emails.');
-            fetchUnseenEmails();
+            setTimeout(() => {
+                fetchUnseenEmails();
+            }, 2000);
         });
     });
 });
@@ -124,14 +126,14 @@ imap.once('close', function (hasError) {
 });
 
 async function emailReceived(mail) {
+    ticketCreated = "";
     const fromAddress = mail.from?.value?.[0]?.address;
     const users = await auth0.getAllUsers();
     // Extract the email addresses
     const emailAddresses = users.map(user => user.email);
 
     if (emailAddresses.includes(fromAddress)) {
-        ticketCreated = "";
-        const user = users.find(user => user.email === fromAddress);
+        const user = await users.find(user => user.email === fromAddress);
         const userRole = await auth0.UserRole(user.user_id)
         if (userRole[0].name == "user") {
             // Check if the email subject indicates a reply to a ticket
@@ -139,17 +141,18 @@ async function emailReceived(mail) {
             if (ticketId) {
                 ticketData = await helpers.getTicket(ticketId);
                 if (mail.text.split("\n")[0] == "CLOSE") {
-                    email.sendEmailToUser(user.email, 'Ticket Closed', 'Your ticket ' + ticketData.title + ' has ben Closed')
+                    sendEmailToUser(user.email, 'Ticket Closed', 'Your ticket ' + ticketData.title + ' has ben Closed')
                     return await helpers.changeStatus(ticketId, "Closed");
                 }
 
                 if (mail.text.split("\n")[0] == "SOLVED") {
-                    email.sendEmailToUser(user.email, 'Ticket Solved', 'Your ticket ' + ticketData.title + ' has ben Solved')
+                    sendEmailToUser(user.email, 'Ticket Solved', 'Your ticket ' + ticketData.title + ' has ben Solved')
                     return await helpers.changeStatus(ticketId, "Solved");
                 }
                 if (ticketData.status != "Closed" && ticketData.status != "Solved") {
                     // Handle the reply to the existing ticket
                     await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
+                    await helpers.changeNotification(ticketId, 1, 0);
                     sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
                 } else {
                     sendEmailToUser(user.email, `Ticket is ${ticketData.status}`, 'Your comment has not been added');
@@ -262,7 +265,7 @@ function generateValidPassword() {
 async function createAccountFromMail(mail) {
     const password = generateValidPassword();
     const username = mail.split('@')[0];
-    await auth0.createAccount(mail, password, username, 'rol_SbiBHiolJfOexDLM');
+    await auth0.createAccount(mail, password, username, config.role.user);
     const passwordLink = await auth0.getResetPasswordLink(mail);
     sendEmailToUser(mail, 'An account has ben created for you', 'Please shows a password here:\n' + passwordLink + '\n You can already create new tickets by sending an new mail to the system');
 
