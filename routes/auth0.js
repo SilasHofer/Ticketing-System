@@ -154,6 +154,17 @@ async function getAllUsers() {
     return usersResponse.data;
 }
 
+async function UserRole(userID) {
+    const token = await getAccessToken('read:users');
+
+    const rolesResponse = await axios.get(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/users/${userID}/roles`, {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+    return rolesResponse.data;
+}
+
 async function getAgentUsers() {
     const token = await getAccessToken("read:roles");
 
@@ -224,5 +235,6 @@ module.exports = {
     getResetPasswordLink,
     getAgentUsers,
     deleteUser,
-    getUser
+    getUser,
+    UserRole
 };

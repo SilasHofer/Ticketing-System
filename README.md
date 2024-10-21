@@ -38,12 +38,6 @@ This could be an architectural diagram or a screenshot of the application.
 
         cd sql/ticket_system
 
-    Install the MariaDB server (if not already installed):
-
-        sudo apt install mariadb-server
-
-4. Reset the Database:
-
     Run the following command to reset the database:
 
         sudo mariadb --table < reset.sql

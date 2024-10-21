@@ -4,6 +4,8 @@ const Imap = require('node-imap');
 const { simpleParser } = require('mailparser');
 const auth0 = require("./auth0.js");
 const helpers = require("../src/helpers.js");
+const fs = require('fs');
+const path = require('path');
 
 const generatePassword = require('generate-password');
 
@@ -128,38 +130,92 @@ async function emailReceived(mail) {
     const emailAddresses = users.map(user => user.email);
 
     if (emailAddresses.includes(fromAddress)) {
+        ticketCreated = "";
         const user = users.find(user => user.email === fromAddress);
-        // Check if the email subject indicates a reply to a ticket
-        const ticketId = extractTicketIdFromSubject(mail.subject);
-        if (ticketId) {
-            ticketData = await helpers.getTicket(ticketId);
-            if (mail.text.split("\n")[0] == "CLOSE") {
-                email.sendEmailToUser(user.email, 'Ticket Closed', 'Your ticket ' + ticketData.title + ' has ben Closed')
-                return await helpers.changeStatus(ticketId, "Closed");
-            }
-            if (ticketData.status != "Closed" && ticketData.status != "Solved") {
-                // Handle the reply to the existing ticket
-                await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
-                sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
+        const userRole = await auth0.UserRole(user.user_id)
+        if (userRole[0].name == "user") {
+            // Check if the email subject indicates a reply to a ticket
+            const ticketId = extractTicketIdFromSubject(mail.subject);
+            if (ticketId) {
+                ticketData = await helpers.getTicket(ticketId);
+                if (mail.text.split("\n")[0] == "CLOSE") {
+                    email.sendEmailToUser(user.email, 'Ticket Closed', 'Your ticket ' + ticketData.title + ' has ben Closed')
+                    return await helpers.changeStatus(ticketId, "Closed");
+                }
+
+                if (mail.text.split("\n")[0] == "SOLVED") {
+                    email.sendEmailToUser(user.email, 'Ticket Solved', 'Your ticket ' + ticketData.title + ' has ben Solved')
+                    return await helpers.changeStatus(ticketId, "Solved");
+                }
+                if (ticketData.status != "Closed" && ticketData.status != "Solved") {
+                    // Handle the reply to the existing ticket
+                    await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
+                    sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
+                } else {
+                    sendEmailToUser(user.email, `Ticket is ${ticketData.status}`, 'Your comment has not been added');
+                }
             } else {
-                sendEmailToUser(user.email, `Ticket is ${ticketData.status}`, 'Your comment has not been added');
+                // Create a new ticket if no ticket ID found in the subject
+                const ticket = await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
+                ticketCreated = ticket;
+                sendEmailToUser(user.email, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!');
             }
-
         } else {
-            // Create a new ticket if no ticket ID found in the subject
-            const ticket = await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
-            sendEmailToUser(user.email, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!');
+            sendEmailToUser(user.email, `Ticket nor created`, 'Admins and Agents can not create tickets');
         }
-
     } else if (config.mail.allowed_mail_domains.includes(fromAddress.split('@')[1])) {
         await createAccountFromMail(fromAddress);
         const user = users.find(user => user.email === fromAddress);
         await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
+        ticketCreated = ticket;
     } else {
         helpers.createAccountRequest(fromAddress);
-        sendEmailToUser(fromAddress, 'Account request', 'An admin will look att your request to create an account');
+        sendEmailToUser(fromAddress, 'Account request', 'An admin will review your request to create an account. You will need to resend the ticket once an admin accepts your account request');
+    }
+
+    // Process attachments if ticket is created and attachments exist
+    if (ticketCreated !== "" && mail.attachments && mail.attachments.length > 0) {
+        console.log(`Processing ${mail.attachments.length} attachments...`);
+        const maxAttachments = config.file.max_files; // Define your max allowed attachments from config
+        let processedAttachments = 0;
+
+        for (const attachment of mail.attachments) {
+            // Check if the processed attachments count has reached the limit
+            if (processedAttachments >= maxAttachments) {
+                sendEmailToUser(fromAddress, `You can only upload a maximum of ${maxAttachments} attachments.`);
+                break; // Stop processing more attachments
+            }
+
+            // Check file size
+            const fileSize = Buffer.byteLength(attachment.content); // Get the size of the attachment content
+            if (fileSize > config.file.max_file_size * 1024 * 1024) {
+                sendEmailToUser(fromAddress, `Attachment ${attachment.filename} exceeds the size limit of ${config.file.max_file_size} MB.`);
+                continue;
+            }
+
+            // Check MIME type and extension
+            const isMimeTypeAllowed = config.file.allowed_mime_types.includes(attachment.contentType);
+            const isExtensionAllowed = config.file.allowed_extensions.some(type => type === path.extname(attachment.filename).toLowerCase());
+
+            if (!isMimeTypeAllowed || !isExtensionAllowed) {
+                sendEmailToUser(fromAddress, `Attachment ${attachment.filename} is not of an allowed type!`);
+                continue; // Skip this attachment
+            }
+
+            // Generate a unique filename for each attachment
+            const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}-${attachment.filename}`;
+            const filePath = path.join('public/user_files/', fileName);
+
+            // Save the attachment to disk
+            fs.writeFileSync(filePath, attachment.content);  // attachment.content contains the file data
+
+            // Associate the saved file with the ticket
+            await helpers.addFileToTicket(ticketCreated, fileName);
+            processedAttachments++;
+        }
     }
 }
+
 function extractReplyText(mailText, userMail) {
     let new_comment = "";
     let line = "";

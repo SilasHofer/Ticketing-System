@@ -469,7 +469,7 @@ p_id INT,
 p_file_name VARCHAR(200)
 )
 BEGIN
-INSERT INTO `Attachments` (
+INSERT INTO `attachments` (
   `file_name`,
   `ticket_id`
 ) VALUES (
