@@ -14,13 +14,16 @@ This could be an architectural diagram or a screenshot of the application.
 ### Prerequisites
 
 1. Node.js: You need to have Node.js installed on your Ubuntu machine  (version 20.x recommended). You can install it by running:
+
         sudo apt update 
         sudo apt install nodejs
 
 1. npm: You need to have npm installed on your Ubuntu machine. You can install it by running:
+
         sudo apt install npm
 
 2. MariaDB Server: You will also need the MariaDB server. You can install it by running: 
+
         sudo apt install mariadb-server
 
 ### Build
