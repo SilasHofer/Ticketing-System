@@ -22,12 +22,12 @@ const { requiresAuth } = require('express-openid-connect');
 
 Router.get("", requiresAuth(), async (req, res) => {
     let data = {};
-
+    console.log(req.oidc.user)
     data.role = req.oidc.user.role[0];
     data.title = "Home";
 
     data.name = req.oidc.user.name;
-    data.userId = req.oidc.user.user_id;
+    data.userId = req.oidc.user.sub;
     data.showCategories = await helpers.showCategories();
 
     try {
@@ -56,7 +56,7 @@ Router.post("/create-ticket", requiresAuth(), (req, res) => {
 
         (async () => {
             try {
-                const ticketId = await helpers.createTicket(req.oidc.user.user_id, req.body.category, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
+                const ticketId = await helpers.createTicket(req.oidc.user.sub, req.body.category, req.oidc.user.name, req.oidc.user.email, req.body.title, req.body.description)
 
                 for (const file of uploadedFiles) {
                     await helpers.addFileToTicket(ticketId, file); // Function to insert files related to the ticket
@@ -77,7 +77,7 @@ Router.post("/create-ticket", requiresAuth(), (req, res) => {
 Router.get("/ticket", requiresAuth(), async (req, res) => {
     let data = {};
     data.ticket = await helpers.getTicket(req.query.ticketID);
-    if (!data.ticket || req.oidc.user.role[0] == "user" && req.oidc.user.user_id != data.ticket.creator_id) {
+    if (!data.ticket || req.oidc.user.role[0] == "user" && req.oidc.user.sub != data.ticket.creator_id) {
         return res.redirect("/")
     }
     data.role = req.oidc.user.role[0];
@@ -92,7 +92,7 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
     }
     data.availableStatuses = config.status.ticketStatuses;
     data.title = data.ticket.title;
-    data.userId = req.oidc.user.user_id;
+    data.userId = req.oidc.user.sub;
     data.userName = req.oidc.user.name;
     data.userEmail = req.oidc.user.email;
     data.showAttachments = await helpers.getAttachments(req.query.ticketID)
@@ -113,7 +113,7 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
 Router.get("/claimTicket", requiresAuth(), async (req, res) => {
     await helpers.assignAgent(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
     await helpers.changeStatus(req.query.ticketID, config.status.ticketStatuses[1]);
-    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${req.query.userName} has claimed your Ticket.`)
+    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${req.query.userName} has claimed your Ticket.\nYou can reply to comment on the ticket`)
 
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -126,7 +126,7 @@ Router.get("/assignAgent", requiresAuth(), async (req, res) => {
 
     await helpers.assignAgent(ticketID, userId, userName, userEmail);
     await helpers.changeStatus(ticketID, config.status.ticketStatuses[1]);
-    email.sendEmailToUser(creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${userName} has been assigned to your Ticket. `)
+    email.sendEmailToUser(creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${userName} has been assigned to your Ticket.\n You can reply to comment on the ticket `)
     res.redirect(`/ticket?ticketID=${ticketID}`)
 });
 
@@ -149,7 +149,7 @@ Router.post("/create-account", requiresAuth(), async (req, res) => {
 
 });
 Router.get("/change-profile-picture", requiresAuth(), async (req, res) => {
-    auth0.changeProfilePicture(req.oidc.user.user_id, res.query.newProfilePictureUrl)
+    auth0.changeProfilePicture(req.oidc.user.sub, res.query.newProfilePictureUrl)
 
     res.redirect("/account-setting");
 });
@@ -203,6 +203,7 @@ Router.post("/addKnowledge", requiresAuth(), async (req, res) => {
 
 
 Router.get("/changeCategory", requiresAuth(), async (req, res) => {
+    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, `The Category for your ticket  ${req.query.ticketTitle}  has ben changed to ${req.query.categoryName}\n You can reply to comment on the ticket`)
     await helpers.changeCategory(req.query.category_id, req.query.ticketID);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -238,7 +239,6 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
     if (ticket.user_notification != 1 && req.oidc.user.role[0] != "user") {
         helpers.changeNotification(ticket.idTickets, 0, 1);
     }
-    console.log(ticket.creator_email);
     await helpers.addComment(ticket.idTickets, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
     if (hide == false && req.oidc.user.role[0] != "user") {
         email.sendEmailToUser(ticket.creator_email, `Ticket updated TicketID:${ticket.idTickets}`, `Your ticket ${ticket.title} has ben updated\n Comment: ${req.body.comment}\n You can reply to comment on the ticket Or send CLOSE to close the ticket`)
@@ -263,7 +263,7 @@ Router.get("/panel", requiresAuth(), async (req, res) => {
         data.title = "Agent Panel";
     }
     data.error = req.query.error ? req.query.error.replace(/_/g, ' ') : null;
-    data.userId = req.oidc.user.user_id;
+    data.userId = req.oidc.user.sub;
     data.statistics = await helpers.systemStatistics();
     data.showCategories = await helpers.showCategories();
     data.accountRequests = await helpers.getRequestedAccounts();

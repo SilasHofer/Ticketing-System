@@ -12,7 +12,7 @@ const generatePassword = require('generate-password');
 
 
 let transporter = nodemailer.createTransport({
-    service: 'gmail', // You can use any provider like 'yahoo', 'hotmail', 'outlook', etc.
+    service: config.mail.source_email_service, // You can use any provider like 'yahoo', 'hotmail', 'outlook', etc.
     auth: {
         user: config.mail.source_email,   // The email to send from
         pass: config.mail.source_email_password     // The email password or app-specific password
@@ -42,7 +42,7 @@ function sendEmailToUser(to, emailsubject, emailText) {
 const imapConfig = {
     user: config.mail.source_email,
     password: config.mail.source_email_password,
-    host: 'imap.gmail.com',
+    host: config.mail.source_email_host,
     port: 993,
     tls: true,
     authTimeout: 10000,
@@ -166,16 +166,16 @@ async function emailReceived(mail) {
                 // Create a new ticket if no ticket ID found in the subject
                 const ticket = await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
                 ticketCreated = ticket;
-                sendEmailToUser(user.email, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!');
+                sendEmailToUser(user.email, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!\nYou can reply to comment on the ticke');
             }
         } else {
             sendEmailToUser(user.email, `Ticket nor created`, 'Admins and Agents can not create tickets');
         }
     } else if (config.mail.allowed_mail_domains.includes(fromAddress.split('@')[1])) {
-        await createAccountFromMail(fromAddress);
-        const user = users.find(user => user.email === fromAddress);
-        await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
+        const user = await createAccountFromMail(fromAddress);
+        const ticket = await helpers.createTicket(user.userId, 1, user.name, fromAddress, mail.subject, mail.text);
         ticketCreated = ticket;
+        sendEmailToUser(fromAddress, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!\nYou can reply to comment on the ticke');
     } else {
         helpers.createAccountRequest(fromAddress);
         sendEmailToUser(fromAddress, 'Account request', 'An admin will review your request to create an account. You will need to resend the ticket once an admin accepts your account request');
@@ -270,10 +270,10 @@ function generateValidPassword() {
 async function createAccountFromMail(mail) {
     const password = generateValidPassword();
     const username = mail.split('@')[0];
-    await auth0.createAccount(mail, password, username, config.role.user);
+    const user = await auth0.createAccount(mail, password, username, config.role.user);
     const passwordLink = await auth0.getResetPasswordLink(mail);
     sendEmailToUser(mail, 'An account has ben created for you', 'Please shows a password here:\n' + passwordLink + '\n You can already create new tickets by sending an new mail to the system');
-
+    return user;
 }
 
 

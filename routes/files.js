@@ -5,7 +5,7 @@ const config = require('../config/config.js');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'public/user_files/'); // Directory where files will be saved
+        cb(null, config.file.uploads_directory); // Directory where files will be saved
     },
     filename: (req, file, cb) => {
         // Use the original file name, but you can also add a timestamp or a unique ID

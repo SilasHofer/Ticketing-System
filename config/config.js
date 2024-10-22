@@ -4,11 +4,12 @@
 // Read environment variables or provide defaults
 const config = {
     app: {
-        port: process.env.PORT || 3000
+        port: 3000
     },
     file: {
         max_files: 3,
         max_file_size: 2,
+        uploads_directory: 'public/user_files/',
         allowed_mime_types: [
             "image/jpeg",
             "image/png",
@@ -28,6 +29,8 @@ const config = {
             "bth.se",
             "student.bth.se"
         ],
+        source_email_host: 'imap.gmail.com',
+        source_email_service: 'gmail',
         source_email: 'ticketsystem8@gmail.com',
         source_email_password: 'kqwf obws yoth apzu',
     },

@@ -52,6 +52,7 @@ async function createAccount(email, password, name, role_id) {
                 Authorization: `Bearer ${token}`
             }
         });
+        console.log(userResponse.data);
         const userId = userResponse.data.user_id;
         if (role_id != "") {
             await axios.post(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/${role_id}/users`, {
@@ -62,7 +63,7 @@ async function createAccount(email, password, name, role_id) {
                 }
             });
         }
-        return { success: true, message: 'User created and role assigned', userId: userId };
+        return { success: true, message: 'User created and role assigned', userId: userId, name: name };
 
     } catch (error) {
         // Handle 409 Conflict error when the user already exists

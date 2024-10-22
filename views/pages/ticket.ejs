@@ -43,7 +43,7 @@
                     <h4>Category:</h4>
                     <div class="category-text">
                         <select name="invincibleDropdown" onchange="
-                                    window.location='/changeCategory?ticketID=<%=ticket.idTickets%>&category_id='
+                                    window.location='/changeCategory?ticketID=<%=ticket.idTickets%>&ticketTitle=<%=ticket.title%>&creatorEmail=<%=ticket.creator_email%>&categoryName=<%=ticket.category_name%>&category_id='
                         + this.value">
                             <% showCategories.forEach(Category=> { %>
                                 <option value="<%= Category.idCategory %>" <%=ticket.category_id===Category.idCategory
@@ -114,13 +114,13 @@
                     </div>
                     <div class="agent">
                         <h3>Agent</h3>
-                        <% if (role=="admin" ) { %>
+                        <% if (role=="admin" && ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
                             Change Agent:
                             <form method="GET" action="/assignAgent">
                                 <select name="agentInfo" onchange="this.form.submit()">
                                     <% agents.forEach(agent=> { %>
                                         <option
-                                            value="<%= agent.id %>,<%= agent.name %>,<%= agent.email %>,<%= ticket.creator_email %>"
+                                            value="<%= agent.user_id %>,<%= agent.name %>,<%= agent.email %>,<%= ticket.creator_email %>"
                                             <%=agent.name===ticket.agent_name ? 'selected' : '' %>>
                                             <%= agent.name %>
                                         </option>
