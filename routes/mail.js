@@ -22,7 +22,7 @@ let transporter = nodemailer.createTransport({
 function sendEmailToUser(to, emailsubject, emailText) {
     // Define mail options
     const mailOptions = {
-        from: 'ticketsystem8@gmail.com',
+        from: config.mail.source_email,
         to: to,
         subject: emailsubject,
         text: emailText
@@ -140,22 +140,27 @@ async function emailReceived(mail) {
             const ticketId = extractTicketIdFromSubject(mail.subject);
             if (ticketId) {
                 ticketData = await helpers.getTicket(ticketId);
-                if (mail.text.split("\n")[0] == "CLOSE") {
-                    sendEmailToUser(user.email, 'Ticket Closed', 'Your ticket ' + ticketData.title + ' has ben Closed')
-                    return await helpers.changeStatus(ticketId, "Closed");
-                }
+                if (ticketData) {
+                    if (mail.text.split("\n")[0] == "CLOSE") {
+                        sendEmailToUser(user.email, 'Ticket Closed', 'Your ticket ' + ticketData.title + ' has ben Closed')
+                        return await helpers.changeStatus(ticketId, "Closed");
+                    }
 
-                if (mail.text.split("\n")[0] == "SOLVED") {
-                    sendEmailToUser(user.email, 'Ticket Solved', 'Your ticket ' + ticketData.title + ' has ben Solved')
-                    return await helpers.changeStatus(ticketId, "Solved");
+                    if (mail.text.split("\n")[0] == "SOLVED") {
+                        sendEmailToUser(user.email, 'Ticket Solved', 'Your ticket ' + ticketData.title + ' has ben Solved')
+                        return await helpers.changeStatus(ticketId, "Solved");
+                    }
+                    if (ticketData.status != "Closed" && ticketData.status != "Solved") {
+                        // Handle the reply to the existing ticket
+                        await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
+                        await helpers.changeNotification(ticketId, 1, 0);
+                        sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
+                    } else {
+                        sendEmailToUser(user.email, `Ticket is ${ticketData.status}`, 'Your comment has not been added');
+                    }
                 }
-                if (ticketData.status != "Closed" && ticketData.status != "Solved") {
-                    // Handle the reply to the existing ticket
-                    await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
-                    await helpers.changeNotification(ticketId, 1, 0);
-                    sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
-                } else {
-                    sendEmailToUser(user.email, `Ticket is ${ticketData.status}`, 'Your comment has not been added');
+                else {
+                    sendEmailToUser(user.email, `Ticket not available`, `There is no ticket with the id:${ticketId}`);
                 }
             } else {
                 // Create a new ticket if no ticket ID found in the subject
