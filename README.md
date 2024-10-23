@@ -31,10 +31,25 @@ This could be an architectural diagram or a screenshot of the application.
 
 
 
-3. MariaDB Server: You will also need the MariaDB server. You can install it by running: 
+3. MariaDB Server: You will also need the MariaDB server. 
+
+    1. You can install it by running: 
 
         sudo apt update
         sudo apt install mariadb-server
+    
+    2. Initial Configuration
+        sudo mysql_secure_installation
+
+    Enter the following answers during the setup:
+
+    Enter current password for root (enter for none): enter
+    Switch to unix_socket authentication? (y/n): n
+    Change the root password? (y/n): n
+    Remove anonymous users? (y/n): y
+    Disallow root login remotely? (y/n): y
+    Remove test database and access to it? (y/n): y
+    Reload privilege tables now? (y/n): y
 
 ### Build
 
@@ -125,7 +140,6 @@ To ensure the software functions correctly, I performed manual testing throughou
     4. Verify that the Category appears in the table.
     5. Log in as a User and attempt to create a ticket using that category.
     6. Log in as Admin or Agent again and remove the category
-
 
 3. Ticket Creation:
     1. Log in as a User.

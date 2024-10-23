@@ -272,7 +272,7 @@ async function createAccountFromMail(mail) {
     const username = mail.split('@')[0];
     const user = await auth0.createAccount(mail, password, username, config.role.user);
     const passwordLink = await auth0.getResetPasswordLink(mail);
-    sendEmailToUser(mail, 'An account has ben created for you', 'Please shows a password here:\n' + passwordLink + '\n You can already create new tickets by sending an new mail to the system');
+    sendEmailToUser(mail, 'An account has ben created for you', 'The password is:' + password + '\nBut place change the password her:\n' + passwordLink + '\n You can already create new tickets by sending an new mail to the system');
     return user;
 }
 
