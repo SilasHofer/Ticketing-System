@@ -43,7 +43,7 @@
                     <h4>Category:</h4>
                     <div class="category-text">
                         <select name="invincibleDropdown" onchange="
-                                    window.location='/changeCategory?ticketID=<%=ticket.idTickets%>&ticketTitle=<%=ticket.title%>&creatorEmail=<%=ticket.creator_email%>&categoryName=<%=ticket.category_name%>&category_id='
+                                    window.location='/changeCategory?ticketID=<%=ticket.idTickets%>&ticketTitle=<%=ticket.title%>&creatorEmail=<%=ticket.creator_email%>&categoryName='+ encodeURIComponent(this.options[this.selectedIndex].getAttribute('data-category-name')) +'&category_id='
                         + this.value">
                             <% showCategories.forEach(Category=> { %>
                                 <option value="<%= Category.idCategory %>" <%=ticket.category_id===Category.idCategory

@@ -48,21 +48,12 @@ This could be an architectural diagram or a screenshot of the application.
 
 2. Navigate to the Project Directory:
 
-        cd your-path/Ticketing-System-main/
+        cd Ticketing-System-main/
 
 3. Install Node.js Dependencies:
 
         npm install
 
-4. Set Up the Database:
-
-    Navigate to the SQL directory:
-
-        cd sql/ticket_system
-
-    Run the following command to reset the database:
-
-        sudo mariadb --table < reset.sql
 
 5. Then log into MariaDB:
 
@@ -72,40 +63,207 @@ This could be an architectural diagram or a screenshot of the application.
 
     Execute the following commands in the MariaDB shell:
 
-        CREATE USER 'dbadm'@'localhost' IDENTIFIED BY 'P@ssw0rd';
-        GRANT ALL PRIVILEGES ON ticket_system.* TO 'dbadm'@'localhost';
+        CREATE USER 'user_name'@'localhost' IDENTIFIED BY 'your_password';
+        GRANT ALL PRIVILEGES ON ticket_system.* TO 'user_name'@'localhost';
         FLUSH PRIVILEGES;
 
     After executing these commands, type exit to leave the MariaDB shell.
+
+7. Database configuration
+
+    open the file  config/db/ticket_system.json
+
+    modify this 
+        
+        {
+        "host": "localhost",
+        "user": "user_name",
+        "password": "your_password",
+        "database": "ticket_system",
+        "multipleStatements": true
+        }
+
+8. Set Up the Database:
+
+    Navigate to the SQL directory:
+
+        cd sql/ticket_system
+
+    Run the following command to reset the database:
+
+        sudo mariadb --table < reset.sql
 
 7. Return to the Project Root Directory:
 
         cd ../..
 
+9. Create Auth0 account
+
+    Create an account of auth0.com if you don,t have one
+
+    Auth0 Config
+
+    1. Go to the Applications > Applications and create a new application.
+
+        1. Select a name for the application
+
+        2. Select Regular Web Applications
+
+        3. Select Node.js (Express) and then I want to integrate with my app
+
+        4. Set 
+            Allowed Callback URL http://<express_ip>:<port>/callback
+            Allowed Logout URLs http://<express_ip>:<port>
+        5. Hit next until you get "You're all set!" and then go to Applications settings
+
+        6. copy the Domain and scroll down to Allowed Callback URLs
+
+            Add <domain>/login/callback with , between the tow URLs
+    
+    2. Go to Applications > APIs > Auth0 Management API > Machine To Machine Applications
+
+        1. Authorize your application
+
+        2. hit the arrow next to the Authorize button 
+
+        3. add the following permissions
+            
+            1. reade:users
+            
+            2. update:users
+
+            3. delete:users
+
+            4. create:users
+
+            5. create:user_tickets
+
+            6. read:roles
+
+            7. update:roles
+
+            8. create:role_members
+
+            9. delete:role_members
+    
+    3. Go to Actions > Library annd Create Action form scratch
+
+        Name: Add role to tokens
+
+        Trigger: Login/Post Login
+
+        Runtime: Node 19 (Recommended)
+
+        then replace the code with this:
+
+            /**
+            * Handler that will be called during the execution of a PostLogin flow.
+            *
+            * @param {Event} event - Details about the user and the context in which they are logging in.
+            * @param {PostLoginAPI} api - Interface whose methods can be used to change the behavior of the login.
+            */
+            exports.onExecutePostLogin = async (event, api) => {
+            const namespace = 'role';
+                if (event.authorization) {
+                    api.idToken.setCustomClaim(`${namespace}`, event.authorization.roles);
+                    api.accessToken.setCustomClaim(`${namespace}`, event.authorization.roles);
+                }
+            }
+        
+        then Deploy and go to Actions > Triggers
+
+        then click Post-User-Registration and drag an drop the custom action between start and Complete
+
+    4. Go to User Management > Roles and configure thies roles:
+
+        1. user
+        2. agent
+        3. admin
+
+    5. Go to Users
+
+        Create a new user and then assign the admin role to it
+
+        You can create more user her if you whan,t but they need to have one role assigned to them
+        You can also create users via the webinterface with the admin account.
+    
+10. Configure gmail account
+
+    1. Create an gmail account for the system
+
+    2. when logged in to the gmail account go to settings in the top right corner and then See all settings
+
+    3. go to Forwarding and POP/IMAP and the enable IMAP
+
+    4. Klick on the user icon in the top left and then on Manage your Google Account
+
+    5. Go to Security and enable 2-Step Verification
+
+    6. Search for App passwords and then create a new app and save the Generated app password
+
+
+11. System config
+
+    1. In the projekt directory open the file config/config.js
+
+    2. mail config
+
+        mail: {
+        allowed_mail_domains: [
+            "bth.se",
+            "student.bth.se"
+        ],
+        source_email_host: 'imap.gmail.com',
+        source_email_service: 'gmail',
+        source_email: '<your-system-email>',
+        source_email_password: '<your-system-email-passowrd>',
+        }
+    
+    3. auth0 config
+
+            auth0: {
+        AUTH_SECRET: 'b59770593843a845dc847b7e3645541665cb9849d11009327500a15c40c06c1f',
+        AUTH_CLIENTID: '<your_auth0_client_id>',
+        AUTH_CLIENTSECRET: '<your_auth0_client_secret>',
+        AUTH_ISSUERBASEURL: 'https://<your_auth0_domain>',
+        AUTH_CONNECTIONID: '<your_auth0_connections_id>',
+        },
+        role: {
+            user: '<your_user_role_id>',
+            agent: '<your_user_agent_id>',
+            admin: '<your_user_admin_id>'
+        }
+
+    4. file config
+
+        here you can change the settings how you like them to be
+
+        file: {
+        max_files: 3,
+        max_file_size: 2,
+        uploads_directory: 'public/user_files/',
+        allowed_mime_types: [
+            "image/jpeg",
+            "image/png",
+            "application/pdf",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ],
+        allowed_extensions: [
+            ".jpg",
+            ".jpeg",
+            ".png",
+            ".pdf",
+            ".docx"
+        ]
+        }
+
 8. Start the Application:
 
         node index.js
 
-9. Create admin account
-
-    1. Use the following credentials to at auth0.com:
-
-        Auth0 Email: ticketingsystem821@gmail.com
-
-        Auth0 Password: m3YbsCRsT3iSBK3
-
-    2. Once logged in, navigate to User Management and then Users.
-
-    3. Create a new user by providing an email and password for the admin account.
-
-    4. On the user page click Roles and then assign Roles
-
-    5. select Admin and the hit assign
-
-
 10. Log In with the Admin User:
 
-    Use the newly created admin account to log in to the software at http://localhost:3000.
+    Use the newly created admin account to log in to the software at http://localhost:<your_port>.
 
 ### Test
 
