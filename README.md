@@ -77,8 +77,8 @@ This could be an architectural diagram or a screenshot of the application.
         
         {
         "host": "localhost",
-        "user": "user_name",
-        "password": "your_password",
+        "user": "<user_name>",
+        "password": "<your_password>",
         "database": "ticket_system",
         "multipleStatements": true
         }
@@ -112,8 +112,11 @@ This could be an architectural diagram or a screenshot of the application.
         3. Select Node.js (Express) and then I want to integrate with my app
 
         4. Set 
+
             Allowed Callback URL http://<express_ip>:<port>/callback
+
             Allowed Logout URLs http://<express_ip>:<port>
+
         5. Hit next until you get "You're all set!" and then go to Applications settings
 
         6. copy the Domain and scroll down to Allowed Callback URLs
@@ -124,35 +127,35 @@ This could be an architectural diagram or a screenshot of the application.
 
         1. Authorize your application
 
-        2. hit the arrow next to the Authorize button 
+        2. Hit the arrow next to the Authorize button 
 
         3. add the following permissions
             
-            1. reade:users
+            * reade:users
             
-            2. update:users
+            * update:users
 
-            3. delete:users
+            * delete:users
 
-            4. create:users
+            * create:users
 
-            5. create:user_tickets
+            * create:user_tickets
 
-            6. read:roles
+            * read:roles
 
-            7. update:roles
+            * update:roles
 
-            8. create:role_members
+            * create:role_members
 
-            9. delete:role_members
+            * delete:role_members
     
-    3. Go to Actions > Library annd Create Action form scratch
+    3. Go to Actions > Library and Create Action form scratch
 
         Name: Add role to tokens
 
-        Trigger: Login/Post Login
+        Trigger: Login / Post Login
 
-        Runtime: Node 19 (Recommended)
+        Runtime: Node 18 (Recommended)
 
         then replace the code with this:
 
@@ -185,6 +188,7 @@ This could be an architectural diagram or a screenshot of the application.
         Create a new user and then assign the admin role to it
 
         You can create more user her if you whan,t but they need to have one role assigned to them
+
         You can also create users via the webinterface with the admin account.
     
 10. Configure gmail account
@@ -208,54 +212,54 @@ This could be an architectural diagram or a screenshot of the application.
 
     2. mail config
 
-        mail: {
-        allowed_mail_domains: [
-            "bth.se",
-            "student.bth.se"
-        ],
-        source_email_host: 'imap.gmail.com',
-        source_email_service: 'gmail',
-        source_email: '<your-system-email>',
-        source_email_password: '<your-system-email-passowrd>',
-        }
+            mail: {
+            allowed_mail_domains: [
+                "bth.se",
+                "student.bth.se"
+            ],
+            source_email_host: 'imap.gmail.com',
+            source_email_service: 'gmail',
+            source_email: '<your-system-email>',
+            source_email_password: '<your-email-app-passowrd>',
+            }
     
     3. auth0 config
 
             auth0: {
-        AUTH_SECRET: 'b59770593843a845dc847b7e3645541665cb9849d11009327500a15c40c06c1f',
-        AUTH_CLIENTID: '<your_auth0_client_id>',
-        AUTH_CLIENTSECRET: '<your_auth0_client_secret>',
-        AUTH_ISSUERBASEURL: 'https://<your_auth0_domain>',
-        AUTH_CONNECTIONID: '<your_auth0_connections_id>',
-        },
-        role: {
-            user: '<your_user_role_id>',
-            agent: '<your_user_agent_id>',
-            admin: '<your_user_admin_id>'
-        }
+            AUTH_SECRET: 'b59770593843a845dc847b7e3645541665cb9849d11009327500a15c40c06c1f',
+            AUTH_CLIENTID: '<your_auth0_client_id>',
+            AUTH_CLIENTSECRET: '<your_auth0_client_secret>',
+            AUTH_ISSUERBASEURL: 'https://<your_auth0_domain>',
+            AUTH_CONNECTIONID: '<your_auth0_connections_id>',
+            },
+            role: {
+                user: '<your_user_role_id>',
+                agent: '<your_user_agent_id>',
+                admin: '<your_user_admin_id>'
+            }
 
     4. file config
 
         here you can change the settings how you like them to be
 
-        file: {
-        max_files: 3,
-        max_file_size: 2,
-        uploads_directory: 'public/user_files/',
-        allowed_mime_types: [
-            "image/jpeg",
-            "image/png",
-            "application/pdf",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        ],
-        allowed_extensions: [
-            ".jpg",
-            ".jpeg",
-            ".png",
-            ".pdf",
-            ".docx"
-        ]
-        }
+            file: {
+            max_files: 3,
+            max_file_size: 2,
+            uploads_directory: 'public/user_files/',
+            allowed_mime_types: [
+                "image/jpeg",
+                "image/png",
+                "application/pdf",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            ],
+            allowed_extensions: [
+                ".jpg",
+                ".jpeg",
+                ".png",
+                ".pdf",
+                ".docx"
+            ]
+            }
 
 8. Start the Application:
 
