@@ -23,6 +23,6 @@ app.use('/config', express.static("config"));
 
 app.use(indexRoutes);
 
-app.listen(config.app.port, () => {
+app.listen(config.app.port, config.app.server_ip, () => {
     console.log(`Server is on and listening on ${config.app.port}`);
 });

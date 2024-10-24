@@ -4,7 +4,8 @@
 // Read environment variables or provide defaults
 const config = {
     app: {
-        port: 3000
+        port: 3000,
+        server_ip: '127.0.0.1'
     },
     file: {
         max_files: 3,

@@ -133,6 +133,19 @@ It serves as communication software between an agent and a user.
     cd ../..
     ```
 
+8. **Configure express server**:
+
+    1. In the project directory, open the file `config/config.js`.
+
+2. Locate the `app` configuration section and edit the port and server IP to your desired values. (Note: `127.0.0.1` is localhost, which binds the server to your machine only).
+
+    ```javascript
+    app: {
+        port: 3000,         // Set the port you want to use (default: 3000)
+        server_ip: '127.0.0.1'  // Set the server IP (default: '127.0.0.1' for localhost)
+    }
+    ```
+
 9. **Create Auth0 account**:
 
     Create an account on auth0.com if you don’t have one.
