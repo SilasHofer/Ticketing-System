@@ -1,7 +1,7 @@
 {
     "host": "localhost",
-    "user": "dbadm",
-    "password": "P@ssw0rd",
+    "user": "<user_name>",
+    "password": "<your_password>",
     "database": "ticket_system",
     "multipleStatements": true
 }

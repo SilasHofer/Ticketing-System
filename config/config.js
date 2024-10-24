@@ -31,8 +31,8 @@ const config = {
         ],
         source_email_host: 'imap.gmail.com',
         source_email_service: 'gmail',
-        source_email: 'ticketsystem8@gmail.com',
-        source_email_password: 'kqwf obws yoth apzu',
+        source_email: '<your-system-email>',
+        source_email_password: '<your-email-app-passowrd>',
     },
     status: {
         ticketStatuses: [
@@ -44,15 +44,15 @@ const config = {
     },
     auth0: {
         AUTH_SECRET: 'b59770593843a845dc847b7e3645541665cb9849d11009327500a15c40c06c1f',
-        AUTH_CLIENTID: 'n5j0r0Jbr5TdluK5Zd6BDsvgSQnXkaj6',
-        AUTH_CLIENTSECRET: '-edsn5gSDKYBrP52i79UEaxz6stMO4IXezn-gDVm-AaC2tos5mn8qUztWQtjBXIO',
-        AUTH_ISSUERBASEURL: 'https://ticketing-system.eu.auth0.com',
-        AUTH_CONNECTIONID: 'con_XkxeHZk06XP1K2O9',
+        AUTH_CLIENTID: '<your_auth0_client_id>',
+        AUTH_CLIENTSECRET: '<your_auth0_client_secret>',
+        AUTH_ISSUERBASEURL: 'https://<your_auth0_domain>',
+        AUTH_CONNECTIONID: '<your_auth0_connections_id>',
     },
     role: {
-        user: 'rol_noPghTuFtxv0p9Tc',
-        agent: 'rol_NJdhv6EIRy437s4h',
-        admin: 'rol_PDVEvsdkJ7mlG1BO'
+        user: '<your_user_role_id>',
+        agent: '<your_user_agent_id>',
+        admin: '<your_user_admin_id>'
     }
 };
 
