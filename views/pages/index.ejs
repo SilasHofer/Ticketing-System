@@ -36,16 +36,18 @@
                                 <% } }) %>
 
                         </select>
-                        Allowed file types: JPEG, PNG, PDF, DOCX | Max file size: 2 MB each | Max 3 files. <br>
-                        <label class="custom-file-upload">
-                            add a file/picture
-                            <input type="file" id="myFile" name="filename" multiple>
-                        </label>
-                        <div id="imageContainer"></div>
-                        <span id="file-name">No file chosen</span>
+                        Allowed file types: <%= fileSettings.allowed_extensions.map(ext=> ext.replace('.',
+                            '').toUpperCase()).join(', ') %> | Max file size: <%= fileSettings.max_file_size%> MB
+                                each | Max <%= fileSettings.max_files %> files. <br>
+                                    <label class="custom-file-upload">
+                                        add a file/picture
+                                        <input type="file" id="myFile" name="filename" multiple>
+                                    </label>
+                                    <div id="imageContainer"></div>
+                                    <span id="file-name">No file chosen</span>
 
-                        <button type="submit" class="btn">Add</button>
-                        <button type="button" class="btn cancel" id="closeAddForm">Close</button>
+                                    <button type="submit" class="btn">Add</button>
+                                    <button type="button" class="btn cancel" id="closeAddForm">Close</button>
                     </form>
                 </div>
             </div>

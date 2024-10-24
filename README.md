@@ -37,6 +37,13 @@ This could be an architectural diagram or a screenshot of the application.
 
         sudo apt update
         sudo apt install mariadb-server
+
+4. git: You will also need the git. 
+
+    You can install it by running: 
+
+        sudo apt update
+        sudo apt install git
     
 
 ### Build
@@ -44,14 +51,12 @@ This could be an architectural diagram or a screenshot of the application.
 
 1. Download the Project:
 
-    Download the zip file from GitHub and extract it to your desired destination on your Unix machine.
+        git clone <repository-url>
 
-2. Navigate to the Project Directory:
-
-        cd Ticketing-System-main/
-
-3. Install Node.js Dependencies:
-
+3. Install Node.js Dependencies:    
+    
+    go to the directory where you just cloned the repository
+    
         npm install
 
 
@@ -304,7 +309,7 @@ To ensure the software functions correctly, I performed manual testing throughou
     9. Log in as an Admin or Agent and ensure that the ticket is displayed correctly.
 
 4. Send Emails (Note: It may take time for the server to process emails)
-    1. Send an email to ticketsystem8@gmail.com from an account that is not an allowed mail domain (default not bth.se and student.bth.se) and does not have an account in the system.
+    1. Send an email to <your-system-mail> from an account that is not an allowed mail domain (default not bth.se and student.bth.se) and does not have an account in the system.
     2. Log in as Admin and navigate to the Admin Panel, then go to Account Requests.
     3. Look for the email address that you just sent from (reload the page to update the table with requests).
     4. Click "No" when prompted, and check the email you receive in response.
@@ -323,8 +328,8 @@ To ensure the software functions correctly, I performed manual testing throughou
 
 To use the software:
 
-1. As an Agent/Admin: You can access the system via the web interface at http://localhost:3000.
-2. As a Normal User: You can interact with the system either through the web interface or by sending emails to ticketsystem8@gmail.com.
+1. As an Agent/Admin: You can access the system via the web interface at http://localhost:<your_port>.
+2. As a Normal User: You can interact with the system either through the web interface or by sending emails to <your-system-mail>.
 
 Users can create accounts via email, so they don’t need to log in to the web interface to resolve their issues.
 

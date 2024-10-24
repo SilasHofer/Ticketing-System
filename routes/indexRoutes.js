@@ -26,6 +26,10 @@ Router.get("", requiresAuth(), async (req, res) => {
     data.role = req.oidc.user.role[0];
     data.title = "Home";
 
+    data.fileSettings = config.file;
+
+    console.log(data.fileSettings.max_file_size)
+
     data.name = req.oidc.user.name;
     data.userId = req.oidc.user.sub;
     data.showCategories = await helpers.showCategories();
@@ -63,7 +67,7 @@ Router.post("/create-ticket", requiresAuth(), (req, res) => {
                 }
 
 
-                email.sendEmailToUser(req.oidc.user.email, `Ticket Created TicketID:${ticketId}`, 'Your ticket ' + req.body.title + ' has been successfully created!')
+                email.sendEmailToUser(req.oidc.user.email, `Ticket Created TicketID:${ticketId}`, 'Your ticket ' + req.body.title + ' has been successfully created!\nYou can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status')
 
                 res.redirect("/")
             } catch (error) {
@@ -113,7 +117,7 @@ Router.get("/ticket", requiresAuth(), async (req, res) => {
 Router.get("/claimTicket", requiresAuth(), async (req, res) => {
     await helpers.assignAgent(req.query.ticketID, req.query.userID, req.query.userName, req.query.userEmail);
     await helpers.changeStatus(req.query.ticketID, config.status.ticketStatuses[1]);
-    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${req.query.userName} has claimed your Ticket.\nYou can reply to comment on the ticket`)
+    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${req.query.userName} has claimed your Ticket.\nYou can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status`)
 
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -126,7 +130,7 @@ Router.get("/assignAgent", requiresAuth(), async (req, res) => {
 
     await helpers.assignAgent(ticketID, userId, userName, userEmail);
     await helpers.changeStatus(ticketID, config.status.ticketStatuses[1]);
-    email.sendEmailToUser(creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${userName} has been assigned to your Ticket.\n You can reply to comment on the ticket `)
+    email.sendEmailToUser(creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, ` ${userName} has been assigned to your Ticket.\n You can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status `)
     res.redirect(`/ticket?ticketID=${ticketID}`)
 });
 
@@ -203,7 +207,7 @@ Router.post("/addKnowledge", requiresAuth(), async (req, res) => {
 
 
 Router.get("/changeCategory", requiresAuth(), async (req, res) => {
-    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, `The Category for your ticket  ${req.query.ticketTitle}  has ben changed to ${req.query.categoryName}\n You can reply to comment on the ticket`)
+    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, `The Category for your ticket  ${req.query.ticketTitle}  has ben changed to ${req.query.categoryName}\n You can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status`)
     await helpers.changeCategory(req.query.category_id, req.query.ticketID);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -215,8 +219,17 @@ Router.get("/closeTicket", requiresAuth(), async (req, res) => {
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
 
+Router.get("/solveTicket", requiresAuth(), async (req, res) => {
+    await helpers.changeStatus(req.query.ticketID, "Solved");
+    email.sendEmailToUser(req.query.creatorEmail, 'Ticket Closed', 'Your ticket ' + req.query.ticketTitle + ' has ben Solved')
+
+    res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
+});
+
+
+
 Router.get("/changeStatus", requiresAuth(), async (req, res) => {
-    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, `The Status for your ticket  ${req.query.ticketTitle}  has ben changed to ${req.query.status}\n You can reply to comment on the ticket`)
+    email.sendEmailToUser(req.query.creatorEmail, `Ticket updated TicketID:${req.query.ticketID}`, `The Status for your ticket  ${req.query.ticketTitle}  has ben changed to ${req.query.status}\n You can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status`)
     await helpers.changeStatus(req.query.ticketID, req.query.status);
     res.redirect(`/ticket?ticketID=${req.query.ticketID}`)
 });
@@ -241,7 +254,7 @@ Router.post("/addComment", requiresAuth(), async (req, res) => {
     }
     await helpers.addComment(ticket.idTickets, req.body.userName, req.body.comment, hide, req.oidc.user.role[0])
     if (hide == false && req.oidc.user.role[0] != "user") {
-        email.sendEmailToUser(ticket.creator_email, `Ticket updated TicketID:${ticket.idTickets}`, `Your ticket ${ticket.title} has ben updated\n Comment: ${req.body.comment}\n You can reply to comment on the ticket Or send CLOSE to close the ticket`)
+        email.sendEmailToUser(ticket.creator_email, `Ticket updated TicketID:${ticket.idTickets}`, `Your ticket ${ticket.title} has ben updated\n Comment: ${req.body.comment}\n You can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status`)
     }
 
     res.redirect(`/ticket?ticketID=${ticket.idTickets}`)

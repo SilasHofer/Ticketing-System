@@ -154,7 +154,7 @@ async function emailReceived(mail) {
                         // Handle the reply to the existing ticket
                         await helpers.addComment(ticketId, user.name, extractReplyText(mail.text, fromAddress), false, 'user');
                         await helpers.changeNotification(ticketId, 1, 0);
-                        sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added');
+                        sendEmailToUser(user.email, `Reply Received TicketID:${ticketId}`, 'Your comment has been successfully been added.\nYou can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status');
                     } else {
                         sendEmailToUser(user.email, `Ticket is ${ticketData.status}`, 'Your comment has not been added');
                     }
@@ -166,7 +166,7 @@ async function emailReceived(mail) {
                 // Create a new ticket if no ticket ID found in the subject
                 const ticket = await helpers.createTicket(user.user_id, 1, user.name, user.email, mail.subject, mail.text);
                 ticketCreated = ticket;
-                sendEmailToUser(user.email, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!\nYou can reply to comment on the ticke');
+                sendEmailToUser(user.email, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!\nYou can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status');
             }
         } else {
             sendEmailToUser(user.email, `Ticket nor created`, 'Admins and Agents can not create tickets');
@@ -175,7 +175,7 @@ async function emailReceived(mail) {
         const user = await createAccountFromMail(fromAddress);
         const ticket = await helpers.createTicket(user.userId, 1, user.name, fromAddress, mail.subject, mail.text);
         ticketCreated = ticket;
-        sendEmailToUser(fromAddress, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!\nYou can reply to comment on the ticke');
+        sendEmailToUser(fromAddress, `Ticket Created TicketID:${ticket}`, 'Your ticket ' + mail.subject + ' has been successfully created!\nYou can reply to add a comment on the ticket Or send CLOSE/SOLVED to change the ticket status');
     } else {
         helpers.createAccountRequest(fromAddress);
         sendEmailToUser(fromAddress, 'Account request', 'An admin will review your request to create an account. You will need to resend the ticket once an admin accepts your account request');
@@ -272,7 +272,7 @@ async function createAccountFromMail(mail) {
     const username = mail.split('@')[0];
     const user = await auth0.createAccount(mail, password, username, config.role.user);
     const passwordLink = await auth0.getResetPasswordLink(mail);
-    sendEmailToUser(mail, 'An account has ben created for you', 'The password is:' + password + '\nBut place change the password her:\n' + passwordLink + '\n You can already create new tickets by sending an new mail to the system');
+    sendEmailToUser(mail, 'An account has been created for you', 'The password is: ' + password + '\nPlease change your password here:\n' + passwordLink + '\nYou can now create new tickets by sending an email to the system.');
     return user;
 }
 

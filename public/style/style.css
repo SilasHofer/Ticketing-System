@@ -70,10 +70,6 @@
           padding: 15px, 20px;
         }
 
-        .status-indicator {
-          width: 100%;
-          margin: 0;
-        }
 
         .top-text {
           font-size: 50px;
@@ -878,6 +874,8 @@
           border-radius: 20px;
           padding: 10px;
 
+          margin-top: auto;
+          margin-bottom: auto;
         }
 
         option {
@@ -1233,7 +1231,32 @@
 
         }
 
+        .green-button {
+          background-color: green !important;
+        }
+
+        .green-button:hover {
+          background-color: rgb(0, 71, 0) !important;
+        }
+
+        .button-group {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          width: 45%;
+          /* Stack the buttons vertically */
+        }
+
+        .status-actions-container {
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          gap: 20px;
+          /* Space between status and buttons */
+        }
+
         .red-button {
+          display: block;
           white-space: nowrap;
           margin-left: 10px;
           font-weight: bold;

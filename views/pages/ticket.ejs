@@ -73,24 +73,33 @@
                                 <% }) %>
                         </select>
                         <% } else { %>
-                            <b
-                                class="status-indicator <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
+                            <div class="status-actions-container">
+                                <b
+                                    class="status-indicator <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
                                             ticket.status === 'Closed' ? 'status-background-color-closed' :
                                             ticket.status === 'Processed' ? 'status-background-color-processed' :
                                             ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>">
-                                <%= ticket.status %>
-                            </b>
-                            <% } %>
+                                    <%= ticket.status %>
+                                </b>
+                                <% } %>
 
-                                <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
-                                    <a class="red-button" href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
+                                    <% if (ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
+                                        <div class="button-group">
+                                            <a class="red-button" href=" /closeTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
                     <%=ticket.creator_email %>&ticketTitle=<%= ticket.title %> %>"
-                                        onclick="return confirm('Are you sure you want to close this ticket?');">
-                                        Close Ticket
-                                    </a>
-                                    <% } else {%>
-                                        <%= ticket.status_timestamp %>
-                                            <% } %>
+                                                onclick="return confirm('Are you sure you want to close this ticket?');">
+                                                Close Ticket
+                                            </a>
+                                            <a class="red-button green-button" href=" /solveTicket?ticketID=<%=ticket.idTickets%>&creatorEmail=
+                                                        <%=ticket.creator_email %>&ticketTitle=<%= ticket.title %> %>"
+                                                onclick="return confirm('Are you sure this ticket is salved?');">
+                                                Solve Ticket
+                                            </a>
+                                        </div>
+                                        <% } else {%>
+                                            <%= ticket.status_timestamp %>
+                                                <% } %>
+                            </div>
                 </div>
             </div>
             <div class=" ticket-bottom-row">

@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => {
         // Use the original file name, but you can also add a timestamp or a unique ID
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const originalName = file.originalname.replace(path.extname(file.originalname), ''); // Get the original name without extension
+        const originalName = Buffer.from(file.originalname, 'latin1').toString('utf-8').replace(path.extname(file.originalname), ''); // Get the original name without extension
         const extension = path.extname(file.originalname); // Get the extension
         cb(null, `${originalName}-${uniqueSuffix}${extension}`); // Retain original name and add unique suffix
     }

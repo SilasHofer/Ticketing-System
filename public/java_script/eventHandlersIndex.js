@@ -152,12 +152,50 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+function parseTimeAgo(timeString) {
+    // Split the string into number and unit (e.g., "4 days ago" becomes ["4", "days"])
+    const timeParts = timeString.match(/(\d+)\s(\w+)\sago/);
+
+    if (!timeParts) return 0; // In case parsing fails, treat it as 0 time difference
+
+    const value = parseInt(timeParts[1], 10);
+    const unit = timeParts[2].toLowerCase();
+
+    // Convert to minutes based on the unit
+    switch (unit) {
+        case 'seconds':
+            return value;
+        case 'minutes':
+            return value * 60; // convert hours to minutes
+        case 'hours':
+            return value * 60 * 60; // convert days to minutes
+        case 'days':
+            return value * 60 * 60 * 24; // convert weeks to minutes
+        case 'months':
+            return value * 60 * 60 * 24; // rough conversion for months
+        case 'years':
+            return value * 60 * 60 * 24 * 365; // rough conversion for years
+        default:
+            return 0; // If an unrecognized unit is found, default to 0
+    }
+}
+
 function sortTableByColumn(table, columnIndex, direction) {
     const rowsArray = Array.from(table.querySelectorAll("tbody tr"));
 
     rowsArray.sort((rowA, rowB) => {
         const cellA = rowA.children[columnIndex].innerText.toLowerCase();
         const cellB = rowB.children[columnIndex].innerText.toLowerCase();
+
+
+        // Check if cellA or cellB are time-ago strings and convert them
+        const timeA = parseTimeAgo(cellA);
+        const timeB = parseTimeAgo(cellB);
+
+        // If both are time-ago strings, sort based on that
+        if (timeA !== null && timeB !== null) {
+            return direction * (timeA - timeB);
+        }
 
         // Check if the column is numeric and sort accordingly
         const aIsNumeric = !isNaN(cellA);
