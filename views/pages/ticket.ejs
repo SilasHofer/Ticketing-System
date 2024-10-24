@@ -56,24 +56,24 @@
 
                 </div>
                 <div class="status">
-                    <% if (role !='user' && ticket.agent_id==userId) { %>
-                        <select name='invincibleDropdown'
-                            class=" <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
+                    <div class="status-actions-container">
+                        <% if (role !='user' && ticket.agent_id==userId || role=='admin' ) { %>
+                            <select name='invincibleDropdown'
+                                class=" <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
                                             ticket.status === 'Closed' ? 'status-background-color-closed' :
                                             ticket.status === 'Processed' ? 'status-background-color-processed' :
                                             ticket.status === 'Created' ? 'status-background-color-created' : 'status-background-color-unknown' %>"
-                            onchange="
+                                onchange="
                         window.location='/changeStatus?ticketID=<%=ticket.idTickets%>&creatorEmail=<%=ticket.creator_email %>&ticketTitle=<%= ticket.title %>&status='
                         + this.value ">
-                            <% availableStatuses.forEach(status=> { %>
-                                <option value="<%= status %>" <%=ticket.status===status ? 'selected' : '' %>><%= status
-                                        %>
-                                        <%=ticket.status===status ? '▼' : '' %>
-                                </option>
-                                <% }) %>
-                        </select>
-                        <% } else { %>
-                            <div class="status-actions-container">
+                                <% availableStatuses.forEach(status=> { %>
+                                    <option value="<%= status %>" <%=ticket.status===status ? 'selected' : '' %>><%=
+                                            status %>
+                                            <%=ticket.status===status ? '▼' : '' %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                            <% } else { %>
                                 <b
                                     class="status-indicator <%= ticket.status === 'Solved' ? 'status-background-color-solved' :
                                             ticket.status === 'Closed' ? 'status-background-color-closed' :
@@ -99,7 +99,7 @@
                                         <% } else {%>
                                             <%= ticket.status_timestamp %>
                                                 <% } %>
-                            </div>
+                    </div>
                 </div>
             </div>
             <div class=" ticket-bottom-row">
@@ -126,6 +126,7 @@
                         <% if (role=="admin" && ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
                             Change Agent:
                             <form method="GET" action="/assignAgent">
+                                <option value="" disabled selected hidden>Select an agent</option>
                                 <select name="agentInfo" onchange="this.form.submit()">
                                     <% agents.forEach(agent=> { %>
                                         <option

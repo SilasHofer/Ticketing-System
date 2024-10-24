@@ -22,13 +22,11 @@ const { requiresAuth } = require('express-openid-connect');
 
 Router.get("", requiresAuth(), async (req, res) => {
     let data = {};
-    console.log(req.oidc.user)
     data.role = req.oidc.user.role[0];
     data.title = "Home";
 
     data.fileSettings = config.file;
 
-    console.log(data.fileSettings.max_file_size)
 
     data.name = req.oidc.user.name;
     data.userId = req.oidc.user.sub;

@@ -56,7 +56,7 @@ This could be an architectural diagram or a screenshot of the application.
 3. Install Node.js Dependencies:    
     
     go to the directory where you just cloned the repository
-    
+
         npm install
 
 
@@ -87,6 +87,10 @@ This could be an architectural diagram or a screenshot of the application.
         "database": "ticket_system",
         "multipleStatements": true
         }
+
+    save and return back:
+
+        cd ../..
 
 8. Set Up the Database:
 
@@ -126,17 +130,19 @@ This could be an architectural diagram or a screenshot of the application.
 
         6. copy the Domain and scroll down to Allowed Callback URLs
 
-            Add <domain>/login/callback with , between the tow URLs
+            Add http://<domain>/login/callback with , between the tow URLs
+        
+        7. click Save
     
     2. Go to Applications > APIs > Auth0 Management API > Machine To Machine Applications
 
         1. Authorize your application
 
-        2. Hit the arrow next to the Authorize button 
+        2. click the arrow next to the Authorize button 
 
         3. add the following permissions
             
-            * reade:users
+            * read:users
             
             * update:users
 
@@ -153,6 +159,8 @@ This could be an architectural diagram or a screenshot of the application.
             * create:role_members
 
             * delete:role_members
+        
+        4. Click Update
     
     3. Go to Actions > Library and Create Action form scratch
 
@@ -180,7 +188,7 @@ This could be an architectural diagram or a screenshot of the application.
         
         then Deploy and go to Actions > Triggers
 
-        then click Post-User-Registration and drag an drop the custom action between start and Complete
+        then click Post-login and drag an drop the custom action between start and Complete
 
     4. Go to User Management > Roles and configure thies roles:
 
@@ -200,9 +208,9 @@ This could be an architectural diagram or a screenshot of the application.
 
     1. Create an gmail account for the system
 
-    2. when logged in to the gmail account go to settings in the top right corner and then See all settings
+    2. When logged in to the gmail account go to settings in the top right corner and then See all settings
 
-    3. go to Forwarding and POP/IMAP and the enable IMAP
+    3. go to Forwarding and POP/IMAP and the enable IMAP. Hit Save Changes
 
     4. Klick on the user icon in the top left and then on Manage your Google Account
 
@@ -242,6 +250,8 @@ This could be an architectural diagram or a screenshot of the application.
                 agent: '<your_user_agent_id>',
                 admin: '<your_user_admin_id>'
             }
+
+        Need to explane where alle the addres are found
 
     4. file config
 
