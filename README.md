@@ -6,7 +6,7 @@
 This is a ticket system for companies where users can submit tickets for agents to review and then solve. 
 It serves as communication software between an agent and a user.
 
-![Example picture](https://github.com/SilasHofer/Ticketing-System/blob/main/readme-picture-2.png)
+![Example picture](https://github.com/SilasHofer/Ticketing-System/blob/main/readme-picture-1.png)
 
 ![Example picture](https://github.com/SilasHofer/Ticketing-System/blob/main/readme-picture-2.png)
 
