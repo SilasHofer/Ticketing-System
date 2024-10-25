@@ -19,8 +19,29 @@ It serves as communication software between an agent and a user.
     ```bash
     node -v # (version 18.x or newer)
     npm -v  # (version 9.2 or newer)
-    sudo mariadb # It is installed when you get into the mariadb console (MariaDB [(none)]>) then exit with exit
+    mariadb --version # (version 15.1 or newer)
     ```
+
+    If any of these commands return an error or indicate that the software is not found, it means the respective software is not installed.
+
+    If MariaDB is installed, verify that the service is running properly by executing:
+
+    ```bash
+    sudo systemctl status mariadb
+    ```
+
+    You should see output indicating that the service is **active (running)**. If it is not running, you can start it with the following command:
+
+    ```bash
+    sudo systemctl start mariadb
+    ```
+
+    To ensure that MariaDB starts automatically on boot, you can enable the service with:
+
+    ```bash
+    sudo systemctl enable mariadb
+    ```
+
 
 1. **npm**: You need to have npm installed on your Ubuntu machine. You can install it by running:
 
@@ -91,7 +112,11 @@ It serves as communication software between an agent and a user.
     FLUSH PRIVILEGES;
     ```
 
-    After executing these commands, type exit to leave the MariaDB shell.
+    Replace `<user_name>` with your chosen username.
+
+    Replace `<your_password>` with your chosen password.
+
+    After executing these commands, type **exit** to leave the MariaDB shell.
 
 7. Database configuration
 
@@ -106,6 +131,12 @@ It serves as communication software between an agent and a user.
         "multipleStatements": true
     }
     ```
+
+
+
+    Replace `<user_name>` with the username you created.
+
+    Replace `<your_password>` with the password you created.
 
     Save and return back:
 
@@ -164,8 +195,8 @@ It serves as communication software between an agent and a user.
         4. Set 
 
         ```plaintext
-        Allowed Callback URL http://<express_ip>:<port>/callback
-        Allowed Logout URLs http://<express_ip>:<port>
+        Allowed Callback URL http://<server_ip>:<port>/callback
+        Allowed Logout URLs http://<server_ip>:<port>
         ```
 
         5. Hit next until you get "You're all set!" and then go to **Applications settings**.
@@ -275,9 +306,9 @@ It serves as communication software between an agent and a user.
         }
         ```
 
-        Replace <your-system-email> with the email address you just created
+        Replace `<your-system-email>` with the email address you just created
 
-        Replace <your-email-app-password> with the app password you just generated
+        Replace `<your-email-app-password>` with the app password you just generated
     
     3. **Auth0 config**:
 
@@ -298,19 +329,19 @@ It serves as communication software between an agent and a user.
 
         1. Login to the auth0 account and go to **Applications > Applications** and on the application you created before.
 
-        2. In Settings you se the information you need for this:
+        2. In Settings you see the information you need for this:
 
-        - Replace `<your_auth0_client_id>` with the Client ID.
+            - Replace `<your_auth0_client_id>` with the Client ID.
 
-        - Replace `<your_auth0_client_secret>` with the Client Secret.
+            - Replace `<your_auth0_client_secret>` with the Client Secret.
 
-        - Replace `<your_auth0_domain>` with the Domain. (Note: Do not remove the https://)
+            - Replace `<your_auth0_domain>` with the Domain. (Note: Do not remove the https://)
 
         3. To find `<your_auth0_connection_id>`: 
 
             1. Go to  **Authentication > Database** and select  **Username-Password-Authentication**.
 
-            2. Then replace `<your_auth0_connections_id>` with the **Identifier** you se an that page. (Note: it should start with **con_**)
+            2. Then replace `<your_auth0_connections_id>` with the **Identifier** you see an that page. (Note: it should start with **con_**)
         
         4. Get Role IDs:
 
@@ -354,7 +385,7 @@ It serves as communication software between an agent and a user.
 
 10. **Log In with the Admin User**:
 
-    Use the newly created admin account to log in to the software at `http://localhost:<your_port>`.
+    Use the newly created admin account to log in to the software at `http://<server_ip>:<your_port>`.
 
 ### Test
 
@@ -391,7 +422,7 @@ To ensure the software functions correctly, I performed manual testing throughou
     9. Log in as an Admin or Agent and ensure that the ticket is displayed correctly.
 
 4. Send Emails (Note: It may take time for the server to process emails)
-    1. Send an email to <your-system-mail> from an account that is not an allowed mail domain (default not bth.se and student.bth.se) and does not have an account in the system.
+    1. Send an email to `<your-system-mail>` from an account that is not an allowed mail domain (default not bth.se and student.bth.se) and does not have an account in the system.
     2. Log in as Admin and navigate to the Admin Panel, then go to Account Requests.
     3. Look for the email address that you just sent from (reload the page to update the table with requests).
     4. Click "No" when prompted, and check the email you receive in response.
@@ -410,8 +441,8 @@ To ensure the software functions correctly, I performed manual testing throughou
 
 To use the software:
 
-1. As an Agent/Admin: You can access the system via the web interface at http://localhost:<your_port>.
-2. As a Normal User: You can interact with the system either through the web interface or by sending emails to <your-system-mail>.
+1. As an Agent/Admin: You can access the system via the web interface at http://`<server_ip>`:`<your_port>`.
+2. As a Normal User: You can interact with the system either through the web interface or by sending emails to `<your-system-mail>`.
 
 Users can create accounts via email, so they don’t need to log in to the web interface to resolve their issues.
 
