@@ -478,6 +478,7 @@ To ensure the software functions correctly, I performed manual testing throughou
 To use the software:
 
 1. As an Agent/Admin: You can access the system via the web interface at http://`<server_ip>`:`<your_port>`.
+
     Note: When using the IP address `127.0.0.1`, replace `<server_ip>` with `localhost`.
 2. As a Normal User: You can interact with the system either through the web interface or by sending emails to `<your-system-mail>`.
 
