@@ -163,10 +163,10 @@ It serves as communication software between an agent and a user.
 
         4. Set 
 
-           ```plaintext
-            Allowed Callback URL http://<express_ip>:<port>/callback
-            Allowed Logout URLs http://<express_ip>:<port>
-            ```
+        ```plaintext
+        Allowed Callback URL http://<express_ip>:<port>/callback
+        Allowed Logout URLs http://<express_ip>:<port>
+        ```
 
         5. Hit next until you get "You're all set!" and then go to **Applications settings**.
 
@@ -262,7 +262,7 @@ It serves as communication software between an agent and a user.
 
     2. **Mail config**:
 
-            ```javascript
+        ```javascript
         mail: {
             allowed_mail_domains: [
                 "bth.se",
@@ -281,7 +281,7 @@ It serves as communication software between an agent and a user.
     
     3. **Auth0 config**:
 
-            ```javascript
+        ```javascript
         auth0: {
             AUTH_SECRET: 'b59770593843a845dc847b7e3645541665cb9849d11009327500a15c40c06c1f',
             AUTH_CLIENTID: '<your_auth0_client_id>',
