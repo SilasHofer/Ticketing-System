@@ -205,7 +205,7 @@ It serves as communication software between an agent and a user.
 
         then replace the code with this:
 
-            ```javascript
+        ```javascript
         /**
         * Handler that will be called during the execution of a PostLogin flow.
         *
@@ -221,7 +221,7 @@ It serves as communication software between an agent and a user.
         }
         ```
         
-        Then deploy and go to **Actions > Triggers**.
+        Then **deploy** and go to **Actions > Triggers**.
 
         Click **Post-login** and drag and drop the custom action between **start** and **Complete**.
 
@@ -275,6 +275,9 @@ It serves as communication software between an agent and a user.
         }
         ```
 
+        Replace <your-system-email> with the email address you just created
+
+        Replace <your-email-app-password> with the app password you just generated
     
     3. **Auth0 config**:
 
@@ -288,12 +291,35 @@ It serves as communication software between an agent and a user.
         },
         role: {
             user: '<your_user_role_id>',
-            agent: '<your_user_agent_id>',
-            admin: '<your_user_admin_id>'
+            agent: '<your_agent_role_id>',
+            admin: '<your_admin_role_id>'
         }
         ```
 
-        (Need to explain where all the addresses are found)
+        1. Login to the auth0 account and go to **Applications > Applications** and on the application you created before.
+
+        2. In Settings you se the information you need for this:
+
+        - Replace `<your_auth0_client_id>` with the Client ID.
+
+        - Replace `<your_auth0_client_secret>` with the Client Secret.
+
+        - Replace `<your_auth0_domain>` with the Domain. (Note: Do not remove the https://)
+
+        3. To find `<your_auth0_connection_id>`: 
+
+            1. Go to  **Authentication > Database** and select  **Username-Password-Authentication**.
+
+            2. Then replace `<your_auth0_connections_id>` with the **Identifier** you se an that page. (Note: it should start with **con_**)
+        
+        4. Get Role IDs:
+
+            1. Go to **User Management > Roles** and click on each role.
+
+            2. Copy the **Role ID** for each role (Note: it should start with **rol_**)
+
+            3. And replace `<your_user_role_id>` ,  `<your_agent_role_id>` and `<your_admin_role_id>` with the correct role ID.
+        
 
     4. **File config**:
 
