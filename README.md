@@ -190,6 +190,8 @@ Make sure to choose the option that best suits your needs.
     }
     ```
 
+    Note: This port and server IP address are recommended because choosing another IP address and port can create errors with Auth0.
+
 9. **Create Auth0 account**:
 
     Create an account on auth0.com if you don’t have one.
@@ -211,6 +213,8 @@ Make sure to choose the option that best suits your needs.
         Allowed Callback URL http://<server_ip>:<port>/callback
         Allowed Logout URLs http://<server_ip>:<port>
         ```
+
+        Note: When using the IP address `127.0.0.1`, replace `<server_ip>` with `localhost`.
 
         5. Hit next until you get "You're all set!" and then **go to Applications settings**.
 
@@ -238,7 +242,6 @@ Make sure to choose the option that best suits your needs.
             - `read:roles`
             - `update:roles`
             - `create:role_members`
-            - `delete:role_members`
         
         4. Click **Update**.
     
@@ -418,6 +421,8 @@ Make sure to choose the option that best suits your needs.
 
     Use the newly created admin account to log in to the software at `http://<server_ip>:<your_port>`.
 
+    Note: When using the IP address `127.0.0.1`, replace `<server_ip>` with `localhost`.
+
 ### Test
 
 To ensure the software functions correctly, I performed manual testing throughout the development process. Below are som example test that where made:
@@ -473,6 +478,7 @@ To ensure the software functions correctly, I performed manual testing throughou
 To use the software:
 
 1. As an Agent/Admin: You can access the system via the web interface at http://`<server_ip>`:`<your_port>`.
+    Note: When using the IP address `127.0.0.1`, replace `<server_ip>` with `localhost`.
 2. As a Normal User: You can interact with the system either through the web interface or by sending emails to `<your-system-mail>`.
 
 Users can create accounts via email, so they don’t need to log in to the web interface to resolve their issues.
