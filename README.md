@@ -473,20 +473,25 @@ To ensure the software functions correctly, I performed manual testing throughou
 
 
 
-### Run
+### Instructions for Running the Software
 
-To use the software:
+To use the software, follow these steps:
 
-1. As an Agent/Admin: You can access the system via the web interface at http://`<server_ip>`:`<your_port>`.
+1. **For Agents/Admins**:
+   - Access the system via the web interface at:  
+     ```
+     http://<server_ip>:<your_port>
+     ```
+   - If you are using `127.0.0.1`, replace `<server_ip>` with `localhost`.
 
-    Note: When using the IP address `127.0.0.1`, replace `<server_ip>` with `localhost`.
-2. As a Normal User: You can interact with the system either through the web interface or by sending emails to `<your-system-mail>`.
+2. **For Normal Users**:
+   - You can interact with the system through the web interface or by sending emails to `<your-system-mail>`.
+   - Users can create accounts via email. If an email from a trusted domain is received, the system will automatically create an account. For untrusted domains, admin approval is required.
 
-Users can create accounts via email, so they don’t need to log in to the web interface to resolve their issues.
-
-In the config.js file, you can add trusted email domains. If someone with a trusted domain sends an email to the system but does not have an account, the system will automatically create one. However, if the domain is not trusted, an admin will need to approve the user in the admin panel.
-
-Additionally, in the config.js file, you can configure other options, such as the maximum number and size of files that can be attached to a ticket.
+3. **Configuration Options**:
+   - In the `config.js` file, you can:
+     - Add trusted email domains.
+     - Configure settings like the maximum number and size of files that can be attached to a ticket.
 
 
 ## License
