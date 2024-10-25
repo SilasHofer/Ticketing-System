@@ -126,8 +126,8 @@
                         <% if (role=="admin" && ticket.status !=='Closed' && ticket.status !=='Solved' ) { %>
                             Change Agent:
                             <form method="GET" action="/assignAgent">
-                                <option value="" disabled selected hidden>Select an agent</option>
                                 <select name="agentInfo" onchange="this.form.submit()">
+                                    <option value="" disabled selected>Select an agent</option>
                                     <% agents.forEach(agent=> { %>
                                         <option
                                             value="<%= agent.user_id %>,<%= agent.name %>,<%= agent.email %>,<%= ticket.creator_email %>"

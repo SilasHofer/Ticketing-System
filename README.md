@@ -31,6 +31,7 @@ Make sure to choose the option that best suits your needs.
     ```bash
     node -v # (version 18.x or newer)
     npm -v  # (version 9.2 or newer)
+    git -v # (version 2.43 or newer)
     mariadb --version # (version 15.1 or newer)
     ```
 
@@ -102,7 +103,7 @@ Make sure to choose the option that best suits your needs.
 3. **Install Node.js Dependencies**:    
     
     ```bash
-    cd <repository-directory>
+    cd <repository-directory> # default Ticketing-System
     npm install
     ```
 
@@ -200,9 +201,9 @@ Make sure to choose the option that best suits your needs.
 
         1. Select a name for the application
 
-        2. Select **Regular Web Applications**
+        2. Select **Regular Web Applications** and Create
 
-        3. Select **Node.js (Express)** and then I want to integrate with my app
+        3. Select **Node.js (Express)** and then **I want to integrate with my app**
 
         4. Set 
 
@@ -211,13 +212,15 @@ Make sure to choose the option that best suits your needs.
         Allowed Logout URLs http://<server_ip>:<port>
         ```
 
-        5. Hit next until you get "You're all set!" and then go to **Applications settings**.
+        5. Hit next until you get "You're all set!" and then **go to Applications settings**.
 
         6. copy the **Domain** and scroll down to **Allowed Callback URLs**.
 
             Add `http://<domain>/login/callback` with a comma between the two URLs.
         
         7. Click **Save**.
+
+        8. go to **Connections** and uncheck google-oauth2
     
     2. Go to **Applications > APIs > Auth0 Management API > Machine To Machine Applications**.
 
@@ -276,13 +279,18 @@ Make sure to choose the option that best suits your needs.
         2. agent
         3. admin
 
-    5. Go to **Users**.
+    Note:The description does not matter 
 
-        Create a new user and then assign the admin role to it.
+    5. Go to **User Management > Users**.
+
+        Create a new user.
+
+        Then go to **Roles** and then **Assign Roles** and there assign only the role admin. 
 
         You can create more users here if you want, but they need to have one role assigned to them.
 
         You can also create users via the web interface with the admin account.
+
     
 10. **Configure Gmail account**:
 
@@ -292,11 +300,13 @@ Make sure to choose the option that best suits your needs.
 
     3. Go to **Forwarding and POP/IMAP** and enable **IMAP**. Hit **Save Changes**.
 
-    4. Click on the user icon in the top left and then on **Manage your Google Account**.
+    4. Click on the user icon in the top right and then on **Manage your Google Account**.
 
     5. Go to **Security** and enable **2-Step Verification**.
 
-    6. Search for **App passwords** and then create a new app and save the generated app password.
+    6. Go back to **google Account**.
+
+    7. Search for **App passwords** and then create a new app and save the generated app password.
 
 
 11. **System config**:
@@ -354,7 +364,9 @@ Make sure to choose the option that best suits your needs.
             1. Go to  **Authentication > Database** and select  **Username-Password-Authentication**.
 
             2. Then replace `<your_auth0_connections_id>` with the **Identifier** you see an that page. (Note: it should start with **con_**)
-        
+
+            3. While you are there scroll down and **Disable Sign Ups**
+
         4. Get Role IDs:
 
             1. Go to **User Management > Roles** and click on each role.
@@ -388,6 +400,13 @@ Make sure to choose the option that best suits your needs.
             ]
         }
         ```
+
+        Save the file and go back.
+        
+        ```bash
+        cd ..
+        ```
+
 
 8. **Start the Application**:
 

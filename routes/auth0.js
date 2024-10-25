@@ -52,7 +52,6 @@ async function createAccount(email, password, name, role_id) {
                 Authorization: `Bearer ${token}`
             }
         });
-        console.log(userResponse.data);
         const userId = userResponse.data.user_id;
         if (role_id != "") {
             await axios.post(`${config.auth0.AUTH_ISSUERBASEURL}/api/v2/roles/${role_id}/users`, {

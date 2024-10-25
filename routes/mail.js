@@ -96,7 +96,7 @@ function fetchUnseenEmails() {
                     if (err) {
                         console.error('Error parsing email:', err);
                         return;
-                    } if (mail.from?.value?.[0]?.address != "mailer-daemon@googlemail.com") {
+                    } if (mail.from?.value?.[0]?.address != "mailer-daemon@googlemail.com" && mail.from?.value?.[0]?.address != "no-reply@accounts.google.com" && mail.from?.value?.[0]?.address != "no-reply@google.com") {
                         console.log('New email received:', mail.subject);
                         console.log('From:', mail.from.text);
                         console.log('Body:', mail.text);
