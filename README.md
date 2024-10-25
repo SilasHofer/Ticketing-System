@@ -12,9 +12,21 @@ It serves as communication software between an agent and a user.
 
 ## How to Use
 
+### System Requirements
+
+To run the server, you need either:
+
+- **Ubuntu**: Version 20.04 LTS or newer is recommended for optimal compatibility and performance.
+  
+- **WSL 2.0**: If you are using Windows, you can install the Windows Subsystem for Linux (WSL) version 2.0. WSL allows you to run a Linux distribution alongside your Windows OS without needing a virtual machine. 
+
+  To set up WSL 2.0, follow the instructions [here](https://docs.microsoft.com/en-us/windows/wsl/install). After installation, you can install Ubuntu from the Microsoft Store.
+
+Make sure to choose the option that best suits your needs.
+
 ### Prerequisites
 
-1. check if node,npm and mariadb-server is installed
+1. Check if node,npm and mariadb-server is installed
 
     ```bash
     node -v # (version 18.x or newer)
